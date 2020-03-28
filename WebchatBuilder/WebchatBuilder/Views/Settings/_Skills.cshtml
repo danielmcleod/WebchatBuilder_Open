@@ -1,0 +1,42 @@
+﻿@model WebchatBuilder.ViewModels.SkillsSettingsViewModel
+@{
+    var cntAssignable = Model.AssignableSkills.Count;
+    var cntUnassignable = Model.UnassignableSkills.Count;
+}
+
+<div class="settings-tab">
+    <div class="settings-skills-wrapper">
+        <h3 title="Skills that will show up in the Wcb Profile Editor." class="wcb-tooltip">Assignable - @cntAssignable</h3>
+        <div class="row">
+            @foreach (var skill in @Model.AssignableSkills)
+            {
+                <div class="col-lg-6">
+                    <div class="settings-skill-wrapper">
+                        <span>@skill.DisplayName</span>
+                        @if (skill.IsUsed)
+                        {
+                            <i class="fa fa-times-circle wcb-tooltip" title="This skill is in use and cannot be marked unassignable." data-id="@skill.SkillId"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-times-circle toggle-skill-assignable wcb-tooltip" title="Mark this skill as unassignable." data-id="@skill.SkillId"></i>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <hr />
+        <h3 title="Skills that will not show up in the Wcb Profile Editor." class="wcb-tooltip">Unassignable - @cntUnassignable</h3>
+        <div class="row">
+            @foreach (var skill in @Model.UnassignableSkills)
+            {
+                <div class="col-lg-6">
+                    <div class="settings-skill-wrapper">
+                        <span>@skill.DisplayName</span>
+                        <i class="fa fa-plus-square toggle-skill-assignable wcb-tooltip" title="Mark this skill as assignable." data-id="@skill.SkillId"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

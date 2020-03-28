@@ -1,0 +1,317 @@
+﻿@model WebchatBuilder.ViewModels.CreateWidgetViewModel
+<div id="CreateChatWidget">
+    @using (Html.BeginForm("CreateWidget", "Settings", FormMethod.Post, new { id = "CreateWidgetForm" }))
+    {
+        var useIcon = "";
+        var customLaunch = "";
+        if (!Model.UseIcon)
+        {
+            useIcon = "display:none;";
+        }
+        else
+        {
+            customLaunch = "display:none;";
+        }
+
+        var showUnavailable = "";
+        if (Model.UnavailableFormId == -1)
+        {
+            showUnavailable = "display:none;";
+        }
+        
+        var checkForAgents = "";
+        if (!Model.CheckForAgents)
+        {
+            checkForAgents = "display:none;";
+        }
+        var showTooltips = "";
+        if (!Model.ShowTooltip)
+        {
+            showTooltips = "display:none;";
+        }
+
+        var resumeChatOptions = Model.IsSecondaryStyle ? "Active Chat Options" : "Resume Chat Options";
+        
+        @Html.HiddenFor(m => m.WidgetId)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.Label("Widget Name")
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control wcb-tooltip", title = "The name of the widget that will show up in the dropdown of the create/edit profile form." })
+            </div>
+            <div class="col-xs-3">
+                @Html.Label("Active?")
+                @Html.CheckBoxFor(m => m.IsActive, new { @class = "wcb-tooltip", title = "If a widget is inactive, it will not be shown, and essentially break, any profiles using the widget." })
+            </div>
+            <div class="col-xs-3">
+                @Html.Label("Use Collapsing Style?")
+                @Html.CheckBoxFor(m => m.IsSecondaryStyle, new { @class = "wcb-tooltip", title = "If you switch to the Collapsing Style, the widget will stay open an function like a minimize/maximize button. Some options will be disabled when this feature is enabled." })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Availability Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Chat Delay")
+                @Html.TextBoxFor(m => m.StartTime, new { @class = "form-control wcb-tooltip", title = "The delay before the chat widget is shown or availability is checked.", @type = "number" })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Seconds to wait before Re-checking")
+                @Html.TextBoxFor(m => m.RecycleTime, new { @class = "form-control wcb-tooltip", title = "If checking availability, and greater than 0, how long to wait before rechecking availability.", @type = "number" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Check for Agents or EWT?")
+                @Html.CheckBoxFor(m => m.CheckForAgents, new { @class = "wcb-tooltip", title = "Before showing the widget, determines if the number of available agents or estimated wait time should be checked." })
+            </div>
+            <div id="AgentEwtWrapper" style="@checkForAgents">
+                <div class="col-xs-4">
+                    @Html.Label("Required Agents Available")
+                    @Html.TextBoxFor(m => m.RequiredAgentsAvailable, new { @class = "form-control wcb-tooltip", title = "If greater than zero, how many agents must be available before chat is offered. To be considered available, an agent must be a member of the workgroup, activated in the workgroup, licensed for chat, has not reached max chat utilization percent or max assignable, is logged in and in an acd available status, and has the required skills.", @type = "number" })
+                </div>
+                <div class="col-xs-4">
+                    @Html.Label("Max Estimated Wait Time")
+                    @Html.TextBoxFor(m => m.MaxEstimatedWaitTime, new { @class = "form-control wcb-tooltip", title = "If greater than zero, what the max estimated wait time (in seconds) must be under in order to offer chat.", @type = "number" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Enabled on Mobile Devices?")
+                @Html.CheckBoxFor(m => m.ShowOnMobile, new { @class = "wcb-tooltip", title = "Enable webchat on mobile devices. If turned off, please ensure the width you consider a mobile device is configured." })
+            </div>
+            <div class="col-xs-4" id="MobileWidth">
+                @Html.Label("Mobile Device Width")
+                @Html.TextBoxFor(m => m.MobileWidth, new {@class = "form-control wcb-tooltip", title = "The width considered mobile in pixels", @type = "number"})
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Enable Tooltips for Mobile?")
+                @Html.CheckBoxFor(m => m.ShowTooltipOnMobile, new { @class = "wcb-tooltip", title = "If tooltips are turned on, this setting determines if they are turned on for mobile devices." })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Display Options</h3>
+            @if (Model.AllowIframes)
+            {
+                <div class="col-xs-4 wcb-hidden-secondary-style">
+                    @Html.Label("Use Iframe?")
+                    @Html.CheckBoxFor(m => m.UseIframe, new { @class = "wcb-tooltip", title = "Use an Iframe instead of embedded javascript." })
+                </div>
+            }
+            <div class="col-xs-4 wcb-hidden-secondary-style">
+                @Html.Label("Popup Centered In Overlay?")
+                @Html.CheckBoxFor(m => m.PopOverlay, new { @class = "wcb-tooltip", title = "Pop the chat centered in a semi transparent overlay (like a modal)." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Background Color (While Loading)")
+                <input id="PlaceHolderBackground" name="PlaceHolderBackground" class="color-picker" type="text" value="@Model.PlaceHolderBackground" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 wcb-hidden-secondary-style">
+                @Html.Label("Override Settings and Launch in new window?")
+                @Html.CheckBoxFor(m => m.LaunchInNewWindow, new { @class = "wcb-tooltip", title = "Launch in a new browser window or tab instead of embedding in the page." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Chat Height")
+                @Html.TextBoxFor(m => m.Height, new { @class = "form-control wcb-tooltip", title = "The height of the embedded chat window.", @type = "number" })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Chat Width")
+                @Html.TextBoxFor(m => m.Width, new { @class = "form-control wcb-tooltip", title = "The width of the embedded chat window.", @type = "number" })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Use an Icon?")
+                @Html.CheckBoxFor(m => m.UseIcon, new { @class = "wcb-tooltip", title = "Use an image/icon instead of text." })
+            </div>
+        </div>
+        <div class="row">
+            <div id="IconSettingsWrapper" style="@useIcon">
+                <div class="col-xs-4 wcb-hidden-secondary-style" id="">
+                    @Html.Label("Icon Width")
+                    @Html.TextBoxFor(m => m.IconWidth, new { @class = "form-control wcb-tooltip", title = "The width of the icon must be specified, but the image should be sized properly for best results.", @type = "number" })
+                </div>
+                <div class="col-xs-8" id="IconSelectWrapper">
+                    @Html.Label("Select Icon", new { id = "IconSelectLabel" })
+                    @Html.HiddenFor(m => m.IconPath)
+                    <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearIconSelection" title="Clear Selection"></i>
+                    <div id="IconSelectBox">
+                        @foreach (var icon in Model.Icons)
+                        {
+                            var selectedClass = "";
+                            if (!String.IsNullOrEmpty(Model.IconPath) && icon.ToLower() == Model.IconPath.ToLower())
+                            {
+                                selectedClass = "class=selected";
+                            }
+                            <img src="@icon" @selectedClass />
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="CustomLaunchWrapper" style="@customLaunch">
+            <div class="row">
+                <div class="col-xs-4">
+                    @Html.Label("Text")
+                    @Html.TextBoxFor(m => m.LaunchText, new { @class = "form-control wcb-tooltip", title = "The text displayed in the widget." })
+                </div>
+                <div class="col-xs-4">
+                    @Html.Label("Round Corners?")
+                    @Html.CheckBoxFor(m => m.Rounded, new { @class = "wcb-tooltip", title = "Whether or not the corners of the widget are rounded." })
+                </div>
+                <div class="col-xs-4 wcb-hidden-secondary-style">
+                    @Html.Label("Flip Vertical? - If Left/Right")
+                    @Html.CheckBoxFor(m => m.Vertical, new { @class = "wcb-tooltip", title = "If the widget is positioned on the left or right, this determines if the widget should be flipped vertical." })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    @Html.Label("Background Color")
+                    <input id="Background" name="Background" class="color-picker" type="text" value="@Model.Background" />
+                </div>
+                <div class="col-xs-4">
+                    @Html.Label("Text Color")
+                    <input id="TextColor" name="TextColor" class="color-picker" type="text" value="@Model.TextColor" />
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Show Widget Tooltip?")
+                @Html.CheckBoxFor(m => m.ShowTooltip, new { @class = "wcb-tooltip", title = "Whether or not to show a tooltip for the widget." })
+            </div>
+        </div>
+        <div class="row" id="TooltipSettingWrapper" style="@showTooltips">
+            <div class="col-xs-4">
+                @Html.Label("Tooltip Text")
+                @Html.TextBoxFor(m => m.TooltipText, new { @class = "form-control wcb-tooltip", title = "The text displayed in the tooltip for the widget." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Tooltip Text/Border Color")
+                <div>
+                    <input id="TooltipColor" name="TooltipColor" class="color-picker" type="text" value="@Model.TooltipColor" />
+                </div>
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Seconds to Show Tooltip on Load")
+                @Html.TextBoxFor(m => m.ShowTooltipAtStart, new { @class = "form-control wcb-tooltip", @type = "number", title = "If greater than zero, how long to show the tooltip when the widget is initially shown." })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Positioning</h3>
+            <div class="col-xs-4 wcb-hidden-secondary-style">
+                @Html.Label("Position")
+                @Html.DropDownListFor(m => m.Position, Model.PositionOptions, new { @class = "form-control wcb-tooltip", title = "Whether the widget should be shown on the Bottom, Left, or Right of the visitors browser." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Offset X")
+                @Html.TextBoxFor(m => m.OffsetX, new { @class = "form-control wcb-tooltip", title = "If positioned on the bottom or right, this affects how many pixels from the right the widget should be placed. If left, how many pixels from the left.", @type = "number" })
+            </div>
+            <div class="col-xs-4 wcb-hidden-secondary-style">
+                @Html.Label("Offset Y")
+                @Html.TextBoxFor(m => m.OffsetY, new { @class = "form-control wcb-tooltip", title = "If positioned on the bottom, how many pixels from the bottom to place the widget. If left or right, how many pixels from the top.", @type = "number" })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Form (optional)</h3>
+            <div class="col-xs-4">
+                @Html.Label("Form")
+                @Html.DropDownList("FormId", Model.Forms, new {@class = "form-control wcb-tooltip", title = "Which form to display when the widget is clicked."})
+            </div>
+        </div>
+        <hr />
+        <div class="row" id="ResumeChatOptions">
+            <h3>@resumeChatOptions</h3>
+            <div class="col-xs-4">
+                <div id="ResumeLaunchText" style="@customLaunch">
+                    @Html.Label("Text")
+                    @Html.TextBoxFor(m => m.ResumeLaunchText, new {@class = "form-control wcb-tooltip", title = "If a Chat exist and can be resumed, The text displayed in the widget. If the collapsible style is used, this is the text to display in the widget tab after the initial launch."})
+                </div>
+                <div class="@showTooltips" id="ResumeTooltip">
+                    @Html.Label("Tooltip Text")
+                    @Html.TextBoxFor(m => m.ResumeTooltipText, new { @class = "form-control wcb-tooltip", title = "If a Chat exist and can be resumed, The text displayed in the tooltip for the widget. If the collapsible style is used, this is the tooltip text to display after the initial launch." })
+                </div>
+            </div>
+            <div class="col-xs-8" id="ResumeIconSelectWrapper" style="@useIcon">
+                @Html.Label("Select Resume Icon", new {id = "ResumeIconSelectLabel"})
+                @Html.HiddenFor(m => m.ResumeIconPath)
+                <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearResumeIconSelection" title="Clear Selection"></i>
+                <div id="ResumeIconSelectBox">
+                    @foreach (var icon in Model.Icons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.ResumeIconPath) && icon.ToLower() == Model.ResumeIconPath.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+    <hr />
+        <div class="row">
+            <h3>Unavailable Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Unavailable Form")
+                @Html.DropDownList("UnavailableFormId", Model.UnavailableForms, new {@class = "form-control wcb-tooltip", title = "If Chat is unavailble, which form to display when the widget is clicked."})
+            </div>
+        </div>
+        <div class="row" id="ExtendedUnavailableOptions" style="@showUnavailable">
+            <div class="col-xs-4">
+                <div>
+                    @Html.Label("Show for Agent Unavailability?")
+                    @Html.CheckBoxFor(m => m.ShowUnavailableIfOpenNoAgents, new { @class = "wcb-tooltip", title = "The default is to only show the unavailable form based on schedules. If enabled, the unavailable form will also be shown when agents are unavailable." })
+                </div>
+                <div id="UnavailableLaunchText" style="@customLaunch">
+                    @Html.Label("Text")
+                    @Html.TextBoxFor(m => m.UnavailableLaunchText, new {@class = "form-control wcb-tooltip", title = "If Chat is unavailble, The text displayed in the widget."})
+                </div>
+                <div class="@showTooltips" id="UnavailableTooltip">
+                    @Html.Label("Tooltip Text")
+                    @Html.TextBoxFor(m => m.UnavailableTooltipText, new {@class = "form-control wcb-tooltip", title = "If Chat is unavailble, The text displayed in the tooltip for the widget."})
+                </div>
+            </div>
+            <div class="col-xs-8" id="UnavailableIconSelectWrapper" style="@useIcon">
+                @Html.Label("Select Unavailable Icon", new { id = "UnavailableIconSelectLabel" })
+                @Html.HiddenFor(m => m.UnavailableIconPath)
+                <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearUnavailableIconSelection" title="Clear Selection"></i>
+                <div id="UnavailableIconSelectBox">
+                    @foreach (var icon in Model.Icons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.UnavailableIconPath) && icon.ToLower() == Model.UnavailableIconPath.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-success" id="SaveWidgetBtn" data-loading-text="Saving...">Save Widget</div>
+            </div>
+            <div class="col-xs-4">
+                <div class="btn btn-info" id="WidgetPreviewBtn">Preview</div>
+            </div>
+        </div>
+    }
+</div>

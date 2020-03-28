@@ -1,0 +1,209 @@
+﻿@model WebchatBuilder.ViewModels.LandingViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-xs-4">
+            <img src="~/Content/Images/wcb.png" />
+        </div>
+        <div class="col-xs-8">
+            <div class="row" id="MainCompanyInfo">
+                @if (!String.IsNullOrEmpty(Model.CompanyLogoPath))
+                {
+                    <div class="col-xs-3">
+                        <img class="pull-right" src="@Model.CompanyLogoPath"/>
+                    </div>
+                }
+                <div class="col-xs-9">
+                    <h1 class="pull-left">@Model.CompanyName</h1>
+                </div>
+            </div>
+            @*<p class="lead">This product is licensed to Company blah blah blah</p>*@
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 main-sub-wrapper">
+        <i class="fa fa-heartbeat fa-5x ui-red"></i>
+        <h2><span>Server Status</span><i class="fa fa-question-circle wcb-tooltip" title="This section provides server statuses, so you know if there are any connection issues."></i></h2>
+        <div class="row" id="WebChatStatus">
+            <div class="col-sm-6 status-left">
+                WebChat:
+            </div>
+            <div class="col-sm-6 status-right server-status">
+                <span></span> <i class="fa fa-circle-o-notch fa-spin"></i>
+            </div>
+        </div>
+        <div class="row" id="ServiceStatus">
+            <div class="col-sm-6 status-left">
+                Service:
+            </div>
+            <div class="col-sm-6 status-right server-status">
+                <span></span> <i class="fa fa-circle-o-notch fa-spin"></i>
+            </div>
+        </div>
+        <div class="row" id="CicStatus">
+            <div class="col-sm-6 status-left">
+                CIC Server:
+            </div>
+            <div class="col-sm-6 status-right server-status">
+                <span></span> <i class="fa fa-circle-o-notch fa-spin"></i>
+            </div>
+        </div>
+        <div class="row" id="ReportIssue">
+            <div class="col-sm-12">
+                <input type="button" value="Report an Issue" id="ReportIssueBtn" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 main-sub-wrapper">
+        <i class="fa fa-pie-chart fa-5x ui-orange"></i>
+        <h2><span>Chat History</span><i class="fa fa-question-circle wcb-tooltip" title="This section provides historic chat information for completed chats. You can hover over the legend or chart to display the count for each item."></i></h2>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="labeled-chart-container">
+                    <div class="canvas-holder">
+                        <canvas id="modular-doughnut" width="262" height="262" style="width: 175px; height: 175px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 chart-legend-col"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 status-left">
+                Lifetime Total:
+            </div>
+            <div class="col-sm-6 status-right" id="TotalChats">
+                0
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="/Scripts/Chart.min.js"></script>
+    <script type="text/javascript">
+
+        // Modular doughnut
+        (function() {
+            var hour = 0, day = 0, week = 0, month = 0, year = 0;
+            var url = "/GetChatStats";
+            $.get(url, function(response) {
+                if (response.success == true) {
+                    hour = response.hour;
+                    day = response.day;
+                    week = response.week;
+                    month = response.month;
+                    year = response.year;
+                    $("#TotalChats").text(response.total);
+                }
+                loadChart();
+            }).fail(function() {
+                loadChart();
+            });
+
+            function loadChart() {
+                var canvas = $('#modular-doughnut');
+                var colors = {
+                    "Hour": "#2ECC71",
+                    "Day": "#2574A9",
+                    "Week": "#F7CA18",
+                    "Month": "#D2527F",
+                    "Year": "#913D88"
+                };
+
+                var moduleData = [
+                    {
+                        value: hour,
+                        color: colors["Hour"],
+                        highlight: colors["Hour"],
+                        label: "Hour"
+                    },
+                    {
+                        value: day,
+                        color: colors["Day"],
+                        highlight: colors["Day"],
+                        label: "Day"
+                    },
+                    {
+                        value: week,
+                        color: colors["Week"],
+                        highlight: colors["Week"],
+                        label: "Week"
+                    },
+                    {
+                        value: month,
+                        color: colors["Month"],
+                        highlight: colors["Month"],
+                        label: "Month"
+                    },
+                    {
+                        value: year,
+                        color: colors["Year"],
+                        highlight: colors["Year"],
+                        label: "Year"
+                    }
+                ];
+                // 
+                var moduleDoughnut = new Chart(canvas.get(0).getContext('2d')).Doughnut(moduleData, { tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>", animation: true, scaleShowLabels: true });
+                // 
+                var legendHolder = document.createElement('div');
+                legendHolder.innerHTML = moduleDoughnut.generateLegend();
+                // Include a html legend template after the module doughnut itself
+                var helpers = Chart.helpers;
+                helpers.each(legendHolder.firstChild.childNodes, function(legendNode, index) {
+                    helpers.addEvent(legendNode, 'mouseover', function() {
+                        var activeSegment = moduleDoughnut.segments[index];
+                        activeSegment.save();
+                        activeSegment.fillColor = activeSegment.highlightColor;
+                        moduleDoughnut.showTooltip([activeSegment]);
+                        activeSegment.restore();
+                    });
+                });
+                helpers.addEvent(legendHolder.firstChild, 'mouseout', function() {
+                    moduleDoughnut.draw();
+                });
+                $(".chart-legend-col").append(legendHolder.firstChild);
+            }
+            var cicServerStatus = $("#CicStatus");
+            var serviceServerStatus = $("#ServiceStatus");
+            var wcbServerStatus = $("#WebChatStatus");
+
+            $.get("/GetStatuses", function (response) {
+                if (response.success == true) {
+                    if (response.serviceStatus) {
+                        serviceServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-check-circle").addClass("ui-green");
+                        serviceServerStatus.find(".status-right span").text(response.serviceName);
+                    } else {
+                        serviceServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-exclamation-triangle").addClass("ui-red");
+                        serviceServerStatus.find(".status-right span").text("Error");
+                    }
+                    if (response.cicStatus) {
+                        cicServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-check-circle").addClass("ui-green");
+                        cicServerStatus.find(".status-right span").text(response.cicName);
+                    } else {
+                        cicServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-exclamation-triangle").addClass("ui-red");
+                        cicServerStatus.find(".status-right span").text("Error");
+                    }
+                    if (response.wcbStatus) {
+                        wcbServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-check-circle").addClass("ui-green");
+                        wcbServerStatus.find(".status-right span").text(response.wcbName);
+                    } else {
+                        wcbServerStatus.find(".status-right").find("i").removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-exclamation-triangle").addClass("ui-red");
+                        wcbServerStatus.find(".status-right span").text("Error");
+                    }
+                }
+            }).fail(function () {
+                $(".server-status").each(function () {
+                    $(this).text("Error");
+                });
+                $(".fa-circle-o-notch").each(function () {
+                    $(this).removeClass("fa-spin").removeClass("fa-circle-o-notch").addClass("fa-exclamation-triangle").addClass("ui-red");
+                });
+            });
+        })();
+    </script>
+}

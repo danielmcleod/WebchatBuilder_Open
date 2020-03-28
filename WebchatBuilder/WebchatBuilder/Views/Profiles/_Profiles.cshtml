@@ -1,0 +1,59 @@
+﻿@model ICollection<WebchatBuilder.ViewModels.ProfileViewModel>
+
+@foreach (var profile in Model)
+{
+    <div class="profile-wrapper">
+        @if (profile.HasError)
+        {
+            <div class="profile-error">
+                <i class="fa fa-exclamation-triangle wcb-tooltip" title="@profile.ErrorMessage"></i>
+            </div>
+        }
+        <div class="profile-name pull-left" title="@profile.ProfileName">@profile.ProfileName</div>
+        @if (User.IsInRole("ProfileAdmin"))
+        {
+            <i class="fa fa-times pull-right wcb-tooltip delete-profile-btn ui-red" data-toggle="modal" data-target="#MainModal" data-placement="left" title="Delete Chat Profile." data-modal-title="Delete Chat Profile" data-type="deleteprofile" data-profile="@profile.ProfileId"></i>
+            <i class="fa fa-pencil pull-right wcb-tooltip edit-profile-btn ui-blue" data-toggle="modal" data-target="#MainModal" data-placement="left" title="Edit Chat Profile." data-modal-title="Edit Chat Profile" data-type="editprofile" data-profile="@profile.ProfileId"></i>
+            if (profile.Schedules.Any())
+            {
+                <i class="fa fa-clock-o pull-right wcb-tooltip edit-profile-btn ui-green" data-toggle="modal" data-target="#MainModal" data-placement="left" title="Check Profile Schedule." data-modal-title="Check Profile Schedule" data-type="checkprofile" data-profile="@profile.ProfileId"></i>
+            }
+        }
+        <div class="profile-details">
+            <div class="profile-description"><span>Description:</span> @profile.Description</div>
+            <div class="profile-updated">
+                <div>
+                    <span>Updated:</span> @profile.LastUpdatedOn
+                </div>
+                <div>
+                    <span>By:</span> @profile.LastUpdatedBy
+                </div>
+            </div>
+            <div class="profile-workgroup"><span>Workgroup:</span> @profile.Workgroup</div>
+            <div class="profile-skills">
+                <div>
+                    <span>Skills:</span>
+                </div>
+                @foreach (var skill in profile.Skills)
+                {
+                    <div class="profile-skill">@skill</div>
+                }
+            </div>
+            <div class="profile-schedules">
+                <div>
+                    <span>Schedules:</span>
+                </div>
+                @foreach (var schedule in profile.Schedules)
+                {
+                    <div class="profile-schedule">@schedule</div>
+                }
+            </div>
+            <div class="profile-template"><span>Template:</span> @profile.Template</div>
+            @if (profile.Widget != null)
+            {
+                <div class="profile-widget"><span>Widget:</span> @profile.Widget</div>
+            }
+        </div>
+    </div>
+
+}

@@ -1,0 +1,5 @@
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\bin\Debug\WcbWebSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\bin\Debug\WcbWebSetupCustomAction.pdb
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\obj\Debug\WcbWebSetupCustomAction.csprojResolveAssemblyReference.cache
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\obj\Debug\WcbWebSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\obj\Debug\WcbWebSetupCustomAction.pdb

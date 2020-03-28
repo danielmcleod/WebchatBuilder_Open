@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<!--General-->
+  <String Id="Dialog_Title">Webchat Builder Setup</String>
+  <String Id="WixUINext">Next</String>
+  <String Id="WixUIBack">Back</String>
+  <String Id="WixUICancel">Cancel</String>
+  <String Id="WixUIPrint">Print</String>
+  <String Id="WixUIFinish">Finish</String>
+  <String Id="WixUIInstall">Install</String>
+  <String Id="WelcomeDlgTitle">Webchat Builder Installer</String>
+  <String Id="WelcomeDlgDescription">This will install the Webchat Builder Web service and Windows service. You will be asked to provide some configuration information and your License Key specific to this machine. Additional configuration may be required.</String>
+  <String Id="ProgressDlgTitleInstalling">Installing</String>
+  <String Id="ProgressDlgTextInstalling">Webchat Builder is being installed.</String>
+  <String Id="ProgressDlgStatusLabel">...</String>
+  <String Id="LicenseAgreementDlgTitle">EULA</String>
+  <String Id="AdvancedWelcomeEulaDlgTitle">Webchat Builder License Agreement</String>
+  <String Id="LicenseAgreementDlgLicenseAcceptedCheckBox">I have read and agree to the Terms of this License Agreement</String>
+  <String Id="ExitDialogTitle">Installation Finished</String>
+  <String Id="ExitDialogDescription">The Installation has Finished.</String>
+  <String Id="UserExitDescription">The Installation had been stopped.</String>
+  <String Id="ErrorExitDescription">The Installation has stopped due to an Error.</String>
+  <String Id="ApplicationName">Webchat Builder</String>
+	<String Id="ManufacturerName">Qsect LLC</String>
+  
+  <!--Shared-->
+  <String Id="SharedSettingsDlgTitle">Shared Settings</String>
+	<String Id="SharedSettingsDlgDescription">Settings for Web and Windows service</String>
+  <String Id="ConnectionStringLabel">Connection String</String>
+	<String Id="WcbPortLabel">Webchat Builder Service Port</String>
+  
+  <!--Web-->
+  <String Id="WebSettingsDlgTitle">Web Configuration</String>
+	<String Id="WebSettingsDlgDescription">Settings for Webchat Builder Web service</String>
+  <String Id="SiteNameLabel">Site Name</String>
+  <String Id="IpAddressLabel">IP Address</String>
+  <String Id="PortLabel">Port</String>
+  <String Id="AppPoolNameLabel">App Pool Name</String>
+	<String Id="WcbDomainLabel">Domain</String>
+  <String Id="AllowedDomainsLabel">Allowed Domains</String>
+  <String Id="RunAsCurrentLabel">Run App Pool as Current User?</String>
+ 
+  <!--CIC-->
+  <String Id="CicSettingsDlgTitle">CIC Configuration</String>
+	<String Id="CicSettingsDlgDescription">Settings related to your CIC environment</String>
+ 	<String Id="CicPortLabel">CIC Port</String>
+ 	<String Id="CicProtocolLabel">CIC Protocol</String>
+  <String Id="CicUserLabel">CIC User</String>
+  <String Id="CicPasswordLabel">CIC Password</String>
+  <String Id="CicPrimaryServerLabel">Primary Server</String>
+  <String Id="CicSecondaryServerLabel">Secondary Server</String>
+  
+  <!--LicenseKey-->
+  <String Id="LicenseKeyDlgTitle">License Key</String>
+	<String Id="LicenseKeyDlgDescription">The License Key you received from Qsect</String>
+  <String Id="LicenseKeyLabel">License Key</String>
+
+  <!--Uninstall-->
+  <String Id="MaintenanceTypeDlgTitle">Uninstall</String>
+  <String Id="MaintenanceTypeDlgDescription">Uninstall Webchat Builder</String>
+  <String Id="MaintenanceTypeDlgRemoveButton">Remove</String>
+  <String Id="MaintenanceTypeDlgRemoveText">Removes all files related to Webchat Builder. This includes the Windows service and the Web service.</String>
+
+</WixLocalization>

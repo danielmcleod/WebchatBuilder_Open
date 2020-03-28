@@ -1,0 +1,116 @@
+﻿@using WebchatBuilder.ViewModels
+@model WebchatBuilder.ViewModels.SettingsViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css
+{
+    <link rel="stylesheet" href="~/Content/spectrum.css">
+}
+
+<div id="SettingsPage">
+    <div id="SettingsHeader">
+        <h2>Settings</h2>
+    </div>
+    <div id="SettingsContainer">
+        <!-- Nav tabs -->
+        <div class="nav-center">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
+                <li role="presentation"><a href="#assignable" aria-controls="assignable" role="tab" data-toggle="tab">Assignable</a></li>
+                <li role="presentation"><a href="#schedules" aria-controls="schedules" role="tab" data-toggle="tab">Schedules</a></li>
+                <li role="presentation"><a href="#templates" aria-controls="templates" role="tab" data-toggle="tab">Templates</a></li>
+                <li role="presentation"><a href="#widgets" aria-controls="widgets" role="tab" data-toggle="tab">Widgets</a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="general">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2" id="GeneralSettings">
+                        @Html.Partial("_General", Model.GeneralSettingsViewModel)
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="assignable">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2" id="WorkgroupSettings">
+                        @{
+                            var cntAssignable = Model.WorkgroupsSettingsViewModel.AssignableWorkgroups.Count;
+                            var cntUnassignable = Model.WorkgroupsSettingsViewModel.UnassignableWorkgroups.Count;
+                            var total = cntUnassignable + cntAssignable;
+                        }
+                        <i class="fa fa-chevron-circle-up collapse-arrow"></i>
+                        <h2>Workgroups - @total</h2>
+                        <div class="assignable-wrapper">
+                            @Html.Partial("_Workgroups", Model.WorkgroupsSettingsViewModel)
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="col-md-8 col-md-offset-2" id="SkillSettings">
+                        @{
+                            var scntAssignable = Model.SkillsSettingsViewModel.AssignableSkills.Count;
+                            var scntUnassignable = Model.SkillsSettingsViewModel.UnassignableSkills.Count;
+                            var stotal = scntAssignable + scntUnassignable;
+                        }
+                        <i class="fa fa-chevron-circle-up collapse-arrow"></i>
+                        <h2>Skills - @stotal</h2>
+                        <div class="assignable-wrapper">
+                            @Html.Partial("_Skills", Model.SkillsSettingsViewModel)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="schedules">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2" id="ScheduleSettings">
+                        @Html.Partial("_Schedules", Model.ScheduleSettingsViewModel)
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="templates">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2" id="TemplateSettings">
+                        @Html.Partial("_Templates", Model.TemplateSettingsViewModel)
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="widgets">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2" id="WidgetSettings">
+                        @Html.Partial("_Widgets", Model.WidgetSettingsViewModel)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="SettingsModal" tabindex="-1" role="dialog" aria-labelledby="SettingsTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="show-modal-tooltips fa fa-question"></i>
+                <h4 class="modal-title" id="SettingsModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="SettingsModalBody">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-corner"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src='/Scripts/spectrum.js'></script>
+    @*@Scripts.Render("~/bundles/settings")*@
+    <script src='/Scripts/Local/settings.js'></script>
+}

@@ -1,0 +1,108 @@
+﻿@model WebchatBuilder.ViewModels.WidgetSettingsViewModel
+<div class="settings-tab">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 title="Chat Widgets that will show up in the Wcb Profile Editor and determine how a chat is launched." class="wcb-tooltip">Chat Widgets</h2>
+        </div>
+        <div class="col-md-6">
+            <h2 title="Forms that can be used in widgets to collect user information before a chat is created." class="wcb-tooltip">Widget Forms</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="CreateWidgetBtn" class="btn btn-success wcb-tooltip" title="" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Create Widget" data-modal-type="createwidget">Create Widget</div>
+        </div>
+        <div class="col-md-6">
+            <div id="CreateFormBtn" class="btn btn-success wcb-tooltip" title="" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Create Form" data-modal-type="createform">Create Form</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                @if (Model.Widgets.Any())
+                {
+                    foreach (var widget in Model.Widgets)
+                    {
+                        <div class="col-md-12">
+                            <div class="widget-wrapper">
+                                <span class="widget-title">@widget.Name</span><i class="fa fa-pencil-square ui-blue edit-widget-btn" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Edit Widget" data-modal-type="editwidget" data-id="@widget.WidgetId"></i><i class="fa fa-times-circle ui-red delete-widget-btn" data-id="@widget.WidgetId"></i>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-12">
+                        No Widgets found.
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                @if (Model.Forms.Any())
+                {
+                    foreach (var form in Model.Forms)
+                    {
+                        <div class="col-md-12">
+                            <div class="form-wrapper">
+                                <span class="form-title">@form.FormName</span><i class="fa fa-times-circle ui-red delete-form-btn" data-id="@form.FormId"></i><i class="fa fa-pencil-square ui-blue edit-form-btn" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Edit Form" data-modal-type="editform" data-id="@form.FormId"></i>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-12">
+                        No Forms found.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-offset-6 col-md-6">
+            <h3>Unavailable Options</h3>
+            @using (Html.BeginForm("UnavailableOptions", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "UnavailableOptionsForm" }))
+            {
+                <div>
+                    @Html.Label("Confirm Name In Visitor Messages?")
+                    @Html.CheckBoxFor(m => m.ConfirmNameInVisitorMessages, new { @class = "wcb-tooltip", title = "This only applies if Chat Voicemails are used for Visitor Messages. If you are not sure, leave this set to true and confirm functionality via testing." })
+                </div>
+                <div>
+                    @Html.Label("Use Profile Workgroup For Visitor Messages?")
+                    @Html.CheckBoxFor(m => m.UseProfileWorkgroupForVisitorMessages, new { @class = "wcb-tooltip", title = "Whether or not to send Visitor Messages to the Workgroup associated with the profile used." })
+                </div>
+                <div>
+                    @Html.Label("Default Workgroup For Visitor Messages")
+                    @Html.TextBoxFor(m => m.DefaultWorkgroupForVisitorMessages, new { title = "The name of the workgroup to use for visitor messages if the profile workgroup is not used.", @class = "form-control wcb-tooltip" })
+                </div>
+                <div>
+                    @Html.Label("Use Callback For Visitor Messages?")
+                    @Html.CheckBoxFor(m => m.UseCallbackForVisitorMessages, new { @class = "wcb-tooltip", title = "Whether or not to use Callbacks for Visitor Messages instead of a Chat Voicemail." })
+                </div>
+                
+                <input type="submit" value="Save" class="btn btn-default wcb-tooltip" data-loading-text="Saving..." id="UnavailableOptionsSaveBtn" title="Clicking here will save Unavailable Option Changes." />
+            }
+        </div>
+    </div>
+
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Launch Icons</h3>
+            <div id="LaunchIcons" class="wcb-tooltip" title="Uploaded launch Icons will appear here.">
+                @foreach (var icon in Model.Icons)
+                {
+                    <img src="@icon" />
+                }
+            </div>
+            <form action="" method="post" enctype="multipart/form-data" id="AddLaunchIcon">
+                <label for="AddLaunchFileInput" class="btn btn-primary wcb-tooltip" title="Clicking here will open a File Upload dialog where you can select your launch icon.">Add Launch Icon</label>
+                <input type="file" name="AddLaunchFileInput" id="AddLaunchFileInput" class="hidden" accept="image" />
+            </form>
+        </div>
+    </div>
+</div>

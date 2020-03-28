@@ -1,0 +1,155 @@
+﻿@model WebchatBuilder.ViewModels.CreateFormViewModel
+<div id="CreateChatWidget">
+    @using (Html.BeginForm("CreateForm", "Settings", FormMethod.Post, new { id = "CreateFormForm" }))
+    {
+        @Html.HiddenFor(m => m.FormId)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.Label("Form Name")
+                @Html.TextBoxFor(m => m.FormName, new { @class = "form-control wcb-tooltip", title = "The name of the form that is shown in the dropdown of the widget editor." })
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <h3>Form Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Show Form Message?")
+                @Html.CheckBoxFor(m => m.ShowFormMessage, new {@class = "wcb-tooltip", title = "Whether or not to show a message at the top of the form above the fields."})
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Use Schedule Message?")
+                @Html.CheckBoxFor(m => m.UseScheduleMessage, new {@class = "wcb-tooltip", title = "Whether or not to use a Schedule defined Message/Description instead of the Form Message."})
+            </div>
+            <div class="col-xs-6">
+                @Html.Label("Form Message")
+                @Html.TextBoxFor(m => m.FormMessage, new {@class = "form-control wcb-tooltip", title = "The text displayed above the form fields if Show Form Message is enabled."})
+            </div>
+            <div class="col-xs-6">
+                @Html.Label("Unavailable Submitted Message")
+                @Html.TextBoxFor(m => m.FormSubmittedMessage, new { @class = "form-control wcb-tooltip", title = "If this Form is used for Unavailable purposes, this is the text displayed when the form is submitted." })
+            </div>
+        </div>
+        <div class="row">
+            <h3>Display Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Form Background Color")
+                <input id="BackgroundColor" name="BackgroundColor" class="color-picker" type="text" value="@Model.BackgroundColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Form/Field Border Color")
+                <input id="BorderColor" name="BorderColor" class="color-picker" type="text" value="@Model.BorderColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Label Color")
+                <input id="LabelColor" name="LabelColor" class="color-picker" type="text" value="@Model.LabelColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Round Field/Button Corners?")
+                @Html.CheckBoxFor(m => m.Rounded, new { @class = "wcb-tooltip", title = "Whether or not to round the corners of the form fields and the submit button." })
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Save Button Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Button Text")
+                @Html.TextBoxFor(m => m.ButtonText, new { @class = "form-control wcb-tooltip", title = "The text displayed on the button to submit the form." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Button Text Color")
+                <input id="ButtonTextColor" name="ButtonTextColor" class="color-picker" type="text" value="@Model.ButtonTextColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Button Color")
+                <input id="ButtonColor" name="ButtonColor" class="color-picker" type="text" value="@Model.ButtonColor" />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <h3>Form Fields</h3>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Add Field</h4>
+                        <div id="CreateFormField">
+                            <span>* optional</span>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    @Html.Label("Field Name")
+                                    @Html.TextBox("NewFieldName", "", new { @class = "form-control wcb-tooltip", title = "The name used to identify the field. Used as a prefix for customInfo if used. Used as the name if configured as an attribute." })
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Field Label *")
+                                    @Html.TextBox("NewFieldLabel", "", new { @class = "form-control wcb-tooltip", title = "A label appears above the form field and describes what the field is for." })
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Field Placeholder Text *")
+                                    @Html.TextBox("NewPlaceholder", "", new { @class = "form-control wcb-tooltip", @placeholder = "This is a placeholder...", title = "A placeholder can be used with or in place of a label and gives the user an idea of what information to enter." })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    @Html.Label("Custom Classes (space delimited) *")
+                                    @Html.TextBox("NewFieldClasses", "", new { @class = "form-control wcb-tooltip", title = "Any custom classes to add to the form field." })
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Field Type")
+                                    @Html.DropDownList("NewFieldType", Model.FieldTypes, new {@class = "form-control wcb-tooltip", title = "The type to assign to the field. The password type will hide the users entry."})
+                                </div>
+                                <div class="col-xs-3">
+                                    @Html.Label("Max Length")
+                                    @Html.TextBox("NewFieldMaxLength", "0", new { @class = "form-control wcb-tooltip", title = "If you enter a value greater than 0, the value will be used as the max length for the field.", type = "number", min = "0" })
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    @Html.Label("User Field?")
+                                    @Html.CheckBox("NewFieldIsUser", new {@class = "wcb-tooltip", title = "Whether or not this field should be used as the User name for the chat visitor."})
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Append to CustomInfo?")
+                                    @Html.CheckBox("NewFieldCustomInfo", new {@class = "wcb-tooltip", title = "Whether or not this field should be included as customInfo and shown in the Notes field of the Agents CIC Client."})
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Send as Attribute?")
+                                    @Html.CheckBox("NewFieldAttribute", new {@class = "wcb-tooltip", title = "Whether or not this field should be sent as an attribute to the CIC server."})
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    @Html.Label("Required Field?")
+                                    @Html.CheckBox("NewFieldIsRequired", new { @class = "wcb-tooltip", title = "Whether or not this field is required." })
+                                </div>
+                                <div class="col-xs-4">
+                                    @Html.Label("Phone Number?")
+                                    @Html.CheckBox("NewFieldIsPhone", new {@class = "wcb-tooltip", title = "Whether or not this field should be used as the phone number when used as an unavailable form with callbacks enabled."})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn btn-success" id="CreateNewFormFieldBtn">Create Field</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4 class="pull-left">Existing Fields</h4><i class="fa fa-refresh refresh-form-fields"></i>
+                    </div>
+                    <div id="ExistingFormFields">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-success" id="SaveFormBtn" data-loading-text="Saving...">Save Form</div>
+            </div>
+        </div>
+    }
+</div>

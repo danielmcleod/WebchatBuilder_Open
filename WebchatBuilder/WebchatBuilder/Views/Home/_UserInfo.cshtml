@@ -1,0 +1,23 @@
+﻿@model WebchatBuilder.ViewModels.UserViewModel
+           
+<div id="AccountInfo">
+    <div id="AccountUser">
+        @Model.DisplayName
+    </div>
+    <div id="AccountImage">
+        <div class="img-wrapper">
+            <img src="@Model.ImgPath" />
+        </div>
+    </div>
+    <div id="AccountInfo">
+        @Model.Title
+    </div>
+    <div id="AccountLinks">
+        <div>
+            @Html.ActionLink("Edit", "Edit", "Account", null, new { @class = "btn btn-primary" })
+        </div>
+        <div>
+            @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+</div>

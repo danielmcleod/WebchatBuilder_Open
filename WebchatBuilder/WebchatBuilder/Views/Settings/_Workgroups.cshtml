@@ -1,0 +1,42 @@
+﻿@model WebchatBuilder.ViewModels.WorkgroupsSettingsViewModel
+@{
+    var cntAssignable = Model.AssignableWorkgroups.Count;
+    var cntUnassignable = Model.UnassignableWorkgroups.Count;
+}
+
+<div class="settings-tab">
+    <div class="settings-workgroups-wrapper">
+        <h3 title="Workgroups that will show up in the Wcb Profile Editor." class="wcb-tooltip">Assignable - @cntAssignable</h3>
+        <div class="row">
+            @foreach (var workgroup in @Model.AssignableWorkgroups)
+            {
+                <div class="col-lg-6">
+                    <div class="settings-workgroup-wrapper">
+                        <span>@workgroup.DisplayName</span>
+                        @if (workgroup.IsUsed)
+                        {
+                            <i class="fa fa-times-circle wcb-tooltip" title="This workgroup is in use and cannot be marked unassignable." data-id="@workgroup.WorkgroupId"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-times-circle toggle-workgroup-assignable wcb-tooltip" title="Mark this workgroup as unassignable." data-id="@workgroup.WorkgroupId"></i>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <hr />
+        <h3 title="Workgroups that will not show up in the Wcb Profile Editor." class="wcb-tooltip">Unassignable - @cntUnassignable</h3>
+        <div class="row">
+            @foreach (var workgroup in @Model.UnassignableWorkgroups)
+            {
+                <div class="col-lg-6">
+                    <div class="settings-workgroup-wrapper">
+                        <span>@workgroup.DisplayName</span>
+                        <i class="fa fa-plus-square toggle-workgroup-assignable wcb-tooltip" title="Mark this workgroup as assignable." data-id="@workgroup.WorkgroupId"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,276 @@
+﻿@model WebchatBuilder.ViewModels.ChatTemplateViewModel
+@{
+    Layout = null;
+    var title = Model.Title;
+    @*var domain = Model.Domain.TrimEnd('/');*@
+    var launchIconOverridePath = String.IsNullOrWhiteSpace(Model.LaunchIconOverridePath) ? "" : Model.LaunchIconOverridePath; //domain + Model.LaunchIconOverridePath;
+    var audioFilePath = "/Audio/alert.mp3"; //domain + "/Audio/alert.mp3";
+    var dottedIconPath = "/Content/Images/dotdotdot.png"; //domain + "/Content/Images/dotdotdot.png";
+    var imgClass = "wcb-chat-btn wcb-chat-btn-icons";
+    if (Model.UseUnstyledHeaderIcons)
+    {
+        imgClass = "wcb-chat-btn wcb-chat-btn-icon-only";
+    }
+    var printIconSrc = !String.IsNullOrWhiteSpace(Model.PrintButtonIconPath) ? Model.PrintButtonIconPath : "/Content/Images/print.png";
+    var emailIconSrc = !String.IsNullOrWhiteSpace(Model.EmailButtonIconPath) ? Model.EmailButtonIconPath : "/Content/Images/email.png";
+}
+
+@*<!DOCTYPE html>*@
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@title</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/StandardChat.min.css">
+    @if (!String.IsNullOrEmpty(Model.CustomCss))
+    {
+        <link rel="stylesheet" type="text/css" href="@Model.CustomCss">
+    }
+</head>
+<body style="margin:0;">
+<div id="wcb-body" class="wcb-body-iframe">
+    @if (Model.EnableAudioAlerts)
+    {
+        <audio id="wcb-audio-alert" src="@audioFilePath" preload="auto"></audio>
+    }
+    <div id="wcb-error">@Model.ErrorText</div>
+    <div id="wcb-chat-container">
+        @if (!Model.HideHeader)
+        {
+            var closeIconSrc = Model.CloseButtonIconPath; //domain + Model.CloseButtonIconPath;
+            var disconnectIconSrc = Model.DisconnectButtonIconPath;
+            <div id="wcb-chat-header">
+                <div id="wcb-chat-header-left">
+                    @if (!String.IsNullOrEmpty(Model.HeaderLogoPath))
+                    {
+                        <img src="@Model.HeaderLogoPath"/>
+                    }
+                    @if (!String.IsNullOrEmpty(Model.HeaderText))
+                    {
+                        <h2>@Model.HeaderText</h2>
+                    }
+
+                </div>
+                @if (Model.HeaderIcons)
+                {
+                    <div id="wcb-chat-header-right">
+                        @if (Model.IncludeDisconnect)
+                        {
+                            <div class="@imgClass" id="wcb-chat-disconnect" title="End Chat">
+                                <img src="@disconnectIconSrc" />
+                            </div>
+                        }
+                        <div class="@imgClass" id="wcb-exit-btn" title="Close Chat"><img src="@closeIconSrc"/>
+                        </div>
+                        @if (Model.IncludePrint && !Model.ShowOptionsButton)
+                        {
+                            <div class="@imgClass" id="wcb-print-btn" title="Print"><img src="@printIconSrc" />
+                            </div>
+                        }
+                        @if (Model.IncludeTranscript && !Model.ShowOptionsButton)
+                        {
+                            <div class="@imgClass" id="wcb-transcript-btn" title="Email Transcript"><img src="@emailIconSrc" />
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div id="wcb-chat-header-right" class="wcb-chat-header-show-text">
+                        @if (Model.IncludeDisconnect)
+                        {
+                            <div class="wcb-chat-btn" id="wcb-chat-disconnect" title="End Chat">
+                                <span>End Chat</span><img src="@disconnectIconSrc" />
+                            </div>
+                        }
+                        <div class="wcb-chat-btn" id="wcb-exit-btn" title="Close Chat"><span>Close Chat</span><img src="@closeIconSrc"/>
+                        </div>
+                        @if (Model.IncludePrint && !Model.ShowOptionsButton)
+                        {
+                            <div class="wcb-chat-btn" id="wcb-print-btn" title="Print"><span>Print</span><img src="@printIconSrc" />
+                            </div>
+                        }
+                        @if (Model.IncludeTranscript && !Model.ShowOptionsButton)
+                        {
+                            <div class="wcb-chat-btn" id="wcb-transcript-btn" title="Email Transcript"><span>Email</span><img src="@emailIconSrc" />
+                            </div>
+                        }
+                    </div>
+
+                }
+            </div>
+        }
+
+        <div id="wcb-chat-body">
+        </div>
+        @{
+            var agentName = Model.DefaultAgentName;
+        }
+        <div id="wcb-chat-agent-typing">
+            <span id="wcb-chat-agent-name">@agentName</span> is typing...
+        </div>
+        <div id="wcb-chat-entry">
+            @if (Model.ShowOptionsButton && (Model.IncludePrint || Model.IncludeTranscript))
+            {
+                <div id="wcb-chat-options">
+                    <div id="wcb-chat-options-wrapper">
+                        <div id="wcb-chat-dotdotdot" title="Chat Options">
+                            <img src="@dottedIconPath"/>
+                        </div>
+                        <div id="wcb-chat-option-btn-wrapper">
+                            @if (Model.IncludePrint)
+                            {
+                                <div class="@imgClass" id="wcb-print-btn" title="Print"><img src="@printIconSrc" /></div>
+                            }
+                            @if (Model.IncludeTranscript)
+                            {
+                                <div class="@imgClass" id="wcb-transcript-btn" title="Email Transcript"><img src="@emailIconSrc" /></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @{
+                var entryRightInline = Model.HideSendButton ? "display:none !important;" : "";
+                var entryLeftInline = Model.HideSendButton ? "width: 100% !important; float: none !important; margin: 0 !important;" : "";
+            }
+            <div id="wcb-chat-entry-left" style="@entryLeftInline">
+                @if (!String.IsNullOrEmpty(Model.PlaceholderText))
+                {
+                    <textarea id="wcb-chat-entry-text" placeholder="@Model.PlaceholderText"></textarea>
+                }
+                else
+                {
+                    <textarea id="wcb-chat-entry-text"></textarea>
+                }
+            </div>
+            <div id="wcb-chat-entry-right" style="@entryRightInline">
+                @{
+                    var classDisabled = "disabled";
+                    if (Model.EnableSendAndQueueChatsBeforeAgent)
+                    {
+                        classDisabled = "";
+                    }
+                }
+                <div id="wcb-chat-entry-btn" class="wcb-chat-btn @classDisabled">
+                    @if (Model.SendIncludeIcon)
+                    {
+                        var iconPath = "/Content/Images/paper-plane.png";
+                        if (!String.IsNullOrEmpty(Model.SendButtonIcon))
+                        {
+                            iconPath = Model.SendButtonIcon;
+                        }
+                        <div id="wcb-chat-entry-btn-wrapper">
+                            <img src="@iconPath"/>
+                            <div>Send</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="wcb-chat-entry-btn-wrapper2">
+                            <div>Send</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script id="sent-template" type="text/x-handlebars-template">
+        <div class="chat-sent">
+            <div class="chat-msg-icon">
+                @if (Model.ShowInitials)
+                {
+                    <div class="chat-msg-initial-wrapper">
+                        <div class="chat-msg-initials">{{initials}}</div>
+                    </div>
+                }
+                else
+                {
+                    <img src="{{imgsrc}}" />
+                }
+                <div class="chat-display-name">
+                    {{name}}
+                    {{#if time}}
+                    <div class="chat-display-time">{{time}}</div>
+                    {{/if}}
+                </div>
+            </div>
+            @if (Model.MessageArrows)
+            {
+                <div class="chat-msg-text"><div class="chat-msg-arrow"></div>{{text}}</div>
+            }
+            else
+            {
+                <div class="chat-msg-text chat-msg-text-rnd"><div class="chat-msg-pointer"></div>{{text}}</div>
+            }
+        </div>
+    </script>
+    <script id="received-template" type="text/x-handlebars-template">
+        <div class="chat-received">
+            <div class="chat-msg-icon">
+                @if (Model.ShowInitials)
+                {
+                    <div class="chat-msg-initial-wrapper">
+                        <div class="chat-msg-initials">{{initials}}</div>
+                    </div>
+                }
+                else
+                {
+                    <img src="{{imgsrc}}" />
+                }
+                <div class="chat-display-name">
+                    {{name}}
+                    {{#if time}}
+                    <div class="chat-display-time">{{time}}</div>
+                    {{/if}}
+                </div>
+            </div>
+            @if (Model.MessageArrows)
+            {
+                <div class="chat-msg-text"><div class="chat-msg-arrow"></div>{{text}}</div>
+            }
+            else
+            {
+                <div class="chat-msg-text chat-msg-text-rnd"><div class="chat-msg-pointer"></div>{{text}}</div>
+            }
+        </div>
+    </script>
+    @Html.Hidden("wcb-show-time", Model.ShowTime, new { data_value = Json.Encode(Model.ShowTime) })
+    @Html.Hidden("wcb-in-test-mode", Model.TestMode, new { data_value = Json.Encode(Model.TestMode) })
+    @Html.Hidden("wcb-user-name", Model.UserName, new { data_value = Model.UserName })
+    @Html.Hidden("wcb-session-id", Model.SessionId, new { data_value = Model.SessionId })
+    @Html.Hidden("wcb-chat-profile-name", Model.Profile, new { data_value = Model.Profile })
+    @Html.Hidden("wcb-chat-launch-text", Model.LaunchTextOverride, new { data_value = Model.LaunchTextOverride })
+    @Html.Hidden("wcb-chat-tooltip-text", Model.TooltipOverrideText, new { data_value = Model.TooltipOverrideText })
+    @Html.Hidden("wcb-chat-launch-icon", launchIconOverridePath, new { data_value = launchIconOverridePath })
+    @Html.Hidden("wcb-chat-browser-alerts", Model.EnableBrowserAlerts, new { data_value = Json.Encode(Model.EnableBrowserAlerts) })
+
+<!--Script references. -->
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/Scripts/handlebars.js"></script>
+    <script src="~/Scripts/Autolinker.min.js"></script>
+    <script src="~/Scripts/wcb.chat.typing.min.js"></script>
+    @*Reference the SignalR library.*@
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    @*Reference the autogenerated SignalR hub script.*@
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/wcb.chat.js"></script>
+    @*@Scripts.Render("~/bundles/chat")*@
+    <script>
+        $(function () {
+            function isIframe() {
+                try {
+                    return window.self !== window.top;
+                } catch (e) {
+                    return true;
+                }
+            }
+            if (!isIframe()) {
+                $("#wcb-exit-btn").remove();
+            }
+        });
+    </script>
+</body>
+</html>

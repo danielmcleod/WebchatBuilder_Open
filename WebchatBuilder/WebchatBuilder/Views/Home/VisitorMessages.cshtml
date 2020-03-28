@@ -1,0 +1,104 @@
+﻿@model WebchatBuilder.ViewModels.VisitorMessagesViewModel
+
+<div id="VisitorMessages">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <div id="UnprocessedMessages">
+                <div class="supervisor-list">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Pending Messages</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2">Workgroup</div>
+                        <div class="col-xs-5">Summary</div>
+                        <div class="col-xs-2">Date</div>
+                    </div>
+                    @foreach (var vm in Model.VisitorMessages)
+                    {
+                        var summary = vm.Message.Length > 200 ? vm.Message.Substring(0, 196) + "..." : vm.Message;
+                        <div class="row vm-wrapper">
+                            <div class="col-xs-2">@vm.Workgroup</div>
+                            <div class="col-xs-5" title="@vm.Message">@summary</div>
+                            <div class="col-xs-3">@vm.DateCreated.ToString("G")</div>
+                            <div class="col-xs-2">
+                                <div class="btn btn-default delete-msg-btn" title="Delete Message" data-id="@vm.VisitorMessageId">
+                                    <i class="fa fa-times"></i>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr />
+            <div id="ProcessedMessages">
+                <div class="supervisor-list">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Processed Messages</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2">Workgroup</div>
+                        <div class="col-xs-5">Summary</div>
+                        <div class="col-xs-2">Date</div>
+                    </div>
+                    @foreach (var vm in Model.ProcessedMessages)
+                    {
+                        var summary = vm.Message.Length > 200 ? vm.Message.Substring(0, 196) + "..." : vm.Message;
+                        <div class="row vm-wrapper">
+                            <div class="col-xs-2">@vm.Workgroup</div>
+                            <div class="col-xs-5" title="@vm.Message">@summary</div>
+                            <div class="col-xs-3">@vm.DateCreated.ToString("G")</div>
+                            <div class="col-xs-2">
+                                <div class="btn btn-default delete-msg-btn" title="Delete Message" data-id="@vm.VisitorMessageId">
+                                    <i class="fa fa-times"></i>
+                                </div>
+                                <div class="btn btn-default resend-msg-btn" title="Re-process Message" data-id="@vm.VisitorMessageId">
+                                    <i class="fa fa-repeat"></i>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(".resend-msg-btn").click(function () {
+            var btn = $(this);
+            var id = btn.data("id");
+            var parent = btn.closest(".vm-wrapper");
+            $.post("/ResendVisitorMessage", { id: id }, function (response) {
+                if (response.success == true) {
+                    $("#UnprocessedMessages").find(".supervisor-list").append(parent);
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function () {
+                alert("Error resending message.");
+            });
+        });
+
+        $(".delete-msg-btn").click(function () {
+            var btn = $(this);
+            var id = btn.data("id");
+            var parent = btn.closest(".vm-wrapper");
+            $.post("/DeleteVisitorMessage", { id: id }, function (response) {
+                if (response.success == true) {
+                    parent.remove();
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function () {
+                alert("Error deleting message.");
+            });
+        });
+    </script>
+}

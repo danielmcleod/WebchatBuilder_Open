@@ -1,0 +1,236 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebchatBuilder.Helpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">*@
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    <title>Webchat Builder</title>
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="WebchatBuilder" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
+
+    <script src="/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/Site.min.css">
+    @RenderSection("css", required: false)
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" id="NavHeader">
+        <div class="container-fluid">
+            <div class="navbar-header pull-left">
+                <a class="navbar-brand" href="/">
+                    <img alt="Qsect" src="~/Content/Images/qsect-brand.png">
+                </a>
+            </div>
+            <div class="navbar-header" id="HeaderLinkWrapper">
+                <div id="HeaderLinks">
+                    <ul class="nav navbar-nav" id="HeaderLinkList">
+                        @if (User.IsInRole("DashboardAdmin") || Html.IsDebug())
+                        {
+                            <li class="li-round wcb-tooltip li-link" data-placement="bottom" title="Clicking here opens the Dashboard to view Chat Stats."><a href="/Dashboard" class="header-link"><i class="fa fa-bar-chart ui-blue"></i></a></li>
+                        }
+                        @if (User.IsInRole("SettingsAdmin") || Html.IsDebug())
+                        {
+                            <li class="li-round wcb-tooltip li-link" data-placement="bottom" title="Clicking here opens the Settings Page for Configuration."><a href="/Settings" class="header-link"><i class="fa fa-cog ui-turq"></i></a></li>
+                        }
+                        @if (User.IsInRole("UserAdmin") || Html.IsDebug())
+                        {
+                            <li class="li-round wcb-tooltip li-link" data-placement="bottom" title="Clicking here opens the User Management Page."><a href="/Users" class="header-link"><i class="fa fa-users ui-yellow"></i></a></li>
+                        }
+                        @if (User.IsInRole("AlertAdmin") || Html.IsDebug())
+                        {
+                            <li class="dropdown li-round">
+                                <div data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle wcb-tooltip" data-placement="bottom" title="Clicking here will show you recent alerts.">
+                                    <div class="dropdown-inner">
+                                        <i class="fa fa-bell ui-red"></i>
+                                        <span class="caret"></span>
+                                        <span id="AlertCounter">0</span>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown-menu" role="menu" aria-labelledby="dLabel" id="AlertDropDownMenu">
+                                    <div class="dropdown-arrow"></div>
+                                    <div id="AlertList"></div>
+                                </div>
+                            </li>
+                        }
+                        <li class="dropdown li-round">
+                            <div data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle wcb-tooltip" data-placement="bottom" title="Clicking here will show your account info.">
+                                <div class="dropdown-inner">
+                                    <i class="fa fa-lock ui-orange"></i>
+                                    <span class="caret"></span>
+                                </div>
+                            </div>
+
+                            <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <div class="dropdown-arrow"></div>
+                                <div id="AccountInfo">
+                                    <div id="AccountUser">
+                                        @User.Identity.GetUserName()
+                                    </div>
+                                    <div id="AccountImage">
+                                        <div class="img-wrapper">
+                                            <img src="~/Content/Images/WcbUser.png" />
+                                        </div>
+                                    </div>
+                                    <div id="AccountInfo">
+
+                                    </div>
+                                    <div id="AccountLinks">
+                                        <div>
+                                            @Html.ActionLink("Edit", "Edit", "Account", null, new { @class = "btn btn-primary" })
+                                        </div>
+                                        <div>
+                                            @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="container-fluid body-content">
+        <div id="SidePanel">
+            <div id="SidePanelInner">
+                <div id="ProfilesHeader">
+                    <span class="pull-left">Profiles</span>
+                    @if (User.IsInRole("ProfileAdmin"))
+                    {
+                        <i class="fa fa-plus-circle pull-right wcb-tooltip" id="CreateProfileBtn" data-toggle="modal" data-target="#MainModal" data-placement="left" title="Create a new Chat Profile." data-modal-title="Create a new Chat Profile" data-type="createprofile"></i>
+                    }
+                </div>
+                <div id="SidePanelProfiles">
+                </div>
+            </div>
+            <div id="SideSlider">
+                <div id="ArrowIcon" class="center-block">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+                <img src="~/Content/Images/webchat-builder.png" class="slider-icon center-block">
+            </div>
+        </div>
+        <div id="MainView">
+            <div id="AboutWcb">
+                <span class="fa-stack fa-lg" data-toggle="modal" data-target="#MainModal" data-modal-title="About Webchat Builder" data-type="aboutwcb">
+                    <i class="fa fa-circle fa-stack-2x" style="color: #fff;"></i>
+                    <i class="fa fa-info-circle ui-blue fa-stack-2x"></i>
+                </span>
+                <span class="fa-stack fa-lg" id="ToggleTooltips">
+                    <i class="fa fa-circle fa-stack-2x" style="color: #fff;"></i>
+                    <i class="fa fa-question-circle ui-yellow fa-stack-2x"></i>
+                </span>
+            </div>
+            <div id="ScrollTop">
+                <i class="fa fa-arrow-circle-o-up"></i>
+            </div>
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="MainModal" tabindex="-1" role="dialog" aria-labelledby="ModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <i class="show-modal-tooltips fa fa-question"></i>
+                    <h4 class="modal-title" id="ModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="ModalBody">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="modal-corner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="Loading" style="display: none;">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <i class="fa fa-refresh fa-spin"></i>
+            </div>
+        </div>
+    </div>
+
+    @*@Scripts.Render("~/bundles/wcb")*@
+    <script src="~/Scripts/Local/main.js"></script>
+    @if (User.IsInRole("AlertAdmin"))
+    {
+        <text>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+            <script>
+                var addingAlert = false;
+                resetAlertText();
+                var chat = $.connection.alertHub;
+                chat.client.addAlert = function (title, description, alertId) {
+                    var id = $(".alert-wrapper").first().data("id");
+                    if (alertId != id) {
+                        var html = '<div class="alert-wrapper" data-id=' + alertId + '><div class="alert-title">' + title + '<i class="fa fa-times-circle delete-alert"></i></div><div class="alert-description">' + description + '</div></div>';
+                        addingAlert = true;
+                        resetAlertText();
+                        $("#AlertList").prepend(html);
+                        $("#AlertCounter").text($(".alert-wrapper").length);
+                        $("#AlertCounter").show();
+                        addingAlert = false;
+                    }
+                }
+                $.connection.hub.start().done(function () { });
+                $("#AlertDropDownMenu").click(function(e) {
+                    e.stopPropagation();
+                });
+                $("#AlertList").on("click", ".delete-alert", function() {
+                    $(this).closest(".alert-wrapper").remove();
+                    $("#AlertCounter").text($(".alert-wrapper").length);
+                    resetAlertText();
+                });
+                function resetAlertText() {
+                    if (!$(".alert-wrapper").length) {
+                        $("#AlertCounter").hide();
+                        if (addingAlert) {
+                            $("#AlertList").html('');
+                        } else {
+                            $("#AlertList").html('<div>No Alerts...</div>');
+                        }
+                    }
+                }
+            </script>
+        </text>
+    }
+    @RenderSection("scripts", required: false)
+</body>
+
+
+
+</html>

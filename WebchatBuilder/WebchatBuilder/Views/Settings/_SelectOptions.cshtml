@@ -1,0 +1,53 @@
+﻿@model WebchatBuilder.ViewModels.SelectOptionsViewModel
+
+<div id="SelectOptionsWrapper">
+    <i id="CloseSelectOptions" class="fa fa-times"></i>
+    <div class="row">
+        <div class="col-xs-6">
+            @Html.Label("Display Name *")
+            @Html.TextBox("NewOptionName", "", new { id = "NewSelectionOptionName", @class = "form-control", title = "The name/text that appears in the dropdown for this item." })
+        </div>
+        @if (Model.IsProfileList)
+        {
+            <div class="col-xs-6">
+                @Html.Label("Profile to send Chat/Message *")
+                <select class="form-control" id="NewSelectionOptionValue">
+                    @foreach (var option in Model.Profiles)
+                    {
+                        <option value="@option">@option</option>
+                    }
+                </select>
+            </div>
+        }
+        else
+        {
+            <div class="col-xs-6">
+                @Html.Label("Selected Value *")
+                @Html.TextBox("NewOptionValue", "", new { id = "NewSelectionOptionValue", @class = "form-control", title = "The value that will be passed to the CIC server if this option is selected." })
+            </div>
+        }
+        <div class="col-xs-12">
+            <div class="btn btn-success" data-field="@Model.FieldId" id="AddSelectOption" data-loading-text="Adding...">Add Option</div>
+        </div>
+    </div>
+    <div class="row">
+        @foreach (var option in Model.FormOptions)
+        {
+            <div class="col-xs-12 select-option-detail">
+                <div class="col-xs-5 option-text" title="@option.Text">@option.Text</div>
+                <div class="col-xs-4 option-value" title="@option.Value">@option.Value</div>
+                <div class="col-xs-3">
+                    @if (!option.IsDefault)
+                    {
+                        <i data-id="@option.FormOptionId" data-field="@Model.FieldId" class="fa fa-times-circle remove-select-option" title="Remove Option"></i>
+                        <i data-id="@option.FormOptionId" data-field="@Model.FieldId" class="fa fa-wrench set-default-select-option" title="Make Default Option"></i>
+                    }
+                    else
+                    {
+                        <span class="default-option">DEFAULT</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

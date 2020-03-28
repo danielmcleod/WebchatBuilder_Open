@@ -1,0 +1,1291 @@
+﻿@using WebchatBuilder.DataModels
+@using WebChatBuilderModels.Models
+@model WebchatBuilder.ViewModels.DynamicChatScriptViewModel
+@{
+    var urlBase = "";
+    if (!String.IsNullOrEmpty(Model.FullDomain))
+    {
+        urlBase = "//" + Model.FullDomain.TrimEnd('/');
+    }
+}
+var wcb_urlBase = "@urlBase";
+var wcb_chatWrapperCreated = false;
+var wcb_checkAgentTimer;
+var wcb_jsIdArray = [];
+var wcb_continueChatTime = 0;
+var wcb_recycleTime = @Model.RecycleTime;
+var wcb_chatLaunched = false;
+var wcb_overlayOpen = false;
+var wcb_hasUnavailableForm = false;
+var wcb_unavailableMessage = "";
+var wcb_useScheduleMessage = false;
+var wcb_collapsibleLauncher = @Json.Encode(Model.IsSecondaryStyle);
+var wcb_isMobileWidth = false;
+var wcb_integratedButton = false;
+var wcb_chat_profile_override;
+
+@if (Model.ContinueChatTimeRemaining > 0)
+{
+    <text>
+        wcb_continueChatTime = @Model.ContinueChatTimeRemaining;
+        function wcb_continueTimer(){
+            if(wcb_continueChatTime > 1){
+                wcb_continueChatTime--;
+                setTimeout(wcb_continueTimer, 1000);
+            }
+        }
+        wcb_continueTimer();
+    </text>
+}
+
+@if (Model.Form != null)
+{
+    @:var wcb_formCreated = false;
+    @:var wcb_formSubmitted = false;
+}
+@if (Model.UnavailableForm != null)
+{
+    @:var wcb_uaFormCreated = false;
+    @:wcb_uaFormSubmitted = false;
+}
+var hasScrollbar = window.innerWidth > document.documentElement.clientWidth;
+var scrollbarWidth = 0;
+@*if (hasScrollbar) {
+    scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+}*@
+var wcb_chatUser = "";
+var wcb_testing;
+var wcb_attributeNames = [];
+var wcb_attributeValues = [];
+var wcb_fieldNames = [];
+var wcb_fieldValues = [];
+var wcb_customInfo = "";
+if (typeof wcbChatUser !== "undefined") {
+    wcb_chatUser = wcbChatUser;
+}
+if (typeof wcbTesting !== "undefined") {
+    wcb_testing = wcbTesting;
+}
+if (typeof wcbAttributeNames !== "undefined") {
+    wcb_attributeNames = wcbAttributeNames;
+}
+if (typeof wcbAttributeValues !== "undefined") {
+    wcb_attributeValues = wcbAttributeValues;
+}
+if (typeof wcbCustomInfo !== "undefined") {
+    wcb_customInfo = wcbCustomInfo;
+}
+@if (Model.IncludeUserDataInAttributes || Model.IncludeUserDataInCustomInfo)
+{
+    if (Model.IncludeUserDataInAttributes)
+    {
+        @:wcb_attributeNames.push("WcbUserData");
+        @:wcb_attributeValues.push("@Model.UserData");
+    }
+    if (Model.IncludeUserDataInCustomInfo)
+    {
+        @:wcb_customInfo += "@Model.UserData";
+    }
+}
+@if (Model.ShowTooltip)
+{
+    <text>
+        var tooltipTimer;
+    </text>
+}
+
+@if (Model.ShowOnMobile)
+{
+    <text>wcb_startWcbChat();</text>
+}
+else
+{
+    <text>
+        var deviceWidth = window.innerWidth;
+        if (deviceWidth > @Model.MobileWidth) {
+            wcb_startWcbChat();
+        }
+    </text>
+}
+
+function wcb_startWcbChat(){
+    if (@Model.StartTime > 0 && wcb_continueChatTime < 1) {
+        var startTimer = setTimeout(wcb_setChatInterval, @Model.StartTime*1000);
+    } else {
+        wcb_setChatInterval();
+    }
+}
+
+function wcb_setChatInterval() {
+    if ((@Json.Encode(Model.CheckForAgents) || @Json.Encode(Model.HasSchedules)) && wcb_continueChatTime < 1) {
+        if(wcb_recycleTime > 0){
+            wcb_checkAgentTimer = setInterval(wcb_checkForAgents, @Model.RecycleTime*1000);
+        }
+        wcb_checkForAgents();
+    } else {
+        wcb_createChatWrapper();
+    }
+}
+
+function wcb_checkForAgents() {
+    @{
+        var req = Model.CheckForAgents ? Model.RequiredAgentsAvailable : 0;
+        var ewt = Model.CheckForAgents ? Model.MaxEstimatedWaitTime : 0;
+    }
+
+    var requiredAgents = @req;
+    var maxEwt = @ewt;
+    var wcb_hasSchedules = @Json.Encode(Model.HasSchedules);
+    if(requiredAgents < 1 && maxEwt < 1 && !wcb_hasSchedules){
+        clearInterval(wcb_checkAgentTimer);
+        wcb_createChatWrapper();
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    var wcb_chat_profile = wcb_chat_profile_override || '@Model.Profile';
+    xhr.open('GET', encodeURI('@urlBase/Chat/QueryAvailability?profile=' + wcb_chat_profile));
+    xhr.withCredentials = true;
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            if (data.success)
+            {
+                if((!data.hasSchedule || (data.hasSchedule && !data.closed)) &&
+                ((requiredAgents < 1 && maxEwt < 1) ||
+                (((requiredAgents > 0 && maxEwt < 1 && data.agentsAvailable >= requiredAgents) ||
+                (maxEwt > 0 && requiredAgents < 1 && data.ewt < maxEwt) ||
+                (requiredAgents > 0 && maxEwt > 0 && data.agentsAvailable >= requiredAgents && data.ewt < maxEwt)))))
+                {
+                    clearInterval(wcb_checkAgentTimer);
+                    wcb_createChatWrapper();
+                } else {
+                    if((data.hasSchedule && data.closed) || @Json.Encode(Model.ShowUnavailableIfOpenNoAgents)){
+                        @if (Model.UnavailableForm != null)
+                        {
+                        <text>
+                            clearInterval(wcb_checkAgentTimer);
+                            wcb_hasUnavailableForm = true;
+                            wcb_unavailableMessage = data.message;
+                            wcb_createChatWrapper();
+                        </text>
+                        }
+                    }
+                }
+            }
+        }
+    };
+    xhr.send();
+}
+
+function wcb_createChatWrapper() {
+    if (wcb_chatWrapperCreated) {
+        document.getElementById("wcb-webchat-launch").style.display = 'block';
+        return;
+    }
+
+    var css = '@@media print {[id^="wcb"] {display: none;} [class^="wcb"] {display: none;}}',
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+    style.type = 'text/css';
+    if (style.styleSheet){
+        style.styleSheet.cssText = css;
+    } else {
+        style.appendChild(document.createTextNode(css));
+    }
+    head.appendChild(style);
+
+    var deviceWidth = window.innerWidth;
+    var deviceHeight = window.innerHeight;
+    wcb_chatWrapperCreated = true;
+    var wcb_chatWrapper = document.createElement("div");
+    wcb_chatWrapper.id = "wcb-webchat-wrapper";
+    wcb_chatWrapper.innerHTML = '@Html.Raw(Model.DynamicHtml)';
+    document.body.appendChild(wcb_chatWrapper);
+    var wcb_launchChat = document.getElementById("wcb-webchat-launch");
+    var integratedButton = document.getElementById("WcbLauncherButton");
+    if(typeof integratedButton !== "undefined" && integratedButton !== null){
+        wcb_integratedButton = true;
+        wcb_collapsibleLauncher = true;
+        wcb_launchChat.parentNode.removeChild(wcb_launchChat);
+        integratedButton.id = 'wcb-webchat-launch';
+        wcb_launchChat = document.getElementById("wcb-webchat-launch");
+    }
+
+    if(wcb_hasUnavailableForm) {
+        //wcb-tooltip-text
+        var wcb_tooltipText = document.getElementById("wcb-tooltip-text");
+        if(typeof wcb_tooltipText !== "undefined" && wcb_tooltipText !== null) {
+            var wcb_closedTip = wcb_tooltipText.getAttribute('data-closed-text');
+            if(wcb_closedTip && wcb_closedTip.trim().length !== 0)
+            {
+                wcb_tooltipText.innerHTML = wcb_closedTip;
+            }
+            if(wcb_integratedButton) {
+                wcb_launchChat.title = wcb_closedTip;
+                addClass(wcb_launchChat, "wcb-state-unavailable");
+            }
+        }
+        var wcb_launch = document.getElementById("wcb-webchat-launch");
+        if(typeof wcb_launch !== "undefined" && wcb_launch !== null) {
+            var wcb_launch_images = wcb_launch.getElementsByTagName('img');
+            if(wcb_launch_images.length > 0){
+                var wcb_launch_img = wcb_launch_images[0];
+                if(typeof wcb_launch_img !== "undefined" && wcb_launch_img !== null) {
+                    var wcb_closedIcon = wcb_launch_img.getAttribute('data-closed-icon');
+                    if(wcb_closedIcon && wcb_closedIcon.trim().length !== 0)
+                    {
+                        var wcb_closedIconUrl = '@urlBase' + wcb_closedIcon;
+                        wcb_launch_img.src = wcb_closedIconUrl;
+                        wcb_launch_img.alt = "chat unavailable icon";
+                    }
+                }
+            }
+            var wcb_launchHeaderTextDivs = wcb_launch.getElementsByTagName('div');
+            if(wcb_launchHeaderTextDivs.length > 0){
+                var wcb_launchHeaderText = wcb_launchHeaderTextDivs[0];
+                if(typeof wcb_launchHeaderText !== "undefined" && wcb_launchHeaderText !== null) {
+                    var wcb_closedText = wcb_launchHeaderText.getAttribute('data-closed-text');
+                    if(wcb_closedText && wcb_closedText.trim().length !== 0)
+                    {
+                        wcb_launchHeaderText.innerHTML = wcb_closedText;
+                    }
+                }
+            }
+        }
+    } else {
+    if(wcb_integratedButton) {
+        var wcb_tooltipText = document.getElementById("wcb-tooltip-text");
+        if(typeof wcb_tooltipText !== "undefined" && wcb_tooltipText !== null) {
+            wcb_launchChat.title = wcb_tooltipText.innerHTML;
+        }
+            addClass(wcb_launchChat, "wcb-state-available");
+        }
+    }
+
+    var height = wcb_launchChat.offsetHeight;
+    var width = wcb_launchChat.offsetWidth;
+    var right = getStyle("wcb-webchat-launch","right");
+    var left = getStyle("wcb-webchat-launch","left");
+    if (right && right !== "auto") {
+        right = Number(right.replace(/[^-\d\.]/g, ''));
+        if(!wcb_integratedButton) wcb_launchChat.style.right = (right + scrollbarWidth) + "px";
+        @*wcb_launchChat.style.right = right + "px";*@
+        if(right + width > deviceWidth){
+            if(!wcb_integratedButton) wcb_launchChat.style.right = 0;
+            right = 0;
+        }
+    }
+    if (left && left !== "auto") {
+        left = Number(left.replace(/[^-\d\.]/g, ''));
+        if(left + width > deviceWidth){
+            if(!wcb_integratedButton) wcb_launchChat.style.left = 0;
+            left = 0;
+        }
+    }
+    var height = wcb_launchChat.offsetHeight;
+    var width = wcb_launchChat.offsetWidth;
+    var top = getStyle("wcb-webchat-launch","top");
+    if (top && top !== "auto") {
+        top = Number(top.replace(/[^-\d\.]/g, ''));
+        var wcb_verticalLaunch = document.getElementsByClassName("wcb-launch-vertical")[0];
+        if(typeof wcb_verticalLaunch !== "undefined" && wcb_verticalLaunch !== null){
+            if(!wcb_integratedButton) wcb_launchChat.style.top = top - height + "px";
+        }
+    }
+
+    @if (Model.ShowTooltip)
+    {
+        @:var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+            if (!Model.IsSecondaryStyle)
+            {
+                <text>
+                    var right = getStyle("wcb-launch-tooltip","right");
+                    var left = getStyle("wcb-launch-tooltip","left");
+                    var top = getStyle("wcb-launch-tooltip","top");
+                    var bottom = getStyle("wcb-launch-tooltip","bottom");
+
+                    if (top && top !== "auto") {
+                        top = Number(top.replace(/[^-\d\.]/g, ''));
+                    }
+                    if (right && right !== "auto") {
+                        right = Number(right.replace(/[^-\d\.]/g, ''));
+                    }
+                    if (bottom && bottom !== "auto") {
+                        bottom = Number(bottom.replace(/[^-\d\.]/g, ''));
+                    }
+                    if (left && left !== "auto") {
+                        left = Number(left.replace(/[^-\d\.]/g, ''));
+                    }
+                    if (isValNullOrEmpty(top) || top === "auto") {
+                        wcb_tooltip.style.bottom = (bottom + height + 5) + "px";
+                        var wcb_launch_icon = document.getElementById("wcb-webchat-launch-icon");
+                        if(typeof wcb_launch_icon !== "undefined" && wcb_launch_icon !== null){
+                            var img = new Image();
+                            img.onload = function() { wcb_tooltip.style.bottom = (bottom + (this.height*(width/this.width)) + 5) + "px"; }
+                            img.src = wcb_launch_icon.src;
+                            img.alt = "chat launch icon";
+                        }
+                        var tooltipWidth = wcb_tooltip.offsetWidth;
+                        if((right && right !== "auto" && width + right > deviceWidth)||(left && left !== "auto" && width + left > deviceWidth)){
+                            if (isValNullOrEmpty(right) || right === "auto") {
+                                wcb_tooltip.style.left = 0;
+                            } else {
+                                wcb_tooltip.style.right = 0;
+                            }
+                        }
+                        } else {
+                            var wcb_verticalLaunch = document.getElementsByClassName("wcb-launch-vertical")[0];
+                            if(typeof wcb_verticalLaunch !== "undefined" && wcb_verticalLaunch !== null){
+                                if (isValNullOrEmpty(right) || right === "auto") {
+                                    wcb_tooltip.style.left = (left + height + 5) + "px";
+                                } else {
+                                    wcb_tooltip.style.right = (right + height + 5) + "px";
+                                }
+                            } else {
+                                if (isValNullOrEmpty(right) || right === "auto") {
+                                    wcb_tooltip.style.left = (left + width + 5) + "px";
+                                } else {
+                                    wcb_tooltip.style.right = (right + scrollbarWidth + width + 5) + "px";
+                                }
+                            }
+                        }
+                </text>
+            }
+        <text>
+            if(!wcb_integratedButton){
+                wcb_launchChat.addEventListener("mouseenter", function(){
+                    if(getStyle("wcb-webchat-overlay","display") === "none"){
+                        if (typeof tooltipTimer !== "undefined" && tooltipTimer !== null) {
+                            clearTimeout(tooltipTimer);
+                        }
+                        if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                            wcb_tooltip.style.display = "block";
+                        }
+                    }
+                });
+                wcb_launchChat.addEventListener("mouseleave", function(){
+                    tooltipTimer = setTimeout(function () {
+                        if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                            wcb_tooltip.style.display = "none";
+                        }
+                    }, 500);
+                });
+            }
+        </text>
+        if (Model.ShowTooltipAtStart > 0)
+        {
+            @:if(!wcb_integratedButton) wcb_showTooltipAtStart();
+        }
+    }
+
+@*wcb_launchChat.onclick = wcb_launchButtonClicked;*@
+wcb_launchChat.addEventListener("click",wcb_launchButtonClicked);
+@*wcb_launchChat.addEventListener("touchstart",wcb_launchButtonClicked);*@
+
+    var wcb_chatInner = document.getElementById("wcb-webchat-inner");
+    var wcb_chatOverlay = document.getElementById("wcb-webchat-overlay");
+
+if (deviceWidth <= @Model.MobileWidth) {
+    wcb_isMobileWidth = true;
+    @if (Model.ShowTooltip && !Model.ShowTooltipOnMobile)
+    {
+        @:var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+        @:wcb_tooltip.parentNode.removeChild(wcb_tooltip);
+    }
+    @if (Model.IsSecondaryStyle)
+    {
+        <text>
+            var wcb_webchatOuter = document.getElementById("wcb-webchat-outer");
+            wcb_webchatOuter.style.right = 0;
+            wcb_webchatOuter.style.left = 0;
+            var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+            if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                wcb_tooltip.style.right = 0;
+                wcb_tooltip.style.left = 0;
+            }
+        </text>
+    }
+    else
+    {
+        <text>
+            wcb_chatInner.style.height = "95%";@*(deviceHeight*.95)+"px";*@
+            wcb_chatInner.style.width = "95%";@*(deviceWidth*.95)+"px";*@
+            wcb_chatOverlay.style.right = 0;
+            wcb_chatOverlay.style.left = 0;
+            wcb_chatOverlay.style.top = (deviceHeight*.0175)+"px";
+            wcb_chatOverlay.style.bottom = (deviceHeight*.0175)+"px";
+        </text>
+    }
+    } else {
+        @if (Model.PopOverlay)
+        {
+            <text>
+                wcb_chatInner.style.marginTop = (deviceHeight-@Model.Height)/2+"px";
+            </text>
+        }
+        else
+        {
+            <text>
+                var top = getStyle("wcb-webchat-overlay","top");
+                if (top && top !== "auto") {
+                    top = Number(top.replace(/[^-\d\.]/g, ''));
+                    var height = @Model.Height;
+                    var deviceHeight = window.innerHeight;
+                    if(top + height > deviceHeight){
+                        var launchBottom = 0;
+                        var tooltipBottom = 0;
+                        var wcb_launchChat = document.getElementById("wcb-webchat-launch");
+                        var wcb_verticalLaunch = document.getElementsByClassName("wcb-launch-vertical")[0];
+                        var launchHeight = wcb_launchChat.offsetHeight;
+                        if(typeof wcb_verticalLaunch !== "undefined" && wcb_verticalLaunch !== null){
+                            var launchWidth = wcb_launchChat.offsetWidth;
+                            launchBottom = launchWidth;
+                            tooltipBottom = launchWidth;
+                        } else {
+                            tooltipBottom = launchHeight;
+                        }
+                        wcb_chatOverlay.style.top = "auto";
+                        wcb_chatOverlay.style.bottom = "0";
+                        if(!wcb_integratedButton){
+                            wcb_launchChat.style.top = "auto";
+                            wcb_launchChat.style.bottom = launchBottom + "px";
+                        }
+                        var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+                        if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                            wcb_tooltip.style.top = "auto";
+                            wcb_tooltip.style.bottom = tooltipBottom + "px";
+                        }
+                    }
+                }
+            </text>
+        }
+    }
+}
+
+@if (Model.ShowTooltip && Model.ShowTooltipAtStart > 0)
+{
+    <text>
+        function wcb_showTooltipAtStart() {
+            var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+            if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                wcb_tooltip.style.display = "block";
+                tooltipTimer = setTimeout(
+                    function () {
+                        wcb_tooltip.style.display = "none";
+                    }, @Model.ShowTooltipAtStart*1000);
+            }
+        }
+
+    </text>
+}
+
+@if (Model.LaunchInNewWindow)
+{
+    <text>
+        function wcb_launchChatInNewWindow(){
+            var deviceWidth = window.innerWidth;
+            var deviceHeight = window.innerHeight;
+            var top = (deviceHeight-@Model.Height)/2;
+            var left = (deviceWidth-@Model.Width)/2;
+            var url = "@urlBase/Chat";
+            var wcb_chat_profile = wcb_chat_profile_override || '@Model.Profile';
+            var queryString = "?profile=" + wcb_chat_profile;
+            queryString += "&embedded=false";
+            if(typeof wcb_chatUser !== "undefined" && wcb_chatUser.length > 0){
+                queryString += "&user=" + encodeURIComponent(wcb_chatUser);
+            }
+            if(typeof wcb_customInfo !== "undefined" && wcb_customInfo.length > 0){
+                queryString += "&customInfo=" + encodeURIComponent(wcb_customInfo);
+            }
+            if(typeof wcb_testing !== "undefined" && wcb_testing){
+                queryString += "&testing=true";
+            }
+            if(typeof wcb_attributeNames !== "undefined" && wcb_attributeNames.length > 0 && wcb_attributeNames.length === wcb_attributeValues.length){
+                for (i = 0; i < wcb_attributeNames.length; ++i) {
+                    queryString += "&attributeNames=" + encodeURIComponent(wcb_attributeNames[i]) + "&attributeValues=" + encodeURIComponent(wcb_attributeValues[i]);
+                }
+            }
+            window.open(url + queryString, "_blank", "toolbar=no, scrollbars=no, resizable=no, top=top, left=left, width=@Model.Width, height=@Model.Height");
+        }
+    </text>
+}
+
+@if (!Model.UseIframe)
+{
+    <text>
+    function wcb_prepareChat() {
+        wcb_chatLaunched = true;
+        function loadScript(url, id, callback) {
+        /* Load script from url and calls callback once it's loaded */
+            var scriptTag = document.createElement('script');
+            scriptTag.setAttribute("type", "text/javascript");
+            scriptTag.setAttribute("src", url);
+            if (typeof id !== "undefined") {
+                scriptTag.id = id;
+                wcb_jsIdArray.push(id);
+            }
+            if (typeof callback !== "undefined") {
+                if (scriptTag.readyState) {
+                    /* For old versions of IE */
+                    scriptTag.onreadystatechange = function() {
+                        if (this.readyState === 'complete' || this.readyState === 'loaded') {
+                            callback();
+                        }
+                    };
+                } else {
+                    scriptTag.onload = callback;
+                }
+            }
+            (document.getElementsByTagName("head")[0] || document.documentElement).appendChild(scriptTag);
+        }
+
+        var jQuery, $;
+
+        function loadHtml() {
+            @*/******* Load CSS *******/*@
+            if (!$("link[href='@urlBase/Content/StandardChat.min.css']").length){
+                var css_link = $("<link>", {
+                    rel: "stylesheet",
+                    type: "text/css",
+                    href: "@urlBase/Content/StandardChat.min.css"
+                });
+                css_link.appendTo('head');
+            }
+            var wcb_customCssToLoad = '@Model.CustomCss';
+            if(wcb_customCssToLoad.length > 0){
+                @{ var customCssUrl = urlBase + Model.CustomCss; }
+                if (!$("link[href='@customCssUrl']").length){
+                    var custom_css_link = $("<link>", {
+                        rel: "stylesheet",
+                        type: "text/css",
+                        href: "@customCssUrl"
+                    });
+                    custom_css_link.appendTo('head');
+                }
+            }
+            @*/******* Load HTML *******/*@
+            var wcb_chat_url = "@urlBase/Chat";
+        var wcb_chat_profile = wcb_chat_profile_override || '@Model.Profile';
+        $.ajax({
+                url: wcb_chat_url,
+                type: 'GET',
+                xhrFields: {
+                    withCredentials: true
+                },
+                traditional: true,
+                data: {profile: wcb_chat_profile, testing: wcb_testing, user: wcb_chatUser, customInfo: wcb_customInfo, attributeNames: wcb_attributeNames, attributeValues: wcb_attributeValues},
+                success: function (response) {
+                    $('#wcb-webchat-inner').html(response);
+                    loadScript("@urlBase/Scripts/wcb.chat.js", "wcb-chat-script", function() {
+                        $ = jQuery = window.jQuery.noConflict(true);
+                    });
+                }
+            });
+        }
+
+        @*/* Load jQuery */*@
+        loadScript("@urlBase/Scripts/jquery-2.1.4.min.js", "wcb-jquery-script", function() {
+            $ = jQuery = window.jQuery;
+            loadScript("@urlBase/Scripts/wcb.chat.typing.min.js", "wcb-typing-script", function() {
+                loadScript("@urlBase/Scripts/handlebars.js", "wcb-handlebars-script", function() {
+                    loadScript("@urlBase/Scripts/Autolinker.min.js", "wcb-autolinker-script", function() {
+                        loadScript("@urlBase/Scripts/jquery.signalR-2.2.0.min.js", "wcb-jquery-signalr-script", function() {
+                            loadScript("@urlBase/signalr/hubs","wcb-signalr-script", function() {
+                                loadHtml();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+    </text>
+}
+else
+{
+    <text>
+        function wcb_prepareFrame() {
+            var wcb_chatFrame = document.createElement("IFRAME");
+            wcb_chatFrame.id = "wcb-webchat-iframe";
+            var url = "@urlBase/Chat";
+            var wcb_chat_profile = wcb_chat_profile_override || '@Model.Profile';
+            var queryString = "?profile=" + wcb_chat_profile;
+            queryString = "&embedded=false";
+            if(typeof wcb_chatUser !== "undefined" && wcb_chatUser.length > 0){
+                queryString += "&user=" + encodeURIComponent(wcb_chatUser);
+            }
+            if(typeof wcb_customInfo !== "undefined" && wcb_customInfo.length > 0){
+                queryString += "&customInfo=" + encodeURIComponent(wcb_customInfo);
+            }
+            if(typeof wcb_testing !== "undefined" && wcb_testing){
+                queryString += "&testing=true";
+            }
+            if(typeof wcb_attributeNames !== "undefined" && wcb_attributeNames.length > 0 && wcb_attributeNames.length === wcb_attributeValues.length){
+                for (i = 0; i < wcb_attributeNames.length; ++i) {
+                    queryString += "&attributeNames=" + encodeURIComponent(wcb_attributeNames[i]) + "&attributeValues=" + encodeURIComponent(wcb_attributeValues[i]);
+                }
+            }
+            wcb_chatFrame.setAttribute("src", url);
+            wcb_chatFrame.style.width = 100 + "%";
+            wcb_chatFrame.style.height = 100 + "%";
+            wcb_chatFrame.style.border = "none";
+            var wcb_chatInner = document.getElementById("wcb-webchat-inner");
+            wcb_chatInner.innerHTML = "";            
+            wcb_chatInner.appendChild(wcb_chatFrame);
+        }
+    </text>
+}
+
+function wcb_launchButtonClicked() {
+    if(getStyle("wcb-webchat-overlay","display") === "none"){
+        wcb_overlayOpen = true;
+        if(!wcb_chatLaunched){
+            @if (!Model.IsSecondaryStyle)
+            {
+                @:if(getStyle("wcb-webchat-launch","display") === "block" && !wcb_integratedButton){
+                    @:document.getElementById("wcb-webchat-launch").style.display = 'none';
+                @:}
+            }
+            if(wcb_hasUnavailableForm) {
+                wcb_showClosedChatWindow();
+            } else {
+                wcb_showChatWindow();
+            }
+        }
+        else {
+            var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+            if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+                wcb_tooltip.style.display = "none";
+            }
+        }
+        wcb_rotateLaunchArrow("down");
+    } else {
+        wcb_overlayOpen = false;
+        @if (Model.Form != null)
+        {
+            <text>
+                if(wcb_formCreated && !wcb_formSubmitted){
+                    document.getElementById("wcb-webchat-overlay").style.display = 'none';
+                }
+            </text>
+        }
+        @if (Model.UnavailableForm != null)
+        {
+            <text>
+                if(wcb_uaFormCreated && !wcb_uaFormSubmitted){
+                    document.getElementById("wcb-webchat-overlay").style.display = 'none';
+                }
+            </text>
+        }
+        @*document.getElementById("wcb-webchat-overlay").style.display = 'none';*@
+
+        wcb_rotateLaunchArrow("up");
+    }
+}
+
+function wcb_rotateLaunchArrow(direction){
+    var wcb_launchArrow = document.getElementById("wcb-webchat-launch-arrow");
+    if(typeof wcb_launchArrow !== "undefined" && wcb_launchArrow !== null){
+        if(direction === "up"){
+            wcb_launchArrow.style.webkitTransform = 'rotate(0deg)';
+            wcb_launchArrow.style.mozTransform    = 'rotate(0deg)';
+            wcb_launchArrow.style.msTransform     = 'rotate(0deg)';
+            wcb_launchArrow.style.oTransform      = 'rotate(0deg)';
+            wcb_launchArrow.style.transform       = 'rotate(0deg)';
+        } else {
+            wcb_launchArrow.style.webkitTransform = 'rotate(180deg)';
+            wcb_launchArrow.style.mozTransform    = 'rotate(180deg)';
+            wcb_launchArrow.style.msTransform     = 'rotate(180deg)';
+            wcb_launchArrow.style.oTransform      = 'rotate(180deg)';
+            wcb_launchArrow.style.transform       = 'rotate(180deg)';
+        }
+    }
+}
+
+var wcb_loadMinimized = false;
+
+@if (Model.ChatState == ChatState.Connected || (Model.ChatState == ChatState.Queued && !Model.IsChatMinimized) || (Model.ChatState == ChatState.Paused && !Model.IsChatMinimized))
+{
+    @:wcb_launchButtonClicked();
+}
+else if (Model.ChatState == ChatState.Paused)
+{
+    @:wcb_loadMinimized = true;
+    @:wcb_showChatWindow();
+}
+
+function wcb_showChatWindow() {
+    var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+    if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null && !wcb_loadMinimized){
+        wcb_tooltip.style.display = "none";
+    }
+    @if (Model.Form != null)
+    {
+        var form = Model.Form;
+        var rounded = form.Rounded ? "4px" : "0";
+        var backgroundColor = form.BackgroundColor;
+        var color = form.LabelColor;
+        var borderColor = form.BorderColor;
+        var btnColor = form.ButtonColor;
+        var btnTextColor = form.ButtonTextColor;
+        @:if(!wcb_formCreated && wcb_continueChatTime < 1){
+            @:var formHtml = '';
+            if (Model.PopOverlay || Model.IsSecondaryStyle)
+            {
+                @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;width:100%;height:100%;overflow:auto;position:relative;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">';
+            }
+            else
+            {
+                @:var top = getStyle("wcb-webchat-overlay","top");
+                @:if (top && top !== "auto") {
+                    @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;border:solid 1px @borderColor;position:absolute;top:0;left:0;overflow:auto;width:100%;height:100%;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">';
+                @:}
+                @:else {
+                    @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;border:solid 1px @borderColor;position:absolute;bottom:0;left:0;overflow:auto;width:100%;height:100%;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">';
+                @:}
+            }
+            if (!Model.IsSecondaryStyle)
+            {
+                var closeIcon = urlBase + "/Content/Images/form-close.png";
+                @:formHtml += '<img src="@closeIcon" alt="close form icon" id="wcb-close-form" style="position: absolute; top: 10px; right: 10px; cursor: pointer; max-height: 25px; max-width: 25px;" />';
+            }
+            @:formHtml += '<div id="wcb-webchat-form-inner" style="padding:15px;margin:0;">';
+
+            if (form.ShowFormMessage && !String.IsNullOrWhiteSpace(form.FormMessage))
+            {
+                @:formHtml += '<div id="wcb-webchat-form-message" style="color:@color; width: 90%; margin: 15px auto 15px 0;">@form.FormMessage</div>';
+            }
+
+            foreach (var field in form.FormFields.OrderBy(f => f.Position))
+            {
+                var placeholder = !String.IsNullOrEmpty(field.PlaceHolder) ? field.PlaceHolder : "";
+                var classes = !String.IsNullOrEmpty(field.CustomClasses) ? "wcb-input-field " + field.CustomClasses : "wcb-input-field";
+                var maxLength = field.MaxLength > 0 ? "maxlength=\"" + field.MaxLength + "\"" : "";
+                var required = "";
+                var requiredMarker = "";
+                if (field.IsRequired)
+                {
+                    classes += " wcb-required-field";
+                    required = "required";
+                    requiredMarker = "*";
+                }
+                if (!String.IsNullOrEmpty(field.Label))
+                {
+                    @:formHtml += '<label style="color:@color;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;cursor: default;display: inline;font-family: Helvetica, Arial, sans-serif;font-size: 14px;font-weight: bold;line-height: 20px;max-width: 100%; width: auto; text-align: start;">@field.Label</label><span style="color:@color;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;display: inline;font-family: Helvetica, Arial, sans-serif;font-size: 14px;line-height: 20px; width: auto; text-align: start;">@requiredMarker</span>';
+                }
+                if ((field.FieldType == FieldType.Select || field.FieldType == FieldType.Profiles) && field.SelectOptions.Any())
+                {
+                    @:formHtml += '<select id="wcb-field-@field.FormFieldId" class="@classes" style="width:100%;max-width:100%;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;">';
+                    foreach (var option in field.SelectOptions.OrderBy(i => i.Text))
+                    {
+                        var isSelected = option.IsDefault ? "selected" : "";
+                        @:formHtml += '<option @isSelected value="@option.Value">@option.Text</option>';
+                    }
+                    @:formHtml += '</select>';
+                }
+                else if (field.FieldType == FieldType.TextArea)
+                {
+                    @:formHtml += '<textarea id="wcb-field-@field.FormFieldId" placeholder="@placeholder" @required class="@classes" style="width:100%;max-width:100%;resize:vertical;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;" @maxLength></textarea>';
+                }
+                else
+                {
+                    var type = field.FieldType == FieldType.Text ? "type=text" : field.FieldType == FieldType.Email ? "type=email" : "type=password";
+                    @:formHtml += '<input id="wcb-field-@field.FormFieldId" @type placeholder="@placeholder" @required class="@classes" style="width:100%;max-width:100%;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;" @maxLength />';
+                }
+            }
+            if (form.FormFields.Any())
+            {
+                @:formHtml += '<button id="wcb-chatform-btn" style="background-color:@btnColor;border:none;-ms-border-radius:@rounded;border-radius:@rounded;color:@btnTextColor;min-height: 30px;margin-top:10px;cursor:pointer;">@form.ButtonText</button>';
+            }
+            @:formHtml += '</div>';
+            @:formHtml += '';
+            <text>
+                var wcb_chatInner = document.getElementById("wcb-webchat-inner");
+                wcb_chatInner.innerHTML = formHtml;
+                wcb_formCreated = true;
+            </text>
+            if (!Model.IsSecondaryStyle)
+            {
+                @:var wcb_closeForm = document.getElementById("wcb-close-form");
+                @:wcb_closeForm.onclick = function() {
+                    @:if(!wcb_integratedButton) document.getElementById("wcb-webchat-launch").style.display = 'block';
+                    @:document.getElementById("wcb-webchat-overlay").style.display = 'none';
+                @:}
+            }
+
+            <text>
+                var wcb_chatFormButton = document.getElementById("wcb-chatform-btn");
+                var wcb_chatForm = document.getElementById("wcb-webchat-form");
+                var wcb_inputArr = wcb_chatForm.querySelectorAll(".wcb-input-field");
+                if(wcb_inputArr.length > 0){
+                    var wcb_lastInput = wcb_inputArr[wcb_inputArr.length - 1];
+                    wcb_lastInput.addEventListener("keypress", function(event) {
+                        if (event.keyCode === 13) {
+                            event.preventDefault();
+                            wcb_chatFormButton.click();
+                        }
+                    });
+                }
+
+                var wcb_requiredArr = wcb_chatForm.querySelectorAll(".wcb-required-field");
+                if(wcb_requiredArr.length > 0){
+                    var css = '.wcb-required-field:after { content: "*"; color: red; }',
+                    head = document.head || document.getElementsByTagName('head')[0],
+                    style = document.createElement('style');
+
+                    style.type = 'text/css';
+                    if (style.styleSheet){
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(document.createTextNode(css));
+                    }
+                    head.appendChild(style);
+
+                    //document.styleSheets[0].addRule('.wcb-required-field:after','content: "*"; color: red;');
+                    for (var i = 0; i < wcb_requiredArr.length; i++) {
+                        wcb_requiredArr[i].addEventListener('input', function()
+                        {
+                            if(this.validity.valueMissing || !this.validity.valid){
+                                this.style.borderColor = "red";
+                            } else {
+                                this.style.borderColor = "initial";
+                            }
+                        });
+                    }
+                }
+
+                var wcb_formButtonDisabled = false;
+                if(typeof wcb_chatFormButton !== "undefined" && wcb_chatFormButton !== null){
+                    wcb_chatFormButton.onclick = function() {
+                        if(!wcb_formButtonDisabled) {
+                            if(wcb_requiredArr.length > 0){
+                                var wcb_missingRequiredFields = false;
+                                for (var i = 0; i < wcb_requiredArr.length; i++) {
+                                    if(wcb_requiredArr[i].validity.valueMissing || !wcb_requiredArr[i].validity.valid){
+                                        wcb_requiredArr[i].style.borderColor = "red";
+                                        wcb_missingRequiredFields = true;
+                                    }
+                                }
+                                if(wcb_missingRequiredFields){
+                                    return false;            
+                                }
+                            }
+                            wcb_formButtonDisabled = true;
+                            @foreach (var field in form.FormFields.OrderBy(f => f.Position))
+                            {
+                                @:var fieldElement = document.getElementById("wcb-field-@field.FormFieldId");
+                                if (field.FieldType == FieldType.Profiles)
+                                {
+                                    @:wcb_chat_profile_override = fieldElement.value;
+                                }
+                                else
+                                {
+                                    if (field.IsUserField)
+                                    {
+                                        @:wcb_chatUser = fieldElement.value;
+                                    }
+                                    if (field.AppendToCustomInfo)
+                                    {
+                                        @:wcb_customInfo += "@field.Name: " + fieldElement.value + ";";
+                                    }
+                                    if (field.SendAsAttribute)
+                                    {
+                                        @:wcb_attributeNames.push("@field.Name");
+                                        @:wcb_attributeValues.push(fieldElement.value);
+                                    }
+                                }
+                            }
+                            wcb_formSubmitted = true;
+                            wcb_showChatWindow();
+                            return;
+                        }
+                    }
+                }
+            </text>
+        @:}
+        @:if(!wcb_formSubmitted && wcb_formCreated  && wcb_continueChatTime < 1){
+            @:if(getStyle("wcb-webchat-overlay","display") === "none"){
+                @:document.getElementById("wcb-webchat-overlay").style.display = 'block';
+            @:}
+            if (!Model.IsSecondaryStyle)
+            {
+                @:if(getStyle("wcb-webchat-launch","display") === "block" && !wcb_integratedButton){
+                    @:document.getElementById("wcb-webchat-launch").style.display = 'none';
+                @:}
+            }
+            @:return;
+        @:}
+    }
+    @*End Form*@
+
+    @if (Model.LaunchInNewWindow)
+    {
+        <text>
+            wcb_launchChatInNewWindow();
+            return;
+        </text>
+    }
+    if(!wcb_loadMinimized){
+        document.getElementById("wcb-webchat-overlay").style.display = 'block';
+    }
+    @if (Model.UseIframe)
+    {
+        @:wcb_prepareFrame();
+    }
+    else
+    {
+        @:wcb_prepareChat();
+    }
+    @if (!Model.IsSecondaryStyle)
+    {
+        //@:document.getElementById("wcb-webchat-launch").style.display = 'none';
+    }
+}
+@* END Show Chat *@
+
+function wcb_showClosedChatWindow() {
+    var wcb_tooltip = document.getElementById("wcb-launch-tooltip");
+    if(typeof wcb_tooltip !== "undefined" && wcb_tooltip !== null){
+        wcb_tooltip.style.display = "none";
+    }
+    
+    @if (Model.UnavailableForm != null)
+    {
+        var form = Model.UnavailableForm;
+        var rounded = form.Rounded ? "4px" : "0";
+        var backgroundColor = form.BackgroundColor;
+        var color = form.LabelColor;
+        var borderColor = form.BorderColor;
+        var btnColor = form.ButtonColor;
+        var btnTextColor = form.ButtonTextColor;
+        @:if(!wcb_uaFormCreated){
+            @:var formHtml = '';
+            if (Model.PopOverlay || Model.IsSecondaryStyle)
+            {
+                @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;width:100%;height:100%;overflow:auto;position:relative;">';
+            }
+            else
+            {
+                @:var top = getStyle("wcb-webchat-overlay","top");
+                @:if (top && top !== "auto") {
+                    @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;border:solid 1px @borderColor;position:absolute;top:0;left:0;overflow:auto;width:100%;height:100%;">';
+                @:}
+                @:else {
+                    @:formHtml += '<div id="wcb-webchat-form" style="background-color:@backgroundColor;border:solid 1px @borderColor;position:absolute;bottom:0;left:0;overflow:auto;width:100%;height:100%;">';
+                @:}
+            }
+            if (!Model.IsSecondaryStyle)
+            {
+                var closeIcon = urlBase + "/Content/Images/form-close.png";
+                @:formHtml += '<img src="@closeIcon" alt="close form icon" id="wcb-close-form" style="position: absolute; top: 10px; right: 10px; cursor: pointer; max-height: 25px; max-width: 25px;"/>';
+            }
+            @:formHtml += '<div id="wcb-webchat-form-inner" style="padding:15px;margin:0;">';
+
+            if (form.ShowFormMessage)
+            {
+                @:formHtml += '<div id="wcb-webchat-form-message" style="color:@color; width: 90%; margin: 15px auto 15px 0; ">@form.FormMessage</div>';
+            }
+
+            if (form.UseScheduleMessage)
+            {
+                @:wcb_useScheduleMessage = true;
+            }
+
+            foreach (var field in form.FormFields.OrderBy(f => f.Position))
+            {
+                var placeholder = !String.IsNullOrEmpty(field.PlaceHolder) ? field.PlaceHolder : "";
+                var classes = !String.IsNullOrEmpty(field.CustomClasses) ? "wcb-input-field " + field.CustomClasses : "wcb-input-field";
+                var maxLength = field.MaxLength > 0 ? "maxlength=\"" + field.MaxLength + "\"" : "";
+                var required = "";
+                var requiredMarker = "";
+                if (field.IsRequired)
+                {
+                    classes += " wcb-required-field";
+                    required = "required";
+                    requiredMarker = "*";
+                }
+                if (!String.IsNullOrEmpty(field.Label))
+                {
+                    @:formHtml += '<label style="color:@color;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;cursor: default;display: inline;font-family: Helvetica, Arial, sans-serif;font-size: 14px;font-weight: bold;line-height: 20px;max-width: 100%; width: auto; text-align: start;">@field.Label</label><span style="color:@color;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box;display: inline;font-family: Helvetica, Arial, sans-serif;font-size: 14px;line-height: 20px; width: auto; text-align: start;">@requiredMarker</span>';
+                }
+                if ((field.FieldType == FieldType.Select || field.FieldType == FieldType.Profiles) && field.SelectOptions.Any())
+                {
+                    @:formHtml += '<select id="wcb-field-@field.FormFieldId" class="@classes" style="width:100%;max-width:100%;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;">';
+                    foreach (var option in field.SelectOptions.OrderBy(i => i.Text))
+                    {
+                        var isSelected = option.IsDefault ? "selected" : "";
+                        @:formHtml += '<option @isSelected value="@option.Value">@option.Text</option>';
+                    }
+                    @:formHtml += '</select>';
+                }
+                else if (field.FieldType == FieldType.TextArea)
+                {
+                    @:formHtml += '<textarea id="wcb-field-@field.FormFieldId" placeholder="@placeholder" @required class="@classes" style="width:100%;max-width:100%;resize:vertical;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;" @maxLength></textarea>';
+                }
+                else
+                {
+                    var type = field.FieldType == FieldType.Text ? "type=text" : field.FieldType == FieldType.Email ? "type=email" : "type=password";
+                    @:formHtml += '<input id="wcb-field-@field.FormFieldId" @type placeholder="@placeholder" @required class="@classes" style="width:100%;max-width:100%;-ms-border-radius:@rounded;border-radius:@rounded;margin:5px 0;border:solid 1px @borderColor;padding:6px 3%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height: auto;" @maxLength />';
+                }
+            }
+            if (form.FormFields.Any())
+            {
+                @:formHtml += '<button id="wcb-chatform-btn" style="background-color: @btnColor; border: none; -ms-border-radius: @rounded; border-radius: @rounded; color: @btnTextColor; min-height: 30px;margin-top:10px; cursor: pointer;">@form.ButtonText</button>';
+            }
+            @:formHtml += '</div>';
+            @:formHtml += '</div>';
+        <text>
+            var wcb_chatInner = document.getElementById("wcb-webchat-inner");
+            wcb_chatInner.innerHTML = formHtml;
+            wcb_uaFormCreated = true;
+            var wcb_formMessage = document.getElementById("wcb-webchat-form-message");
+            if(typeof wcb_formMessage !== "undefined" && wcb_formMessage !== null && wcb_unavailableMessage && wcb_unavailableMessage.trim().length !== 0 && wcb_useScheduleMessage){
+                wcb_formMessage.innerHTML = wcb_unavailableMessage;
+            }
+        </text>
+
+        if (!Model.IsSecondaryStyle)
+        {
+            @:var wcb_closeForm = document.getElementById("wcb-close-form");
+            @:wcb_closeForm.onclick = function() {
+                @:if(!wcb_integratedButton) document.getElementById("wcb-webchat-launch").style.display = 'block';
+                @:document.getElementById("wcb-webchat-overlay").style.display = 'none';
+            @:}
+        }
+
+            <text>
+                var wcb_chatFormButton = document.getElementById("wcb-chatform-btn");
+                var wcb_chatForm = document.getElementById("wcb-webchat-form");
+                var wcb_inputArr = wcb_chatForm.querySelectorAll(".wcb-input-field");
+                if(wcb_inputArr.length > 0){
+                    var wcb_lastInput = wcb_inputArr[wcb_inputArr.length - 1];
+                    wcb_lastInput.addEventListener("keypress", function(event) {
+                        if (event.keyCode === 13) {
+                            event.preventDefault();
+                            wcb_chatFormButton.click();
+                        }
+                    });
+                }
+
+                var wcb_requiredArr = wcb_chatForm.querySelectorAll(".wcb-required-field");
+                if(wcb_requiredArr.length > 0){
+                    for (var i = 0; i < wcb_requiredArr.length; i++) {
+                        var wcb_requiredField = wcb_requiredArr[i];
+                        wcb_requiredField.addEventListener('input', function()
+                        {
+                            if(this.validity.valueMissing || !this.validity.valid){
+                                       this.style.borderColor = "red";
+                            } else {
+                                       this.style.borderColor = "initial";
+                            }
+                        });
+                    }
+                }
+
+                var wcb_formButtonDisabled = false;
+                if(typeof wcb_chatFormButton !== "undefined" && wcb_chatFormButton !== null){
+                    wcb_chatFormButton.onclick = function() {
+                        if(!wcb_formButtonDisabled) {
+                            if(wcb_requiredArr.length > 0){
+                                var wcb_missingRequiredFields = false;
+                                for (var i = 0; i < wcb_requiredArr.length; i++) {
+                                    var wcb_requiredField = wcb_requiredArr[i];
+                                    if(wcb_requiredField.validity.valueMissing || !wcb_requiredField.validity.valid){
+                                        wcb_requiredField.style.borderColor = "red";
+                                        wcb_missingRequiredFields = true;
+                                    }
+                                }
+                                if(wcb_missingRequiredFields){
+                                   return false;            
+                                }
+                            }
+                            wcb_formButtonDisabled = true;
+                            @foreach (var field in form.FormFields.OrderBy(f => f.Position))
+                            {
+                                @:var fieldElement = document.getElementById("wcb-field-@field.FormFieldId");
+                                if (field.FieldType == FieldType.Profiles)
+                                {
+                                    @:wcb_chat_profile_override = fieldElement.value;
+                                }
+                                else
+                                {
+                                    @:wcb_fieldNames.push("@field.Name");
+                                    @:wcb_fieldValues.push(fieldElement.value);
+                                    if (field.AppendToCustomInfo)
+                                    {
+                                        @:wcb_customInfo += "@field.Name: " + fieldElement.value + ";";
+                                    }
+                                    if (field.SendAsAttribute)
+                                    {
+                                        @:wcb_attributeNames.push("@field.Name");
+                                        @:wcb_attributeValues.push(fieldElement.value);
+                                    }
+                                }
+                            }
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('POST', encodeURI('@urlBase/Chat/SaveVisitorInfo'));
+                            xhr.withCredentials = true;
+                            xhr.onload = function () {
+                                if (xhr.status === 200) {
+                                    var data = JSON.parse(xhr.responseText);
+                                    if (data.success)
+                                    {
+                                        @{ var submittedMessage = !String.IsNullOrWhiteSpace(form.FormSubmittedMessage) ? form.FormSubmittedMessage : "Thank you!"; }
+                                        var wcb_chatInner = document.getElementById("wcb-webchat-form-inner");
+                                        wcb_chatInner.innerHTML = '<div style="color: @color; width: 90%; margin: 15px auto;">@submittedMessage</div>';
+                                        wcb_uaFormSubmitted = true;
+                                    } else {
+                                        var wcb_chatInner = document.getElementById("wcb-webchat-form-inner");
+                                        wcb_chatInner.innerHTML = '<div style="color: red; width: 90%; margin: 15px auto;">Error Submitting Form.</div>';
+                                    }
+                                }
+                                else {
+                                    var wcb_chatInner = document.getElementById("wcb-webchat-form-inner");
+                                    wcb_chatInner.innerHTML = '<div style="color: red; width: 90%; margin: 15px auto;">Error Submitting Form.</div>';
+                                }
+                            };
+                            xhr.setRequestHeader("Content-Type", "application/json"); @*text/plain*@
+                            var wcb_chat_profile = wcb_chat_profile_override || '@Model.Profile';
+                            var jsdata = {profile: wcb_chat_profile, fieldNames: wcb_fieldNames, fieldValues: wcb_fieldValues}
+
+                            if(typeof wcb_customInfo !== "undefined" && wcb_customInfo.length > 0){
+                                jsdata.customInfo = wcb_customInfo;
+                            }
+
+                            if(typeof wcb_attributeNames !== "undefined" && wcb_attributeNames.length > 0 && wcb_attributeNames.length === wcb_attributeValues.length){
+                                jsdata.attributeNames = wcb_attributeNames;
+                                jsdata.attributeValues = wcb_attributeValues;
+                            }
+
+                            xhr.send(JSON.stringify(jsdata));
+                            return;
+                        }
+                    }
+                }
+            </text>
+            @:}
+            @*@:if(!wcb_uaFormSubmitted && wcb_uaFormCreated  && wcb_continueChatTime < 1){*@
+            @:if(wcb_uaFormCreated){
+                @:if(getStyle("wcb-webchat-overlay","display") === "none"){
+                    @:document.getElementById("wcb-webchat-overlay").style.display = 'block';
+                @:}
+            if (!Model.IsSecondaryStyle)
+            {
+                @:if(getStyle("wcb-webchat-launch","display") === "block" && !wcb_integratedButton){
+                    @:document.getElementById("wcb-webchat-launch").style.display = 'none';
+                @:}
+            }
+                @:return;
+            @:}
+    }
+    @*End Form*@
+
+    @if (Model.LaunchInNewWindow)
+    {
+        <text>
+            wcb_launchChatInNewWindow();
+            return;
+        </text>
+    }
+
+    document.getElementById("wcb-webchat-overlay").style.display = 'block';
+
+    @*@if (Model.UseIframe)
+    {
+        @:wcb_prepareFrame();
+    }
+    else
+    {
+        @:wcb_prepareChat();
+    }*@
+    @if (!Model.IsSecondaryStyle)
+    {
+        @:if(!wcb_integratedButton) document.getElementById("wcb-webchat-launch").style.display = 'none';
+    }
+}
+@* END Show Closed Chat *@
+
+function wcb_hideChatOverlay() {
+    @if (!Model.ContinueChat)
+    {
+    <text>
+        wcb_chatLaunched = false;
+        var wcb_chatFrame = document.getElementById("wcb-webchat-iframe");
+        if (typeof wcb_chatFrame !== "undefined" && wcb_chatFrame !== null) {
+            wcb_chatFrame.parentNode.removeChild(wcb_chatFrame);
+        }
+        for (i = 0; i < wcb_jsIdArray.length; ++i) {
+            var wcb_chatScript = document.getElementById(i);
+            if (typeof wcb_chatScript !== "undefined" && wcb_chatScript !== null) {
+                wcb_chatScript.parentNode.removeChild(wcb_chatScript);
+            }
+        }
+        wcb_jsIdArray = [];
+        var wcb_chatInner = document.getElementById("wcb-webchat-inner");
+        wcb_chatInner.innerHTML = "";
+        wcb_setChatInterval();
+    </text>
+    }
+    else {
+        @:if(!wcb_integratedButton) document.getElementById("wcb-webchat-launch").style.display = 'block';
+    }
+    document.getElementById("wcb-webchat-overlay").style.display = 'none';
+}
+
+window.onmessage = function(e){
+    if (~e.origin.endsWith('@Model.Domain')) {
+        if (e.data === 'closeChat') {
+            wcb_hideChatOverlay();
+        }
+    }
+};
+
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
+
+function isValNullOrEmpty(value){
+    if(value === null || value === ""){
+        return true;
+    }
+    return false;
+}
+
+function getStyle(element,styleProperty)
+{
+    var x = document.getElementById(element);
+    if (x.currentStyle)
+    var y = x.currentStyle[styleProperty];
+    else
+    var y = x.style.getPropertyValue(styleProperty);
+    return y;
+}
+
+function hasClass(ele, cls) {
+    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
+
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        ele.className = ele.className.replace(reg, ' ');
+    }
+}
+
+@*</script>*@
+
+@*
+    //JsonP version
+    $.getJSON(jsonp_url, {profile: @Model.Profile}, function(response) {
+        $('#wcb_chatInner').html(response.html);
+    });
+*@

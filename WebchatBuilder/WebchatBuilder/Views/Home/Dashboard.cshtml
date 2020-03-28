@@ -1,0 +1,132 @@
+﻿@model WebchatBuilder.ViewModels.DashboardViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="DashboardPage">
+    <div id="DashboardHeader">
+        <h2>Dashboard</h2>
+        <div id="DateRangeWrapper">
+            <label for="StartDate">Start Date</label>
+            <input type="date" placeholder="mm/dd/yyyy" id="StartDate" name="StartDate"/>
+            <label for="EndDate">End Date</label>
+            <input type="date" placeholder="mm/dd/yyyy" id="EndDate" name="EndDate"/>
+            <input type="button" value="Refresh" id="RefreshBtn"/>
+        </div>
+        <div id="PageRefreshWrapper">
+            <label for="PageRefreshSeconds">Refresh Interval (seconds)</label>
+            <input type="number" value="60" id="PageRefreshSeconds" onchange="refreshSettingChanged()" />
+        </div>
+    </div>
+    <div id="DashboardContainer">
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script src="/Scripts/d3.min.js"></script>
+    <script src="/Scripts/topojson.js"></script>
+    <script src="/Scripts/datamaps.all.min.js"></script>
+    <script src="/Scripts/Chart.min.js"></script>
+
+    <script type="text/javascript">
+        $("#ArrowIcon i").hide();
+        var pageRefreshSeconds;
+        var timer = null;
+        var refreshUpdated = false;
+        refreshTimer();
+
+        function refreshTimer() {
+            pageRefreshSeconds = $("#PageRefreshSeconds").val();
+            if (pageRefreshSeconds != null && !isNaN(pageRefreshSeconds)) {
+                if (pageRefreshSeconds > 0) {
+                    if (refreshUpdated) {
+                        if (timer != null) {
+                            clearInterval(timer);
+                        }
+                        timer = setInterval(refreshTimer, pageRefreshSeconds * 1000);
+                        refreshUpdated = false;
+                    } else {
+                        if (timer == null) {
+                            timer = setInterval(refreshTimer, pageRefreshSeconds * 1000);
+                        }
+                    }
+                } else {
+                    if (timer != null) {
+                        clearInterval(timer);
+                    }
+                }
+            }
+            updateDashboard();
+        }
+
+        function refreshSettingChanged() {
+            refreshUpdated = true;
+            refreshTimer();
+        }
+
+        $("#RefreshBtn").click(function() {
+            updateDashboard();
+        });
+
+        function updateDashboard() {
+            var data = {};
+
+            if ($("#StartDate").val()) {
+                var start = new Date($("#StartDate").val()).toISOString();
+                var end;
+                if ($("#EndDate").val()) {
+                    end = new Date($("#EndDate").val()).toISOString();
+                } else {
+                    end = new Date().toISOString();
+                }
+                data.startDate = start;
+                data.endDate = end;
+            }
+            $.get("/RefreshDashboard", data, function (response) {
+                $("#DashboardContainer").html(response);
+                getQueueStats();
+            });
+        }
+
+        function getQueueStats() {
+            $(".dash-queue-stat-wrapper").each(function () {
+                var queueWrapper = $(this);
+                var loading = queueWrapper.find(".dash-queue-loading");
+                var inner = queueWrapper.find(".dash-queue-inner");
+                loading.show();
+                var profile = queueWrapper.data("profile");
+                var data = {
+                    profileName: profile
+                };
+
+                if ($("#StartDate").val()) {
+                    var start = new Date($("#StartDate").val()).toISOString();
+                    var end;
+                    if ($("#EndDate").val()) {
+                        end = new Date($("#EndDate").val()).toISOString();
+                    } else {
+                        end = new Date().toISOString();
+                    }
+                    data.startDate = start;
+                    data.endDate = end;
+                }
+
+                $.get("/GetWorkgroupStats", data, function (response) {
+                    if (response.success) {
+                        queueWrapper.find(".dash-queue-active").text(response.active);
+                        queueWrapper.find(".dash-queue-queued").text(response.queued);
+                        queueWrapper.find(".dash-queue-total").text(response.total);
+                        queueWrapper.find(".dash-queue-abandoned").text(response.abandoned);
+                        loading.hide();
+                        inner.show();
+                    }
+                }).fail(function () {
+                    queueWrapper.remove();
+                });
+            });
+        }
+
+    </script>
+}
+

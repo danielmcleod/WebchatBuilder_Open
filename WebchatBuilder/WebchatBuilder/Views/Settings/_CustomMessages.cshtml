@@ -1,0 +1,99 @@
+﻿@model WebchatBuilder.ViewModels.CustomMessagesViewModel
+
+@using (Html.BeginForm("UpdateCustomSystemMessages", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "CustomSystemMessagesForm" }))
+{
+    @Html.Label("Custom System Messages")
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Agent Joined Message Enabled")
+            @Html.CheckBoxFor(m => m.AgentJoinedMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Agent Joined Custom System Message." })
+        </div>
+        <div>
+            @Html.Label("Agent Joined Message")
+            @Html.TextAreaFor(m => m.AgentJoinedMessage, new { title = "Custom Agent Joined Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Agent Disconnect Message Enabled")
+            @Html.CheckBoxFor(m => m.AgentDisconnectMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Agent Disconnect Custom System Message." })
+        </div>
+        <div>
+            @Html.Label("Agent Disconnect Message")
+            @Html.TextAreaFor(m => m.AgentDisconnectMessage, new { title = "Custom Agent Disconnect Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Chat Connected Message Enabled")
+            @Html.CheckBoxFor(m => m.ConnectedMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Chat Connected Custom System Message." })
+        </div>
+        <div>
+            @Html.Label("Chat Connected Message")
+            @Html.TextAreaFor(m => m.ConnectedMessage, new { title = "Custom Chat Connected Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Timeout Disconnect Message Enabled")
+            @Html.CheckBoxFor(m => m.InactiveDisconnectMessageEnabled, new {@class = "wcb-tooltip", title = "Enable the Timeout Disconnect Custom System Message."})
+        </div>
+        <div>
+            @Html.Label("Timeout Disconnect Message")
+            @Html.TextAreaFor(m => m.InactiveDisconnectMessage, new {title = "Custom Timeout Disconnect Message.", @class = "form-control wcb-tooltip"})
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Visitor Disconnect Message Enabled")
+            @Html.CheckBoxFor(m => m.VisitorDisconnectMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Visitor Disconnect Custom System Message." })
+        </div>
+        <div>
+            @Html.Label("Visitor Disconnect Message")
+            @Html.TextAreaFor(m => m.VisitorDisconnectMessage, new { title = "Visitor Timeout Disconnect Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("Chat Restarted Message Enabled")
+            @Html.CheckBoxFor(m => m.RestartedChatMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Chat Restarted Custom System Message." })
+        </div>
+        <div>
+            @Html.Label("Chat Restarted Message")
+            @Html.TextAreaFor(m => m.RestartedChatMessage, new { title = "Custom Chat Restarted Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("*Paused Chat Message Enabled")
+            @Html.CheckBoxFor(m => m.PausedChatMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Paused Chat Custom System Message that will be sent to the agent only." })
+        </div>
+        <div>
+            @Html.Label("Paused Chat Message")
+            @Html.TextAreaFor(m => m.PausedChatMessage, new { title = "Custom Paused Chat Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <div class="custom-message-wrapper">
+        <div>
+            @Html.Label("*Resumed Chat Message Enabled")
+            @Html.CheckBoxFor(m => m.ResumedChatMessageEnabled, new { @class = "wcb-tooltip", title = "Enable the Resumed Chat Custom System Message that will be sent to the agent only.." })
+        </div>
+        <div>
+            @Html.Label("Resumed Chat Message")
+            @Html.TextAreaFor(m => m.ResumedChatMessage, new { title = "Custom Resumed Chat Message.", @class = "form-control wcb-tooltip" })
+        </div>
+    </div>
+    <input type="submit" value="Save Messages" class="btn btn-default wcb-tooltip" data-loading-text="Saving..." id="CustomMessageSaveBtn" title="Clicking here will save the Custom System Messages." />
+    <div>
+        <p>You can use the variable %PARAM% in your custom system messages and this will be replaced with a parameter related to the custom message type. The types and corresponding parameters are as follows:</p>
+        <ul>
+            <li>Connected - Queue Name</li>
+            <li>Agent Joined - Agent Name</li>
+            <li>Agent Disconnected - Agent Name</li>
+            <li>Inactive Disconnect - N/A</li>
+            <li>Restarted - Queue Name</li>
+            <li>Paused - User Name</li>
+            <li>Resumed - User Name</li>
+        </ul>
+    </div>
+}

@@ -1,0 +1,67 @@
+﻿@model WebchatBuilder.ViewModels.UserViewModel
+
+@{
+    ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="EditPage">
+    <div id="EditHeader">
+        <h2>Edit User</h2>
+    </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-12">
+                <div class="row" id="EditUser">
+                    <div class="col-lg-5">
+                        <div id="DisplayImage">
+                            <div class="img-wrapper">
+                                <img src="@Model.ImgPath" id="EditUserImage" />
+                            </div>
+                            <form action="" method="post" enctype="multipart/form-data" id="AddFile">
+                                <label for="AddFileInput" class="btn btn-primary">Upload Image</label>
+                                <input type="file" name="AddFileInput" id="AddFileInput" class="hidden" accept="image" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+                        {
+                            @Html.Partial("_EditUser", Model)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+@section scripts
+{
+    <script>
+        $("#EditPage").on('change', '#AddFileInput', function () { uploadFile(); });
+
+        function uploadFile() {
+            $('#AddFile').submit();
+        }
+
+        $('#AddFile').submit(function (e) {
+            $.ajax({
+                url: '/Account/AddUserImage',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success != false) {
+                        $("#EditUserImage").replaceWith('<img src="' + response.imgUrl + '" id="EditUserImage" />');
+                        $("#AccountImage").find("img").replaceWith('<img src="' + response.imgUrl + '" />');
+                    }
+                },
+                error: function () {
+
+                }
+            });
+            e.preventDefault();
+        });
+    </script>
+}

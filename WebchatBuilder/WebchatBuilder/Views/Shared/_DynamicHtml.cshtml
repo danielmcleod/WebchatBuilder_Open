@@ -1,0 +1,134 @@
+﻿@model WebchatBuilder.ViewModels.DynamicChatHtmlViewModel
+
+<div id="wcb-webchat">
+    @{
+        var offsetX = Model.OffsetX + "px";
+        var offsetY = Model.OffsetY + "px";
+        var height = Model.Height + "px";
+        var width = Model.Width + "px";
+        var pos = "";
+        var domain = !String.IsNullOrWhiteSpace(Model.Domain) ? Model.Domain.TrimEnd('/') : "";
+        var iconSrc = domain + Model.IconPath;
+    }
+    @if (Model.Position == "bottom")
+    {
+        pos = "bottom:"+offsetY+";right:"+offsetX;
+        <div id="wcb-webchat-launch" style="position:fixed;@pos;cursor:pointer;z-index:9999; display: block;">
+            @if (Model.UseIcon)
+            {
+                var iconWidth = Model.IconWidth + "px";
+                <img src="@iconSrc" alt="chat launch icon" data-closed-icon="@Model.UnavailableIconPath" style="width: @iconWidth; max-width: @iconWidth" id="wcb-webchat-launch-icon" />
+            }
+            else
+            {
+                if (Model.Rounded)
+                {
+                    <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -ms-border-radius: 12px 12px 0 0; border-radius: 12px 12px 0 0;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                }
+                else
+                {
+                    <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color:@Model.Background;color:@Model.TextColor;padding:6px 12px;font-size:20px;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                }
+            }
+        </div>
+    }
+    @if (Model.Position == "right")
+    {
+        pos = "top:" + offsetY + ";right:" + offsetX;
+        <div id="wcb-webchat-launch" style="position:fixed;top:@offsetY;right:@offsetX;cursor:pointer;z-index:9999; display: block;">
+            @if (Model.UseIcon)
+            {
+                var iconWidth = Model.IconWidth + "px";
+                <img src="@iconSrc" alt="chat launch icon" data-closed-icon="@Model.UnavailableIconPath" style="width: @iconWidth; max-width: @iconWidth" id="wcb-webchat-launch-icon" />
+            }
+            else
+            {
+                if (Model.Vertical)
+                {
+                    if (Model.Rounded)
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" class="wcb-launch-vertical" style="-webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); -webkit-transform-origin: right bottom 0; -moz-transform-origin: right bottom 0; -ms-transform-origin: right bottom 0; -o-transform-origin: right bottom 0; transform-origin: right bottom 0; background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -ms-border-radius: 12px 12px 0 0; border-radius: 12px 12px 0 0;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                    else
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" class="wcb-launch-vertical" style="-webkit-transform: rotate(270deg); -moz-transform: rotate(270deg); -ms-transform: rotate(270deg); -o-transform: rotate(270deg); transform: rotate(270deg); -webkit-transform-origin: right bottom 0; -moz-transform-origin: right bottom 0; -ms-transform-origin: right bottom 0; -o-transform-origin: right bottom 0; transform-origin: right bottom 0; background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                }
+                else
+                {
+                    if (Model.Rounded)
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -ms-border-radius: 8px 0 0 8px; border-radius: 8px 0 0 8px;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none;">@Model.LaunchText</div>
+                    }
+                    else
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color:@Model.Background;color:@Model.TextColor;padding:6px 12px;font-size:20px;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none;">@Model.LaunchText</div>
+                    }
+                }
+            }
+        </div>
+    }
+    @if (Model.Position == "left")
+    {
+        pos = "top:" + offsetY + ";left:" + offsetX;
+        <div id="wcb-webchat-launch" style="position:fixed;top:@offsetY;left:@offsetX;cursor:pointer;z-index:9999; display: block;">
+            @if (Model.UseIcon)
+            {
+                var iconWidth = Model.IconWidth + "px";
+                <img src="@iconSrc" alt="chat launch icon" data-closed-icon="@Model.UnavailableIconPath" style="width: @iconWidth; max-width: @iconWidth" id="wcb-webchat-launch-icon" />
+            }
+            else
+            {
+                if (Model.Vertical)
+                {
+                    if (Model.Rounded)
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" class="wcb-launch-vertical" style="-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform-origin: left bottom 0; -moz-transform-origin: left bottom 0; -ms-transform-origin: left bottom 0; -o-transform-origin: left bottom 0; transform-origin: left bottom 0; background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -ms-border-radius: 12px 12px 0 0; border-radius: 12px 12px 0 0;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                    else
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" class="wcb-launch-vertical" style="-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); -webkit-transform-origin: left bottom 0; -moz-transform-origin: left bottom 0; -ms-transform-origin: left bottom 0; -o-transform-origin: left bottom 0; transform-origin: left bottom 0; background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                }
+                else
+                {
+                    if (Model.Rounded)
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color: @Model.Background; color: @Model.TextColor; padding: 6px 12px; font-size: 20px; -ms-border-radius: 0 8px 8px 0; border-radius: 0 8px 8px 0;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                    else
+                    {
+                        <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="background-color:@Model.Background;color:@Model.TextColor;padding:6px 12px;font-size:20px;-moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none; line-height: normal;">@Model.LaunchText</div>
+                    }
+                }
+            }
+        </div>
+    }
+    @if (Model.PopOverlay)
+    {
+        <div id="wcb-webchat-overlay" style="display: none; z-index: 9999; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.6); width: 100%; height: 100%;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+            <div id="wcb-webchat-inner" style="height: @height; width: @width; margin: auto; background-color:@Model.PlaceHolderBackground;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+
+            </div>
+        </div>
+    }
+    else
+    {
+        var overLayPos = pos;
+        if (Model.Position == "bottom")
+        {
+            overLayPos = "bottom:0;right:" + offsetX;
+        }
+        <div id="wcb-webchat-overlay" style="display:none;z-index:9999;position:fixed;max-height:100%;max-width:100%;@overLayPos;overflow-y:visible;overflow-x: hidden;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+            <div id="wcb-webchat-inner" style="height:@height;width:@width;max-height:100%;max-width:100%;margin:auto;background-color:transparent;position:relative;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+
+            </div>
+        </div>
+    }
+    @if (Model.ShowTooltip)
+    {
+        <div id="wcb-launch-tooltip" style="display:none;max-width:@width;text-align:center;z-index:9998;position:fixed;@pos;">
+            <div id="wcb-tooltip-text" data-closed-text="@Model.UnavailableTooltipText" style="border: solid 1px @Model.TooltipColor; color: @Model.TooltipColor; padding: 10px 15px; -ms-border-radius: 4px; border-radius: 4px; background-color: #ffffff; background-color: rgba(255, 255, 255, 0.85);">@Model.TooltipText</div>
+        </div>
+    }
+</div>

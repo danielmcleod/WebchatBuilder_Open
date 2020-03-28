@@ -1,0 +1,32 @@
+﻿body {
+  margin: 0;
+  font-family: sans-serif;
+}
+header {
+  width: 1170px;
+  max-width: 100%;
+  margin: 0 auto;
+  float: none;
+  clear: both;
+}
+header a {
+  float: left;
+  width: 25%;
+  padding: 15px 0;
+  text-align: center;
+  background-color: #8d8d8d;
+  color: white;
+  text-decoration: none;
+}
+header a.active {
+  background-color: #769e2d;
+}
+header a:hover {
+  background-color: gray;
+  text-decoration: none;
+}
+#Version {
+  clear: both;
+  float: none;
+}
+/*# sourceMappingURL=preview.css.map */

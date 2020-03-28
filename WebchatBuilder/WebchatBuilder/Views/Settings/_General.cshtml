@@ -1,0 +1,201 @@
+﻿@model WebchatBuilder.ViewModels.GeneralSettingsViewModel
+<div class="settings-tab">
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("CompanyInfo", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "CompanyInfoForm" }))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "ui-red" })
+                @Html.Label("Company")
+                @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control wcb-tooltip", title = "Your Company Name or the name you want displayed on the main page of this web interface." })
+                @Html.Label("Logo")
+                @Html.HiddenFor(m => m.Logo)
+                @Html.HiddenFor(m => m.Logos)
+                <div id="LogoWrapper">
+                    @if (String.IsNullOrEmpty(Model.Logo))
+                    {
+                        <div class="no-logo">Please select a Logo</div>
+                    }
+                    else
+                    {
+                        <img src="@Model.Logo" id="CompanyLogo" />
+                    }
+                </div>
+                <input type="submit" value="Save" class="btn btn-default wcb-tooltip" data-loading-text="Saving..." id="CompanyInfoSaveBtn" title="Clicking here will save your Company name and Logo" />
+            }
+        </div>
+        <div class="col-md-6">
+            <div id="GeneralLogos" class="wcb-tooltip" title="Uploaded logos will appear here. You can select a new logo by clicking on it and then clicking the save button.">
+                @{
+                    var selectedLogo = Model.Logo ?? "";
+                    foreach (var logo in Model.Logos)
+                    {
+                        var selectedClass = "";
+                        if (logo.ToLower() == selectedLogo.ToLower())
+                        {
+                            selectedClass = "class=\"selected\"";
+                        }
+                        <img src="@logo" @selectedClass />
+                    }
+                }
+            </div>
+            <form action="" method="post" enctype="multipart/form-data" id="AddLogo">
+                <label for="AddLogoFileInput" class="btn btn-primary wcb-tooltip" title="Clicking here will open a File Upload dialog where you can select your company logo.">Add Logo</label>
+                <input type="file" name="AddLogoFileInput" id="AddLogoFileInput" class="hidden" accept="image" />
+            </form>
+        </div>
+    </div>
+    <hr />
+    <div id="GlobalChatSettings">
+        <div class="row">
+            <div class="col-md-6">
+                @using (Html.BeginForm("GlobalChatSettings", "Settings", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "GlobalChatSettingsForm" }))
+                {
+                    <div>
+                        @Html.Label("Default Visitor UserName")
+                        @Html.TextBoxFor(m => m.DefaultUserName, new { title = "The default name shown as the visitors name if a username is not passed in.", @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Save visitors IP Address?")
+                        @Html.CheckBoxFor(m => m.SaveIpAddress, new {@class = "wcb-tooltip", title = "Whether or not to save the visitors IP address (when available). You must handle the privacy policy independent of WebchatBuilder."})
+                    </div>
+                    <div>
+                        @Html.Label("Enable Audio Alerts?")
+                        @Html.CheckBoxFor(m => m.AudioAlertsEnabled, new {@class = "wcb-tooltip", title = "Whether or not to play a sound when the chat tab does not have focus and a new message is received."})
+                    </div>
+                    <div>
+                        @Html.Label("Enable Browser Alerts?")
+                        @Html.CheckBoxFor(m => m.BrowserAlertsEnabled, new {@class = "wcb-tooltip", title = "Whether or not to update the browser title when the chat tab does not have focus and a new message is received."})
+                    </div>
+                    <div>
+                        @Html.Label("Show Options Button?")
+                        @Html.CheckBoxFor(m => m.ShowOptionsButton, new { @class = "wcb-tooltip", title = "Whether or not to show the options button when the print button and/or the transcript button is enabled." })
+                    </div>
+                    @*<div>
+                        @Html.Label("Allow Iframes?")
+                        @Html.CheckBoxFor(m => m.Iframes, new { @class = "wcb-tooltip", title = "Whether or not to allow iframes to be configured." })
+                    </div>*@
+                    @Html.HiddenFor(m => m.Iframes)
+                    <div>
+                        @Html.Label("Allow users to continue chat between pages?")
+                        @Html.CheckBoxFor(m => m.ContinueChat, new { @class = "wcb-tooltip", title = "Whether or not chats should remain connected to agents when the chat is closed in order to allow them to be reconnected and continued." })
+                    </div>
+                    <div>
+                        @Html.Label("Continue Chat Timeout")
+                        @Html.TextBoxFor(m => m.ChatTimeout, new { title = "The time in seconds a chat will remain connected to an agent and available to be continued after the visitor closes a chat or leaves a page.", @type = "number", @min = 0, @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Override Agent Name with Default?")
+                        @Html.CheckBoxFor(m => m.OverrideAgentName, new { @class = "wcb-tooltip", title = "Whether or not the Agents name sent from CIC should be overridden with the default agent name." })
+                    </div>
+                    <div>
+                        @Html.Label("Default Agent Name")
+                        @Html.TextBoxFor(m => m.DefaultAgentName, new { title = "The default name shown if we are unable to retrieve the agents name, or if override agent name is turned on.", @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Enable Send Button and Queue Visitor Messages")
+                        @Html.CheckBoxFor(m => m.EnableSendAndQueue, new { @class = "wcb-tooltip", title = "Enable the send button in chats by default and queue visitor messages until agent has joined." })
+                    </div>
+                    
+                    <div>
+                        @Html.Label("Drop Inactive Chats?")
+                        @Html.CheckBoxFor(m => m.DropInactiveChats, new { @class = "wcb-tooltip", title = "Drop chats that have been inactive longer than the defined value for the Chat inactivity timeout." })
+                    </div>
+                    <div>
+                        @Html.Label("Reset Inactivity on Agent Messages?")
+                        @Html.CheckBoxFor(m => m.ResetActivityTimeoutOnAgentMessage, new { @class = "wcb-tooltip", title = "If the drop inactive chat option is enabled, this setting controls whether or not to reset the inactivity timer when an agent sends a message." })
+                    </div>
+                    <div>
+                        @Html.Label("Chat Inactivity Timeout")
+                        @Html.TextBoxFor(m => m.InactiveChatTimeout, new { title = "The time in seconds a chat can remain inactive before being disconnected if the Drop Inactive Chat option is enabled.", @type = "number", @min = 0, @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Block System Messages From CIC?")
+                        @Html.CheckBoxFor(m => m.BlockCicSystemMessages, new { @class = "wcb-tooltip", title = "Whether or not to block system messages sent from CIC." })
+                    </div>
+                    <div>
+                        @Html.Label("Enable Custom System Messages")
+                        @Html.CheckBoxFor(m => m.UseCustomSystemMessages, new { @class = "wcb-tooltip", title = "Enable custom system messages." })
+                    </div>
+                    <div>
+                        @Html.Label("Keep Chat Open on Disconnect and Restart on Send?")
+                        @Html.CheckBoxFor(m => m.KeepOpenOnDisconnectAndStartNew, new {@class = "wcb-tooltip", title = "Whether or not to keep chats open on disconnect and restart the chat if the user sends a message after disconnecting."})
+                    </div>
+                    @*<div>
+                        @Html.Label("Transfer Timeout")
+                        @Html.TextBoxFor(m => m.TransferTimeout, new { title = "The time in seconds a to keep a chat in a transitional state after an agent disconnect. CIC sends a state change indicating the agent disconnected before the new agent has joined. This accounts for that but will not allow auto-closing the chat on agent disconnect.", @type = "number", @min = 0, @class = "form-control wcb-tooltip" })
+                    </div>*@
+                    <div>
+                        @Html.Label("Show Custom Info to Agent on when chat starts/restarts?")
+                        @Html.CheckBoxFor(m => m.ShowCustomInfoOnLoad, new { @class = "wcb-tooltip", title = "Whether or not to show customInfo (if present) to the agent when a chat is started or restarted." })
+                    </div>
+                    <div>
+                        @Html.Label("Show Custom Info to Agent on Page Change or Reload?")
+                        @Html.CheckBoxFor(m => m.ShowCustomInfoOnReload, new { @class = "wcb-tooltip", title = "Whether or not to show customInfo (if present) to the agent when a page reload or page change occurs." })
+                    </div>
+                    <div>
+                        @Html.Label("Pass Historical Messages to New Agent on Restart?")
+                        @Html.CheckBoxFor(m => m.PassHistoryToNewAgentOnRestart, new { @class = "wcb-tooltip", title = "Whether or not you would like the historical chat messages sent to the new agent when a chat is restarted." })
+                    </div>
+                    <div>
+                        @Html.Label("Pass Historical Messages to User on Restart?")
+                        @Html.CheckBoxFor(m => m.ReloadUserHistoryOnNewChat, new { @class = "wcb-tooltip", title = "Whether or not you would like the historical chat messages sent to the user when a chat is restarted in a new window." })
+                    </div>
+                    <div>
+                        @Html.Label("Keep History of Unanswered Chat?")
+                        @Html.CheckBoxFor(m => m.ReloadUnansweredChatHistory, new { @class = "wcb-tooltip", title = "Whether or not you would like to keep the history of unaswered chats." })
+                    </div>
+                    <div>
+                        @Html.Label("Connection Lost Message Text")
+                        @Html.TextAreaFor(m => m.ConnectionLostText, new { title = "The text that is shown when the chat connection is lost.", @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Custom Error Message Text")
+                        @Html.TextAreaFor(m => m.CustomErrorText, new {title = "The Error message that is shown when an error occurs for chat.", @class = "form-control wcb-tooltip"})
+                    </div>
+                    @*<div>
+                        @Html.Label("Enable Hard Disconnect Button on Visitor Side?")
+                        @Html.CheckBoxFor(m => m.EnableHardDisconnect, new {@class = "wcb-tooltip", title = "Enable a hard disconnect button on the visitor side even when using continue chat."})
+                    </div>*@
+                    <div>
+                        @Html.Label("Include UserAgent in User Data?")
+                        @Html.CheckBoxFor(m => m.ShowUserAgentInUserData, new {@class = "wcb-tooltip", title = "Include the UserAgent Information in the UserData passed to CIC if enabled on a Profile."})
+                    </div>
+                    <div>
+                        @Html.Label("Keep Queued Chats Active?")
+                        @Html.CheckBoxFor(m => m.KeepQueuedChatsAlive, new { @class = "wcb-tooltip", title = "This Experimental feature will keep Queued chats active between page refreshes and switching pages. The continue chat timer will apply to these chats when paused/closed." })
+                    </div>
+                    <div>
+                        @Html.Label("Transcript Email Subject")
+                        @Html.TextBoxFor(m => m.EmailTranscriptSubject, new {title = "If you have email transcripts enabled, this controls the subject sent in the email.", @class = "form-control wcb-tooltip"})
+                    </div>
+                    <div>
+                        @Html.Label("Close Button Title")
+                        @Html.TextBoxFor(m => m.CloseButtonTitle, new {title = "The title (hover text) for the close/minimize button in a chat.", @class = "form-control wcb-tooltip"})
+                    </div>
+                    <div>
+                        @Html.Label("Disconnect Button Title")
+                        @Html.TextBoxFor(m => m.DisconnectButtonTitle, new { title = "The title (hover text) for the disconnect button in a chat if the disconnect button is enabled.", @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Enable Google Analytics?")
+                        @Html.CheckBoxFor(m => m.EnableGoogleAnalytics, new { @class = "wcb-tooltip", title = "Enable Google Analytics." })
+                    </div>
+                    <div>
+                        @Html.Label("Google Analytics Tracking Id")
+                        @Html.TextBoxFor(m => m.GoogleAnalyticsTrackingId, new { title = "Your Google Analytics Tracking Id.", @class = "form-control wcb-tooltip" })
+                    </div>
+                    <div>
+                        @Html.Label("Enable Logging?")
+                        @Html.CheckBoxFor(m => m.LoggingEnabled, new { @class = "wcb-tooltip", title = "Enable logging if requested by Qsect's support team." })
+                    </div>
+                    <input type="submit" value="Save" class="btn btn-default wcb-tooltip" data-loading-text="Saving..." id="GlobalChatSaveBtn" title="Clicking here will save the Global Chat Setting Changes." />
+                }
+            </div>
+            <div class="col-md-6">
+                <div id="CustomSystemMessages"></div>
+            </div>
+        </div>
+    </div>
+    <div id="LicenseSettings">
+    </div>
+</div>

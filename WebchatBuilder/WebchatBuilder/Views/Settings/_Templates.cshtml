@@ -1,0 +1,30 @@
+﻿@model WebchatBuilder.ViewModels.TemplateSettingsViewModel
+<div class="settings-tab">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 title="Chat Templates that will show up in the Wcb Profile Editor and determine the look of the chat window." class="wcb-tooltip">Chat Templates</h2>
+        </div>
+        <div class="col-md-6">
+            <div id="CreateTemplateBtn" class="btn btn-success wcb-tooltip" title="" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Create Template" data-modal-type="createtemplate">Create Template</div>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model.Templates.Any())
+        {
+            foreach (var template in Model.Templates)
+            {
+                <div class="col-md-6">
+                    <div class="template-wrapper">
+                        <span class="template-title">@template.Title</span><i class="fa fa-pencil-square ui-blue edit-template-btn" data-toggle="modal" data-target="#SettingsModal" data-modal-title="Edit Template" data-modal-type="edittemplate" data-id="@template.TemplateId"></i><i class="fa fa-times-circle ui-red delete-template-btn" data-id="@template.TemplateId"></i>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-12">
+                No Templates found. Please create a new template.
+            </div>
+        }
+    </div>
+</div> 

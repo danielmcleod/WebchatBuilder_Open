@@ -1,0 +1,14 @@
+﻿@model WebchatBuilder.ViewModels.ProfileCheckViewModel
+
+<div id="CheckProfile">
+    <div class="row">
+        <div class="col-xs-12">Closed?: @Model.Closed</div>
+        <div class="col-xs-12">Has Schedule?: @Model.HasSchedule</div>
+        <div class="col-xs-12">Message: @Model.Message</div>
+        <div class="col-xs-12">Time: @Model.TimeNow</div>
+        <div class="col-xs-12">Found Availability?: @Model.HasProfileAvailability</div>
+        <div class="col-xs-12">Active Schedule Ranges: @Model.ScheduleActiveRanges</div>
+        <div class="col-xs-12">Start Time: @Model.StartTime</div>
+        <div class="col-xs-12">End Time: @Model.EndTime</div>
+    </div>
+</div>

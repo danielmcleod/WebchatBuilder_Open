@@ -1,0 +1,109 @@
+﻿@using System.Configuration
+@using System.Text
+@model WebchatBuilder.ViewModels.CreateProfileViewModel
+
+<div id="CreateChatProfile">
+    @using (Html.BeginForm("UpdateProfile", "Profiles", FormMethod.Post, new { id = "CreateProfileForm" }))
+    {
+        @Html.HiddenFor(m => m.ProfileId)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.Label("Profile Name")
+                @Html.TextBoxFor(m => m.ProfileName, new { @class = "form-control wcb-tooltip", title = "The name of the profile. This is used in the javascript or querystring used to launch the chat." })
+            </div>
+            <div class="col-xs-6">
+                @Html.Label("Profile Description")
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control wcb-tooltip", title = "A description of the profile for internal purposes only." })
+            </div>
+        </div>
+        <div class="row">
+            <h3>Override Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Header Text")
+                @Html.TextBoxFor(m => m.HeaderText, new { @class = "form-control wcb-tooltip", title = "If defined, this will override the template settings and this text will be displayed in the chat header." })
+            </div>
+            <div class="col-xs-8">
+                @Html.Label("Logo") <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearLogoSelection" title="Clear Selection"></i>
+                @Html.HiddenFor(m => m.HeaderLogoPath)
+                <div id="LogoSelectBox">
+                    @foreach (var logo in Model.Logos)
+                    {
+                        var selectedClass = "";
+                        if (Model.HeaderLogoPath != null && logo.ToLower() == Model.HeaderLogoPath.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@logo" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Routing Options</h3>
+            <div class="col-xs-6">
+                @Html.Label("Workgroup")
+                @Html.DropDownListFor(m => m.Workgroup, Model.WorkgroupList, new { @class = "form-control wcb-tooltip", title = "The workgroup to send chats to." })
+            </div>
+            @if (Model.SkillsList.Any())
+            {
+                <div class="col-xs-6">
+                    @Html.Label("Skills") (Use Shift and Ctrl for multi select)
+                    @Html.ListBoxFor(m => m.Skills, new MultiSelectList(Model.SkillsList, "SkillId", "DisplayName", Model.Skills), new { @class = "form-control wcb-tooltip", title = "One or many skills that will be required by an agent in order to receive chats using this profile." })
+                </div>
+            }
+        </div>
+        <div class="row">
+            <h3>Presentation Options</h3>
+            <div class="col-xs-6">
+                @Html.Label("Template")
+                @Html.DropDownListFor(m => m.Template, Model.TemplateList, new { @class = "form-control wcb-tooltip", title = "The template to use for chats using this profile." })
+            </div>
+            <div class="col-xs-6">
+                @Html.Label("Widget")
+                @Html.DropDownListFor(m => m.Widget, Model.WidgetList, new { @class = "form-control wcb-tooltip", title = "The widget to use for chats using this profile." })
+            </div>
+        </div>
+        <div class="row">
+            @if (Model.SchedulesList.Any())
+            {
+                <div class="col-xs-6">
+                    @Html.Label("Schedules") (Use Shift and Ctrl for multi select)
+                    @Html.ListBoxFor(m => m.Schedules, new MultiSelectList(Model.SchedulesList, "Id", "DisplayName", Model.Schedules), new { @class = "form-control wcb-tooltip", title = "The Schedules (configured in CIC) that should apply to this profile." })
+                </div>
+            }
+        </div>
+        <div class="row">
+            <h3>Data Options</h3>
+            <div class="col-xs-6">
+                @Html.Label("Pass User Data as CustomInfo")
+                @Html.CheckBoxFor(m => m.IncludeUserDataAsCustomInfo, new {@class = "wcb-tooltip", title = "Whether or not to pass collected user data as customInfo (shown in the agents CIC client notes field)"})
+            </div>
+            <div class="col-xs-6">
+                @Html.Label("Pass User Data as Attributes")
+                @Html.CheckBoxFor(m => m.IncludeUserDataAsAttributes, new {@class = "wcb-tooltip", title = "Whether or not to send the collected user data as an attribute to the CIC server."})
+            </div>
+        </div>
+        <div class="row">
+            <h3>Additional Options</h3>
+            <div class="col-xs-6">
+                @Html.Label("Allow Agents to send attachments to Visitors")
+                @Html.CheckBoxFor(m => m.AllowAttachments, new { @class = "wcb-tooltip", title = "Whether or not to allow agents to send attachments to visitors. If disabled, the attachment will not be processed and the agent will receive a message telling them it is disabled." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-success" id="SaveProfileBtn" data-loading-text="Saving...">Save Profile</div>
+            </div>
+        </div>
+    }
+</div>
+<div id="GeneratedProfileCode">
+    <textarea readonly="readonly">
+        @Model.GeneratedScript
+    </textarea>
+</div>

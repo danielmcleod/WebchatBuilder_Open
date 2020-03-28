@@ -1,0 +1,67 @@
+﻿@model WebchatBuilder.ViewModels.ScheduleSettingsViewModel
+<div class="settings-tab">
+    <div class="settings-schedules-wrapper">
+        <h3 title="Schedules that will show up in the Wcb Profile Editor." class="wcb-tooltip">Assignable Schedules</h3>
+        <div class="row">
+            @foreach (var schedule in Model.Schedules.Where(i => i.IsAssignable))
+            {
+                <div class="col-lg-6">
+                    <div class="settings-schedule-wrapper">
+                        <span>@schedule.Name</span>
+                        @if (schedule.IsUsed)
+                        {
+                            <i class="fa fa-times-circle wcb-tooltip" title="This schedule is in use and cannot be marked unassignable." data-id="@schedule.ScheduleId"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-times-circle toggle-schedule-assignable wcb-tooltip" title="Mark this schedule as unassignable." data-id="@schedule.ScheduleId"></i>
+                        }
+
+                        <i class="fa fa-pencil-square-o edit-schedule-btn wcb-tooltip" title="Edit this schedule." data-toggle="modal" data-target="#SettingsModal" data-modal-title="Edit Schedule" data-modal-type="editschedule" data-id="@schedule.ScheduleId"></i>
+                        @if (schedule.MarkedForDeletion || schedule.ClosedOnly)
+                        {
+                            <span class="schedule-info">
+                                @if (schedule.MarkedForDeletion)
+                                {
+                                    <i class="fa fa-trash wcb-tooltip" title="This schedule is marked as deleted, but may still be configured in a profile."></i>
+                                }
+                                @if (schedule.ClosedOnly)
+                                {
+                                    <i class="fa fa-calendar wcb-tooltip" title="This Schedule is for Closings."></i>
+                                }
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <hr />
+        <h3 title="Schedules that will not show up in the Wcb Profile Editor." class="wcb-tooltip">Unassignable Schedules</h3>
+        <div class="row">
+            @foreach (var schedule in Model.Schedules.Where(i => !i.IsAssignable))
+            {
+                <div class="col-lg-6">
+                    <div class="settings-schedule-wrapper">
+                        <span>@schedule.Name</span>
+                        <i class="fa fa-plus-square toggle-schedule-assignable wcb-tooltip" title="Mark this schedule as assignable." data-id="@schedule.ScheduleId"></i>
+
+                        <i class="fa fa-pencil-square-o edit-schedule-btn wcb-tooltip" title="Edit this schedule." data-toggle="modal" data-target="#SettingsModal" data-modal-title="Edit Schedule" data-modal-type="editschedule" data-id="@schedule.ScheduleId"></i>
+                        @if (schedule.MarkedForDeletion || schedule.ClosedOnly)
+                        {
+                            <span class="schedule-info">
+                                @if (schedule.MarkedForDeletion)
+                                {
+                                    <i class="fa fa-trash wcb-tooltip" title="This schedule is marked as deleted, but may still be configured in a profile."></i>
+                                }
+                                @if (schedule.ClosedOnly)
+                                {
+                                    <i class="fa fa-calendar wcb-tooltip" title="This Schedule is for Closings."></i>
+                                }
+                            </span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

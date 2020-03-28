@@ -1,0 +1,347 @@
+﻿@model WebchatBuilder.ViewModels.CreateTemplateViewModel
+<div id="CreateChatTemplate">
+    @using (Html.BeginForm("CreateTemplate", "Settings", FormMethod.Post, new { id = "CreateTemplateForm" }))
+    {
+        @Html.HiddenFor(m => m.TemplateId)
+        <div class="row">
+            <div class="col-xs-6">
+                @Html.Label("Template Name")
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control", title = "The Name of the template that will appear on the Create/Edit Profile Page." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <span>* Optional</span>|<span>** Overridable at the profile level</span>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Header Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Header Text *|**")
+                @Html.TextBoxFor(m => m.HeaderText, new { @class = "form-control wcb-tooltip", title = "The text that appears at the top of the chat window if it is not overridden at the profile level." })
+            </div>
+            <div class="col-xs-8">
+                @Html.Label("Logo *|**") <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearLogoSelection" title="Clear Selection"></i>
+                @Html.HiddenFor(m => m.HeaderLogoPath)
+                <div id="LogoSelectBox" class="wcb-tooltip" title="The logo/icon that will appear before the header text in the visitor chat window, unless overridden at the profile level.">
+                    @foreach (var logo in Model.Logos)
+                    {
+                        var selectedClass = "";
+                        if (Model.HeaderLogoPath != null && logo.ToLower() == Model.HeaderLogoPath.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@logo" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Only use Icons in Header Buttons")
+                @Html.CheckBoxFor(m => m.HeaderIcons, new { @class = "wcb-tooltip", title = "When a chat window is configured to be a large size or opened in a new window, the buttons will show text instead of just icons." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Include Print Button?")
+                @Html.CheckBoxFor(m => m.IncludePrint, new {@class = "wcb-tooltip", title = "The print button will allow the visitor to print the chat conversation at the click of a button."})
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Include Transcript Button?")
+                @Html.CheckBoxFor(m => m.IncludeTranscript, new {@class = "wcb-tooltip", title = "The transcript button will allow the visitor to request the chat transcript be emailed to them."})
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Include Disconnect Button?")
+                @Html.CheckBoxFor(m => m.IncludeDisconnect, new { @class = "wcb-tooltip", title = "The disconnect button will allow the visitor to diconnect a chat. If continue chat is enabled, the close button acts as a minimize button and this button disconnects chats." })
+            </div>
+            <div class="col-xs-4" id="CloseIconSelectWrapper">
+                @Html.Label("Select Close Button Icon", new {id = "CloseIconSelectLabel"})
+                @Html.HiddenFor(m => m.CloseButtonIcon)
+                <div id="CloseIconSelectBox">
+                    @foreach (var icon in Model.CloseButtonIcons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.CloseButtonIcon) && icon.ToLower() == Model.CloseButtonIcon.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+            <div class="col-xs-4" id="DisconnectIconSelectWrapper">
+                @Html.Label("Select Disconnect Button Icon", new {id = "DisconnectIconSelectLabel"})
+                @Html.HiddenFor(m => m.DisconnectButtonIcon)
+                <div id="DisconnectIconSelectBox">
+                    @foreach (var icon in Model.CloseButtonIcons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.DisconnectButtonIcon) && icon.ToLower() == Model.DisconnectButtonIcon.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+            <div class="col-xs-4" id="PrintIconSelectWrapper">
+                @Html.Label("Select Print Button Icon", new { id = "PrintIconSelectLabel" }) <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearPrintSelection" title="Clear Selection"></i>
+                @Html.HiddenFor(m => m.PrintButtonIcon)
+                <div id="PrintIconSelectBox">
+                    @foreach (var icon in Model.HeaderButtonIcons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.PrintButtonIcon) && icon.ToLower() == Model.PrintButtonIcon.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+            <div class="col-xs-4" id="EmailIconSelectWrapper">
+                @Html.Label("Select Email Button Icon", new { id = "EmailIconSelectLabel" }) <i class="fa fa-times-circle-o wcb-tooltip ui-red" id="ClearEmailSelection" title="Clear Selection"></i>
+                @Html.HiddenFor(m => m.EmailButtonIcon)
+                <div id="EmailIconSelectBox">
+                    @foreach (var icon in Model.HeaderButtonIcons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.EmailButtonIcon) && icon.ToLower() == Model.EmailButtonIcon.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Chat Entry Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Placeholder Text for Chat Entry *")
+                @Html.TextBoxFor(m => m.PlaceholderText, new { @class = "form-control wcb-tooltip", title = "The placeholder text that appears the the text area the chat visitor types their messages in to." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Include Icon on Send Button?")
+                @Html.CheckBoxFor(m => m.SendIncludeIcon, new { @class = "wcb-tooltip", title = "Include an Icon on the button that chat visitors use to send their chat messages." })
+            </div>
+            <div class="col-xs-4" id="SendIconSelectWrapper">
+                @{
+                    var showSendIcon = "";
+                    if (!Model.SendIncludeIcon)
+                    {
+                        showSendIcon = "display:none;";
+                    }
+                }
+                @Html.Label("Select Send Button Icon", new { id = "SendIconSelectLabel", style = @showSendIcon })
+                @Html.HiddenFor(m => m.SendButtonIcon)
+                <div id="SendIconSelectBox" style="@showSendIcon">
+                    @foreach (var icon in Model.SendIcons)
+                    {
+                        var selectedClass = "";
+                        if (!String.IsNullOrEmpty(Model.SendButtonIcon) && icon.ToLower() == Model.SendButtonIcon.ToLower())
+                        {
+                            selectedClass = "class=selected";
+                        }
+                        <img src="@icon" @selectedClass />
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Style Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Use Default Message Arrows?")
+                @Html.CheckBoxFor(m => m.MessageArrows, new { @class = "wcb-tooltip", title = "The default message arrows are centered. The alternative is a half arrow at the top." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Show Initials instead of Images?")
+                @Html.CheckBoxFor(m => m.ShowInitials, new { @class = "wcb-tooltip", title = "Show the chat visitors and agents initials instead of a generic silhouette or the agent image." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Show Time by Name?")
+                @Html.CheckBoxFor(m => m.ShowTime, new { @class = "wcb-tooltip", title = "Show a timestamp for messages." })
+            </div>
+        </div>
+        <div class="row">
+            <h3>Special Options</h3>
+            <div class="col-xs-4">
+                @Html.Label("Hide Header?")
+                @Html.CheckBoxFor(m => m.HideHeader, new { @class = "wcb-tooltip", title = "This option can be used with the Secondary Style Widget and with Chats opened in a new window. It prevents the Header from being added." })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Hide Send Button?")
+                @Html.CheckBoxFor(m => m.HideSendButton, new {@class = "wcb-tooltip", title = "This option Hides the Send Button and extends the chat entry text area to fill the bottom of the chat window."})
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Use Unstyled Header Icons?")
+                @Html.CheckBoxFor(m => m.UseUnstyledHeaderIcons, new { @class = "wcb-tooltip", title = "If you are only using Icons for Header buttons, This option will only show the icon you have configured for each header icon without applying a background color, border, etc." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel panel-info" style="margin-right: 15px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">More Style Options:</h3>
+                </div>
+                <div class="panel-body">
+                    Settings beyond this point are saved in a CSS file that can be edited externally. To Save Settings beyond this point, you must click the Generate CSS button followed by the Save Template button. If you would like to add custom CSS, you can edit the css file and add your CSS at the bottom of the file. Your custom CSS should be placed between the following comments (you must add the comments) /*%START_CUSTOM_SECTION%"*/ and /*%END_CUSTOM_SECTION%*/
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.CustomCss)
+            <div class="col-xs-4">
+                @Html.Label("Background Color")
+                <input id="BackgroundColor" name="BackgroundColor" class="color-picker" type="text" value="@Model.BackgroundColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Header Text Color")
+                <input id="HeaderFontColor" name="HeaderFontColor" class="color-picker" type="text" value="@Model.HeaderFontColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Round Images/Initials?")
+                @Html.CheckBoxFor(m => m.RoundImages)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Server Message Background Color")
+                <input id="ServerBackgroundColor" name="ServerBackgroundColor" class="color-picker" type="text" value="@Model.ServerBackgroundColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Server Message Text Color")
+                <input id="ServerFontColor" name="ServerFontColor" class="color-picker" type="text" value="@Model.ServerFontColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Server Message Bottom Border Color")
+                <input id="ServerSeparatorColor" name="ServerSeparatorColor" class="color-picker" type="text" value="@Model.ServerSeparatorColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Image/Initials Background Color")
+                <input id="ImageBackgroundColor" name="ImageBackgroundColor" class="color-picker" type="text" value="@Model.ImageBackgroundColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Image/Initials Border Color")
+                <input id="ImageBorderColor" name="ImageBorderColor" class="color-picker" type="text" value="@Model.ImageBorderColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Visitor Background Color")
+                <input id="VisitorBackgroundColor" name="VisitorBackgroundColor" class="color-picker" type="text" value="@Model.VisitorBackgroundColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Visitor Text Color")
+                <input id="VisitorFontColor" name="VisitorFontColor" class="color-picker" type="text" value="@Model.VisitorFontColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Visitor Border Color")
+                <input id="VisitorBorderColor" name="VisitorBorderColor" class="color-picker" type="text" value="@Model.VisitorBorderColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Visitor Name Color")
+                <input id="VisitorNameColor" name="VisitorNameColor" class="color-picker" type="text" value="@Model.VisitorNameColor"/>
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Visitor Link Color")
+                <input id="VisitorLinkColor" name="VisitorLinkColor" class="color-picker" type="text" value="@Model.VisitorLinkColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Agent Background Color")
+                <input id="AgentBackgroundColor" name="AgentBackgroundColor" class="color-picker" type="text" value="@Model.AgentBackgroundColor"/>
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Agent Text Color")
+                <input id="AgentFontColor" name="AgentFontColor" class="color-picker" type="text" value="@Model.AgentFontColor"/>
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Agent Border Color")
+                <input id="AgentBorderColor" name="AgentBorderColor" class="color-picker" type="text" value="@Model.AgentBorderColor"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Agent Link Color")
+                <input id="AgentLinkColor" name="AgentLinkColor" class="color-picker" type="text" value="@Model.AgentLinkColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Agent Name Color")
+                <input id="AgentNameColor" name="AgentNameColor" class="color-picker" type="text" value="@Model.AgentNameColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Agent Typing Font Color")
+                <input id="AgentTypingFontColor" name="AgentTypingFontColor" class="color-picker" type="text" value="@Model.AgentTypingFontColor" />
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Agent Typing Background Color")
+                <input id="AgentTypingBackgroundColor" name="AgentTypingBackgroundColor" class="color-picker" type="text" value="@Model.AgentTypingBackgroundColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Initials Font Color")
+                <input id="InitialsFontColor" name="InitialsFontColor" class="color-picker" type="text" value="@Model.InitialsFontColor" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                @Html.Label("Round Header Top Corners?")
+                @Html.CheckBoxFor(m => m.RoundHeader, new { @class = "wcb-tooltip", title = "If enabled, this option rounds the top corners of the Header" })
+            </div>
+            <div class="col-xs-4">
+                @Html.Label("Simplify Template")
+                @Html.CheckBoxFor(m => m.SimplifyTemplate, new {@class = "wcb-tooltip", title = "Add CSS to simplify the chat with no images, initials, chat bubbles, etc."})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-warning" id="GenerateCssBtn" data-loading-text="Generating...">Generate CSS</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.ValidationSummary()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-success" id="SaveTemplateBtn" data-loading-text="Saving...">Save Template</div>
+            </div>
+        </div>
+
+                    if (Model.PreviewWidth < 325)
+                    {
+                        Model.PreviewWidth = 325;
+                    }
+                    if (Model.PreviewHeight < 330)
+                    {
+                        Model.PreviewHeight = 330;
+                    }
+                    var iframeWidth = Model.PreviewWidth + "px";
+                    var iframeHeight = Model.PreviewHeight + "px";
+                    <div class="row">
+                        <h3>Preview Options:</h3>
+                        <div class="col-xs-4">
+                            @Html.Label("Preview Height")
+                            @Html.TextBoxFor(m => m.PreviewHeight, new { @class = "form-control", placeholder = "minimum 330px...", @title = "The Preview Window Height." })
+                        </div>
+                        <div class="col-xs-4">
+                            @Html.Label("Preview Width")
+                            @Html.TextBoxFor(m => m.PreviewWidth, new { @class = "form-control", placeholder = "minimum 325px...", @title = "The Preview Window Width." })
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="btn btn-info" style="margin-top: 25px;" id="UpdatePreviewBtn">Update Preview</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="center-block iframe-wrapper">
+                            <iframe src="/Chat?testing=true&embedded=false&testId=@Model.TemplateId" seamless="seamless" style="width:@iframeWidth; height:@iframeHeight;" id="TemplatePreview"></iframe>
+                        </div>
+                    </div>
+    }
+</div>

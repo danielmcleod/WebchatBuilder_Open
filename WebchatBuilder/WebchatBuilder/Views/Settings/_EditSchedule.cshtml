@@ -1,0 +1,44 @@
+﻿@model WebchatBuilder.ViewModels.EditScheduleViewModel
+           
+@using (Html.BeginForm("EditSchedule", "Settings", FormMethod.Post, new { id = "EditScheduleForm" }))
+{
+    @Html.HiddenFor(m => m.ScheduleId)
+    @Html.HiddenFor(m => m.Description)
+    @Html.HiddenFor(m => m.Name)
+
+    <div class="row">
+        <div class="col-xs-12">
+            <strong>Name: </strong> <span>@Model.Name</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <strong>Description:</strong>
+            <p>@Model.Description</p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            @Html.Label("Explicitly Closed")
+            @Html.CheckBoxFor(m => m.ClosedOnly, new { @class = "wcb-tooltip", title = "If checked, this schedule is explicitly used for closings." })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            @Html.Label("Override Message (optional)")
+            @Html.TextAreaFor(m => m.OverrideMessage, new { @class = "form-control wcb-tooltip", title = "If your unavailable form shows a message before fields, and is configured to use the schedule defined message, this setting will be used instead of the description if defined." })
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            @Html.ValidationSummary()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="btn btn-success" id="SaveScheduleBtn" data-loading-text="Saving...">Save Schedule</div>
+        </div>
+    </div>
+}

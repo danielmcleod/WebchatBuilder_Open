@@ -1,0 +1,38 @@
+﻿@model WebchatBuilder.ViewModels.DynamicChatHtmlViewModel
+
+<div id="wcb-webchat">
+    @{
+        var offsetX = Model.OffsetX + "px";
+        var height = Model.Height + "px";
+        var width = Model.Width + "px";
+        var pos = "bottom:0;right:" + offsetX;
+        var domain = !String.IsNullOrWhiteSpace(Model.Domain) ? Model.Domain.TrimEnd('/') : "";
+        var iconSrc = domain + Model.IconPath;
+        var rounded = Model.Rounded ? "-ms-border-radius: 12px 12px 0 0; border-radius: 12px 12px 0 0;" : "";
+        var minMaxIcon = domain + "/Content/Images/arrow.png";
+    }
+    <div id="wcb-webchat-outer" style="position:fixed;@pos;z-index:9999;max-width:95%;max-height:95%;margin:auto;">
+
+        <div id="wcb-webchat-launch" style="margin: 0 auto; height:40px; padding: 0; width: @width; max-width: 100%; cursor:pointer; background-color: @Model.Background; color: @Model.TextColor; @rounded">
+            @if (!String.IsNullOrWhiteSpace(Model.IconPath))
+            {
+                <img src="@iconSrc" alt="chat launch icon" data-closed-icon="@Model.UnavailableIconPath" style="margin:10px;width: 20px; max-width: 20px; min-width: 20px; height: 20px; max-height: 20px;min-height: 20px; float: left;" id="wcb-webchat-launch-icon" />
+            }
+            <div id="wcb-webchat-launch-text" data-closed-text="@Model.UnavailableLaunchText" style="padding: 0 12px; font-size: 20px; float: left; line-height: 40px; vertical-align: middle; -moz-user-select: none; -ms-user-select: none; -webkit-user-select: none; user-select: none;">@Model.LaunchText</div>
+            <img id="wcb-webchat-launch-arrow" src="@minMaxIcon" alt="toggle chat icon" style="margin: 10px; float: right; width: 20px; max-width: 20px; min-width: 20px; height: 20px; max-height: 20px; min-height: 20px; -moz-transition: all 0.5s ease; -o-transition: all 0.5s ease; -webkit-transition: all 0.5s ease; transition: all 0.5s ease;" />
+        </div>
+
+        <div id="wcb-webchat-overlay" style="display:none;max-height:100%;max-width:100%;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+            <div id="wcb-webchat-inner" style="height:@height;width:@width;max-height:100%;max-width:100%;margin:auto;background-color:@Model.PlaceHolderBackground;position:relative;-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;">
+
+            </div>
+        </div>
+    </div>
+
+    @if (Model.ShowTooltip)
+    {
+        <div id="wcb-launch-tooltip" style="display:none;max-width:@width;text-align:center;z-index:9998;position:fixed;bottom:45px;right:@offsetX; margin: 0 auto;">
+            <div id="wcb-tooltip-text" data-closed-text="@Model.UnavailableTooltipText" style="border:solid 1px @Model.TooltipColor;color:@Model.TooltipColor;padding:10px 15px; -ms-border-radius:4px; border-radius:4px; background-color:#ffffff; background-color:rgba(255, 255, 255, 0.85);">@Model.TooltipText</div>
+        </div>
+    }
+</div>

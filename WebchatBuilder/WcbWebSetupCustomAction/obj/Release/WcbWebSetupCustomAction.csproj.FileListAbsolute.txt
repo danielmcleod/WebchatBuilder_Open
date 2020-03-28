@@ -1,0 +1,4 @@
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\bin\Release\WcbWebSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\bin\Release\WcbWebSetupCustomAction.pdb
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\obj\Release\WcbWebSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbWebSetupCustomAction\obj\Release\WcbWebSetupCustomAction.pdb

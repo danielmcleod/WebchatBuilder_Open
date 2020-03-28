@@ -1,0 +1,24 @@
+﻿@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Chat Transcript</title>
+    <style>
+        img { display: none; }
+    </style>
+</head>
+<body>
+    <h3>Chat Transcript</h3>
+    @Html.Raw(Model)
+    <script>
+        window.print();
+    </script>
+</body>
+</html>

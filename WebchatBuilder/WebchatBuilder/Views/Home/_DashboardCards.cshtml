@@ -1,0 +1,53 @@
+﻿@model WebchatBuilder.ViewModels.DashboardViewModel
+@{
+    Layout = null;
+}
+
+<div id="DashPanel">
+    <div class="dash-container">
+        <div class="dash-header">Active Chats</div>
+        <div class="dash-data">@Model.ActiveChats</div>
+    </div>
+    <div class="dash-container">
+        <div class="dash-header">Queued Chats</div>
+        <div class="dash-data">@Model.QueuedChats</div>
+    </div>
+    <div class="dash-container">
+        <div class="dash-header">Total Chats</div>
+        <div class="dash-data">@Model.TotalChats</div>
+    </div>
+    <div class="dash-container">
+        <div class="dash-header">Abandoned Chats</div>
+        <div class="dash-data">@Model.AbandonedChats</div>
+    </div>
+</div>
+
+<div id="DashQueueStats" class="row">
+    @foreach (var profile in @Model.Profiles)
+    {
+        <div data-profile="@profile" class="dash-queue-stat-wrapper col-lg-12">
+            <div class="dash-queue-inner">
+                <div class="dash-profile-name">@profile</div>
+                <div class="dash-stat-wrapper">
+                    <div class="dash-queue-active-wrapper">
+                        <span class="dash-queue-active-header">Active: </span><span class="dash-queue-active" title="Active">0</span>
+                    </div>
+                    <div class="dash-queue-queued-wrapper">
+                        <span class="dash-queue-queued-header">Queued: </span><span class="dash-queue-queued" title="Queued">0</span>
+                    </div>
+                    <div class="dash-queue-total-wrapper">
+                        <span class="dash-queue-total-header">Total: </span><span class="dash-queue-total" title="Total">0</span>
+                    </div>
+                    <div class="dash-queue-abandoned-wrapper">
+                        <span class="dash-queue-abandoned-header">Abandoned: </span><span class="dash-queue-abandoned" title="Abandoned">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="dash-queue-loading">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">Loading...</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

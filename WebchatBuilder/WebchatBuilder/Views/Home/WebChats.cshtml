@@ -1,0 +1,115 @@
+﻿@using WebchatBuilder.Services
+
+@{
+    var chats = ChatServices.WebChats;
+    var disconnected = ChatServices.DisconnectedWebChats;
+}
+
+<div id="WebChatsWrapper">
+    <div class="row">
+        <div class="col-xs-offset-1 col-xs-10">
+            <div id="ActiveChats">
+                <div class="supervisor-list">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Active Chats</h3>
+                        </div>
+                    </div>
+
+                    @foreach (var chat in chats)
+                    {
+                        var count = chat.PreviousConnectionIds != null ? chat.PreviousConnectionIds.Count + 1 : 1;
+                        var answered = chat.DateAnswered.HasValue ? @chat.DateAnswered.Value.ToString() : "N/A";
+
+                        <div class="row chat-wrapper">
+                            <div class="col-xs-10">
+                                sessionId: @chat.SessionId |
+                                User: @chat.UserName |
+                                Agent: @chat.AgentName |
+                                State: @chat.State |
+                                ConnectionId: @chat.ConnectionId |
+                                WindowCount: @count |
+                                Answered: @answered
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="btn btn-default details-btn disconnect-button" title="Disconnect" data-id="@chat.ChatId">
+                                    <i class="fa fa-times-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <hr/>
+            <div id="DisconnectedChats">
+                <div class="supervisor-list">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h3>Disconnected Chats</h3>
+                        </div>
+                    </div>
+
+                    @foreach (var chat in disconnected)
+                    {
+                        var count = chat.PreviousConnectionIds != null ? chat.PreviousConnectionIds.Count + 1 : 1;
+                        var answered = chat.DateAnswered.HasValue ? @chat.DateAnswered.Value.ToString() : "N/A";
+
+                        <div class="row chat-wrapper">
+                            <div class="col-xs-12">
+                                sessionId: @chat.SessionId |
+                                User: @chat.UserName |
+                                Agent: @chat.AgentName |
+                                State: @chat.State |
+                                ConnectionId: @chat.ConnectionId |
+                                WindowCount: @count |
+                                Answered: @answered
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+@*<div class="modal fade" id="WebchatsModal" tabindex="-1" role="dialog" aria-labelledby="WebchatsTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <i class="show-modal-tooltips fa fa-question"></i>
+                <h4 class="modal-title" id="WebchatsModalTitle">Disconnect Chat</h4>
+            </div>
+            <div class="modal-body">
+                <div id="WebchatsModalBody">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-corner"></div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section scripts {
+    <script type="text/javascript">
+        $(".disconnect-button").click(function () {
+            var id = $(this).data("id");
+            var disconnect = confirm("Are you sure you want to disconnect this chat?");
+            if (disconnect) {
+                $.post("/DisconnectChat", { chatId: id }, function (response) {
+                    if (response.success == true) {
+                        alert("This chat has been disconnected.");
+                        location.reload();
+                    } else {
+                        alert("Error Disconnecting Chat.");
+                    }
+                }).fail(function () {
+                    alert("Error Disconnecting Chat.");
+                });
+            }
+        });
+    </script>
+}

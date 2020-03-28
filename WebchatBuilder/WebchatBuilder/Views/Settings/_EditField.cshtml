@@ -1,0 +1,60 @@
+﻿@model WebChatBuilderModels.Models.FormField
+
+<div>
+    @using (Html.BeginForm("UpdateFormField", "Settings", FormMethod.Post, new { id = "EditFormField" }))
+    {
+        @Html.HiddenFor(m => m.FormFieldId)
+
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.Label("Field Label *")
+                @Html.TextBoxFor(m => m.Label, new { @class = "form-control", title = "A label appears above the form field and describes what the field is for." })
+            </div>
+            <div class="col-xs-12">
+                @Html.Label("Field Placeholder Text *")
+                @Html.TextBoxFor(m => m.PlaceHolder, new { @class = "form-control", @placeholder = "This is a placeholder...", title = "A placeholder can be used with or in place of a label and gives the user an idea of what information to enter." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.Label("Custom Classes (space delimited) *")
+                @Html.TextBoxFor(m => m.CustomClasses, new { @class = "form-control", title = "Any custom classes to add to the form field." })
+            </div>
+            <div class="col-xs-12">
+                @Html.Label("Max Length")
+                @Html.TextBoxFor(m => m.MaxLength, new { @class = "form-control", title = "If you enter a value greater than 0, the value will be used as the max length for the field.", type = "number", min = "0" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.Label("User Field?")
+                @Html.CheckBoxFor(m => m.IsUserField, new { title = "Whether or not this field should be used as the User name for the chat visitor." })
+            </div>
+            <div class="col-xs-12">
+                @Html.Label("Append to CustomInfo?")
+                @Html.CheckBoxFor(m => m.AppendToCustomInfo, new { title = "Whether or not this field should be included as customInfo and shown in the Notes field of the Agents CIC Client." })
+            </div>
+            <div class="col-xs-12">
+                @Html.Label("Send as Attribute?")
+                @Html.CheckBoxFor(m => m.SendAsAttribute, new { title = "Whether or not this field should be sent as an attribute to the CIC server." })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                @Html.Label("Required Field?")
+                @Html.CheckBoxFor(m => m.IsRequired, new { title = "Whether or not this field is required." })
+            </div>
+            <div class="col-xs-12">
+                @Html.Label("Phone Number?")
+                @Html.CheckBoxFor(m => m.IsPhoneNumber, new { title = "Whether or not this field should be used as the phone number when used as an unavailable form with callbacks enabled." })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="btn btn-success" id="SaveFieldBtn" data-loading-text="Saving...">Save</div>
+            </div>
+        </div>
+    }
+</div>
+

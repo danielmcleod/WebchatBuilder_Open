@@ -1,0 +1,1783 @@
+﻿@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot?v=4.3.0');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.3.0') format('embedded-opentype'), url('/fonts/fontawesome-webfont.woff2?v=4.3.0') format('woff2'), url('/fonts/fontawesome-webfont.woff?v=4.3.0') format('woff'), url('/fonts/fontawesome-webfont.ttf?v=4.3.0') format('truetype'), url('/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.ui-red {
+  color: #e74c3c;
+}
+.ui-green {
+  color: #2ecc71;
+}
+.ui-blue {
+  color: #3498db;
+}
+.ui-turq {
+  color: #1abc9c;
+}
+.ui-orange {
+  color: #f39c12;
+}
+.ui-yellow {
+  color: #f1c40f;
+}
+.ui-gray {
+  color: #95a5a6;
+}
+.ui-white {
+  color: #ecf0f1;
+}
+.ui-purple {
+  color: #8e44ad;
+}
+.progress {
+  height: 75px;
+  margin: 20px auto;
+  width: 75px;
+  border-radius: 50%;
+  border: solid 4px #2ecc71;
+}
+.progress i {
+  font-size: 35px;
+  margin: 15.5px auto;
+}
+.container-fluid > .navbar-header {
+  margin-right: 0;
+}
+.container-fluid > .navbar-header ul li {
+  float: left;
+}
+#NavHeader {
+  max-height: 50px !important;
+}
+#NavHeader #HeaderLinkWrapper {
+  max-width: 350px;
+  position: absolute;
+  top: 0;
+  background-color: #222;
+  height: 80px;
+  border-radius: 0 0 50px 50px;
+  left: calc(50% - 150px);
+  padding: 20px 25px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks {
+  max-width: 350px;
+  margin: 0 auto;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li {
+  height: 50px;
+  width: 50px;
+  border: solid 2px whitesmoke;
+  padding: 0 !important;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 5px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li.li-round {
+  border-radius: 50%;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li.li-square {
+  border-radius: 5px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .header-link {
+  margin: 0 auto;
+  width: 20px;
+  padding: 0;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .header-link i {
+  font-size: 20px;
+  line-height: 48px;
+  vertical-align: middle;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-toggle {
+  height: 50px;
+  width: 50px;
+  margin: -1px -2px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-toggle .dropdown-inner {
+  margin: 0 auto;
+  width: 20px;
+  padding: 0;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-toggle .dropdown-inner i {
+  font-size: 20px;
+  line-height: 48px;
+  vertical-align: middle;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .caret {
+  position: absolute;
+  bottom: 3px;
+  left: 13px;
+  text-align: center;
+  color: whitesmoke;
+  border-top: 5px solid;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertCounter {
+  display: none;
+  border: solid 2px #e74c3c;
+  border-radius: 5px;
+  font-size: 12px;
+  height: 25px;
+  min-width: 25px;
+  line-height: 21px;
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  color: #e74c3c;
+  background-color: rgba(255, 255, 255, 0.85);
+  font-weight: 900;
+  vertical-align: middle;
+  text-align: center;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertList {
+  max-height: 250px;
+  overflow: auto;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertList .alert-wrapper {
+  border: solid 1px #e74c3c;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertList .alert-wrapper .alert-title {
+  border-bottom: dashed 1px #e74c3c;
+  font-weight: 600;
+  font-size: 10px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertList .alert-wrapper .alert-title .delete-alert {
+  font-size: 12px;
+  color: #e74c3c;
+  float: right;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li #AlertList .alert-wrapper .alert-description {
+  font-weight: 100;
+  font-size: 12px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu {
+  position: absolute;
+  top: 58px;
+  background-color: white;
+  border: solid 2px #95a5a6;
+  border-radius: 4px;
+  padding: 10px;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu .dropdown-arrow {
+  position: absolute;
+  top: -10px;
+  left: 13px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 10px solid #95a5a6;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountUser {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountImage .img-wrapper {
+  border-radius: 50%;
+  border: solid 3px #95a5a6;
+  max-width: 100px;
+  max-height: 100px;
+  margin: 5px auto;
+  overflow: hidden;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountInfo {
+  text-align: center;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountLinks {
+  margin: 5px auto;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountLinks div {
+  margin: 2.5px auto;
+}
+#NavHeader #HeaderLinkWrapper #HeaderLinks li .dropdown-menu #AccountInfo #AccountLinks div .btn {
+  width: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: #333;
+  font-family: sans-serif;
+  -ms-scrollbar-face-color: #95a5a6;
+  scrollbar-face-color: #95a5a6;
+  -ms-scrollbar-track-color: rgba(149, 165, 166, 0.5);
+  scrollbar-track-color: rgba(149, 165, 166, 0.5);
+}
+#wcb-webchat-launch {
+  z-index: 9999;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #95a5a6;
+}
+::-webkit-scrollbar-track {
+  background: #ecf0f1;
+}
+img {
+  max-width: 100%;
+}
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-bottom: 50px;
+}
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+  white-space: normal;
+}
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  max-width: 280px;
+}
+.navbar-brand {
+  padding: 10px 15px;
+}
+.navbar-brand img {
+  width: 30px;
+}
+.modal {
+  padding: 0 !important;
+}
+.modal .modal-content {
+  border-left: 35px solid #3498db;
+  min-height: 150px;
+}
+.modal .modal-header {
+  min-height: 45px;
+  padding: 15px 15px 4px 15px;
+  border-bottom: 6px double #3498db;
+}
+.modal .modal-header .show-modal-tooltips {
+  color: #3498db;
+  cursor: pointer;
+  float: right;
+  margin-right: 15px;
+  font-size: 30px;
+  margin-top: -8px;
+}
+.modal .modal-footer {
+  border: none;
+}
+.modal .modal-footer .modal-corner {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-bottom: 20px solid #3498db;
+  border-right: 20px solid #3498db;
+  border-radius: 0 0 6px 0;
+}
+.tooltip {
+  top: 0;
+}
+.tooltip > .tooltip-inner {
+  background-color: white;
+  /*#8e44ad;*/
+  border: 2px solid #8e44ad;
+  padding: 8px;
+  font-size: 14px;
+  color: #000;
+}
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #8e44ad !important;
+}
+.tooltip.top .tooltip-arrow {
+  border-top-color: #8e44ad !important;
+}
+.tooltip.left .tooltip-arrow {
+  border-left-color: #8e44ad !important;
+}
+.tooltip.right .tooltip-arrow {
+  border-right-color: #8e44ad !important;
+}
+#SidePanel {
+  position: fixed;
+  left: 0;
+  width: 65px;
+  background-color: darkgray;
+  height: 100%;
+  top: 50px;
+}
+#SidePanel #SidePanelInner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: 285px;
+  width: 100%;
+  height: 100%;
+}
+#SidePanel #SidePanelInner #ProfilesHeader {
+  background-color: #2ecc71;
+  font-size: 28px;
+  font-weight: 600;
+  border-bottom: solid 5px #333;
+  line-height: 50px;
+  height: 50px;
+}
+#SidePanel #SidePanelInner #ProfilesHeader span {
+  margin-left: 10px;
+}
+#SidePanel #SidePanelInner #ProfilesHeader i {
+  font-size: 28px;
+  line-height: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+@media (max-width: 350px) {
+  #SidePanel #SidePanelInner #ProfilesHeader i {
+    margin-right: 75px;
+  }
+}
+#SidePanel #SidePanelInner #SidePanelProfiles {
+  color: #fff;
+  padding: 5px 10px 50px 10px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper {
+  color: #2ecc71;
+  background-color: #fff;
+  margin-bottom: 5px;
+  padding: 10px 5px;
+  min-height: 35px;
+  vertical-align: middle;
+  border-radius: 4px;
+  position: relative;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-error {
+  position: relative;
+  float: right;
+  height: 14px;
+  width: 14px;
+  margin-left: 4px;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-error i {
+  color: #f1c40f;
+  cursor: help;
+  position: absolute;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-name {
+  max-width: 195px;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .delete-profile-btn {
+  cursor: pointer;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .edit-profile-btn {
+  cursor: pointer;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details {
+  float: none;
+  clear: both;
+  display: none;
+  border-top: solid 1px #2ecc71;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details span {
+  font-weight: 600;
+  clear: both;
+  float: none;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-skills {
+  clear: both;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-skills .profile-skill {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  float: left;
+  border-radius: 4px;
+  background-color: #3498db;
+  padding: 0 5px;
+  color: #fff;
+  max-width: 220px;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-schedules {
+  clear: both;
+  max-height: 250px;
+  overflow-y: auto;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-schedules .profile-schedule {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  float: left;
+  border-radius: 4px;
+  background-color: #f39c12;
+  padding: 0 5px;
+  color: #fff;
+  max-width: 220px;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-template,
+#SidePanel #SidePanelInner #SidePanelProfiles .profile-wrapper .profile-details .profile-widget {
+  clear: both;
+  float: none;
+}
+#SidePanel #SideSlider {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 65px;
+  background-color: #333;
+}
+#SidePanel #SideSlider #ArrowIcon {
+  width: 25px;
+  margin-bottom: 25px;
+  margin-top: 35px;
+}
+#SidePanel #SideSlider #ArrowIcon i {
+  color: white;
+  font-size: 30px;
+}
+#SidePanel #SideSlider .slider-icon {
+  width: 45px;
+}
+#ScrollTop {
+  display: none;
+  z-index: 99;
+  line-height: 0;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  cursor: pointer;
+  color: rgba(26, 188, 156, 0.75);
+  font-size: 40px;
+  padding: 1px;
+  margin: 0;
+}
+#AboutWcb {
+  position: fixed;
+  top: 65px;
+  right: 20px;
+  z-index: 99;
+  width: 30px;
+}
+#AboutWcb span {
+  cursor: pointer;
+}
+#MainView {
+  background-color: #ecf0f1;
+  position: absolute;
+  left: 65px;
+  width: 100%;
+  height: 100%;
+  top: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 0;
+  border-top: 3px solid #333;
+}
+#LoginForm {
+  border: solid 10px #2ecc71;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 15%;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+#LoginForm hr {
+  border-top: 3px solid #2ecc71;
+}
+#LoginForm .form-control {
+  width: 100%;
+  max-width: 100%;
+}
+#LoginForm input[type=checkbox] {
+  display: none;
+}
+#LoginForm input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f096";
+  letter-spacing: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+#LoginForm input[type=checkbox]:checked + label:before {
+  content: "\f046";
+  letter-spacing: 7px;
+}
+/*Index*/
+.jumbotron {
+  border-radius: 0 !important;
+  background-color: #34495e;
+  color: #fff;
+}
+.jumbotron #MainCompanyInfo {
+  margin: 10% 0;
+}
+.jumbotron #MainCompanyInfo img {
+  margin: 0 auto;
+  max-width: 100%;
+}
+.jumbotron #MainCompanyInfo h1 {
+  margin: 0;
+}
+.main-sub-wrapper {
+  text-align: center;
+  padding: 15px 35px;
+}
+.main-sub-wrapper h2 {
+  position: relative;
+}
+.main-sub-wrapper h2 span {
+  margin: 0 5px;
+}
+.main-sub-wrapper h2 i {
+  position: absolute;
+  top: -5px;
+  color: #f1c40f;
+  font-size: 20px;
+  padding: 1px;
+  cursor: pointer;
+}
+.main-sub-wrapper .fa-5x {
+  max-width: 100%;
+  width: 100%;
+}
+.main-sub-wrapper .status-left {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 600;
+}
+.main-sub-wrapper .status-right {
+  text-align: left;
+  font-size: 18px;
+}
+@media (max-width: 767px) {
+  .main-sub-wrapper .status-left {
+    text-align: center;
+  }
+  .main-sub-wrapper .status-right {
+    text-align: center;
+  }
+}
+.main-sub-wrapper #ChartLegend {
+  text-align: left;
+}
+.main-sub-wrapper .doughnut-legend {
+  margin-top: 15px;
+  padding: 0;
+}
+.main-sub-wrapper .doughnut-legend li span {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  margin: -1px 0;
+  border-radius: 50%;
+}
+.main-sub-wrapper .doughnut-legend li {
+  display: block;
+  position: relative;
+  margin-bottom: 4px;
+  padding: 2px 8px 2px 28px;
+  font-size: 14px;
+  cursor: pointer;
+  -webkit-transition: background-color 200ms ease-in-out;
+  -moz-transition: background-color 200ms ease-in-out;
+  -o-transition: background-color 200ms ease-in-out;
+  transition: background-color 200ms ease-in-out;
+  text-align: left;
+}
+.main-sub-wrapper .labeled-chart-container {
+  float: right;
+  height: 200px;
+  min-height: 200px;
+  max-height: 200px;
+}
+/*Preview*/
+#PreviewPage .iframe-wrapper {
+  /*width: 625px;
+        height: 530px;*/
+  margin: 50px auto;
+  font-family: sans-serif;
+}
+#PreviewPage #iframe-fixed {
+  position: fixed;
+  bottom: 0;
+  right: 2%;
+  width: 375px;
+  background-color: #fff;
+}
+#PreviewPage #iframe-fixed #iframe-fixed-toggle {
+  height: 40px;
+  background-color: gray;
+}
+#PreviewPage #iframe-fixed #iframe-fixed-inner {
+  display: none;
+}
+#DashboardPage #DashboardHeader {
+  background-color: #bdc3c7;
+  height: 150px;
+  position: relative;
+}
+#DashboardPage #DashboardHeader h2 {
+  font-size: 50px;
+  line-height: 150px;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+#DashboardPage #DashboardHeader #DateRangeWrapper {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+}
+#DashboardPage #DashboardHeader #PageRefreshWrapper {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+#DashboardPage #DashboardContainer .dash-header {
+  font-weight: 600;
+  font-size: 22px;
+  text-align: center;
+}
+#DashboardPage #DashboardContainer #DashboardGraphs {
+  margin-top: 15px;
+  height: 320px;
+}
+#DashboardPage #DashboardContainer #DashboardGraphs .dash-graph {
+  float: left;
+  width: 48%;
+  border-radius: 4px;
+  margin: 0 1%;
+  height: 320px;
+  padding: 15px;
+  color: white;
+  background-color: #2ecc71;
+}
+#DashboardPage #DashboardContainer #DashboardGraphs .dash-graph .dash-chart {
+  width: 90%;
+  margin: 5px 2.5%;
+}
+#DashboardPage #DashboardContainer #DashboardGraphs .dash-graph .dash-chart canvas {
+  width: 100%;
+  height: 250px;
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+}
+#DashboardPage #DashboardContainer #DashboardGraphs .dash-graph:nth-of-type(2) {
+  background-color: #8e44ad;
+}
+#DashboardPage #DashboardContainer #DashPanel {
+  margin-top: 15px;
+  height: 150px;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container {
+  float: left;
+  width: 23%;
+  border-radius: 4px;
+  margin: 0 1%;
+  height: 150px;
+  padding: 15px;
+  color: white;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container .dash-data {
+  width: 100%;
+  text-align: center;
+  font-size: 75px;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container:nth-of-type(1) {
+  background-color: #f39c12;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container:nth-of-type(2) {
+  background-color: #f1c40f;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container:nth-of-type(3) {
+  background-color: #e74c3c;
+}
+#DashboardPage #DashboardContainer #DashPanel .dash-container:nth-of-type(4) {
+  background-color: #1abc9c;
+}
+#DashboardPage #DashboardContainer #DashQueueStats {
+  margin: 50px 15px;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper {
+  border-radius: 4px;
+  border: solid 1px #3498db;
+  margin: 10px auto;
+  height: 120px;
+  padding: 15px;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-loading .progress {
+  height: auto;
+  margin: 20px auto;
+  width: auto;
+  border-radius: 15px;
+  border: none;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner {
+  display: none;
+  font-weight: 600;
+  font-size: 22px;
+  text-align: center;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-profile-name {
+  color: #3498db;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper {
+  color: #fff;
+  margin-top: 15px;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-active-wrapper {
+  float: left;
+  margin: 0 1% 5px 0;
+  background-color: #f39c12;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 300;
+  width: 24%;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-queued-wrapper {
+  float: left;
+  margin: 0 1% 5px 0;
+  background-color: #f1c40f;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 300;
+  width: 24%;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-total-wrapper {
+  float: left;
+  margin: 0 1% 5px 0;
+  background-color: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 300;
+  width: 24%;
+}
+#DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-abandoned-wrapper {
+  float: left;
+  margin: 0 1% 5px 0;
+  background-color: #1abc9c;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 300;
+  width: 24%;
+}
+#DashboardPage #DashboardContainer #MapDash {
+  position: relative;
+  border: solid 15px #333;
+  border-top: solid 40px #333;
+  border-radius: 10px;
+  width: 780px;
+  margin: 30px auto;
+  background-color: #3498db;
+}
+#DashboardPage #DashboardContainer #MapDash #MapDashHeader {
+  color: white;
+  position: absolute;
+  top: -35px;
+  left: 0;
+  font-weight: 600;
+  font-size: 22px;
+}
+#DashboardPage #DashboardContainer #MapDash #MapDashHeader span {
+  font-size: 16px;
+}
+#DashboardPage #DashboardContainer #MapDash .map {
+  position: relative;
+  width: 750px;
+  height: 500px;
+}
+#DashboardPage #DashboardContainer #MapDash #MapLiveBtnWrapper {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
+  border-radius: 25px;
+  background-color: #333;
+  z-index: 99;
+}
+#DashboardPage #DashboardContainer #MapDash #MapLiveBtnWrapper #WorldMapLiveBtn {
+  display: none;
+}
+#DashboardPage #DashboardContainer #MapDash #MapLiveBtnWrapper .btn {
+  border-radius: 25px;
+  float: left;
+  margin: 0 2.5px;
+  padding: 6px 10px;
+}
+@media (max-width: 1024px) {
+  #DashboardPage #DashboardContainer #DashPanel {
+    font-size: 18px;
+  }
+  #DashboardPage #DashboardContainer #DashPanel .dash-container .dash-data {
+    font-size: 50px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner {
+    font-size: 22px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-active-wrapper {
+    font-size: 14px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-active-wrapper .dash-queue-active-header {
+    display: table;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-queued-wrapper {
+    font-size: 14px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-queued-wrapper .dash-queue-queued-header {
+    display: table;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-total-wrapper {
+    font-size: 14px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-total-wrapper .dash-queue-total-header {
+    display: table;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-abandoned-wrapper {
+    font-size: 14px;
+  }
+  #DashboardPage #DashboardContainer #DashQueueStats .dash-queue-stat-wrapper .dash-queue-inner .dash-stat-wrapper .dash-queue-abandoned-wrapper .dash-queue-abandoned-header {
+    display: table;
+  }
+}
+#SettingsPage #SettingsHeader {
+  background-color: #bdc3c7;
+  height: 150px;
+}
+#SettingsPage #SettingsHeader h2 {
+  font-size: 50px;
+  line-height: 150px;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+#SettingsPage #SettingsContainer {
+  margin-top: 15px;
+}
+#SettingsPage #SettingsContainer .nav-center {
+  text-align: center;
+  border-bottom: solid 3px #34495e;
+}
+#SettingsPage #SettingsContainer .nav-center ul.nav {
+  display: inline-block;
+  margin-bottom: -7px;
+  border: none;
+}
+#SettingsPage #SettingsContainer .nav-center ul.nav li {
+  display: inline;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+#SettingsPage #SettingsContainer .nav-center ul.nav li a {
+  float: left;
+  border: solid 1px #34495e;
+  border-top: solid 2px #34495e;
+  font-weight: 600;
+  padding: 6px 25px;
+  background-color: #fff;
+  margin-top: 6px;
+  color: #34495e;
+}
+#SettingsPage #SettingsContainer .nav-center ul.nav li a:hover,
+#SettingsPage #SettingsContainer .nav-center ul.nav li a:focus {
+  color: #34495e;
+  border-top: solid 5px #34495e;
+  border-radius: 4px 4px 0 0;
+  padding: 8px 25px;
+  margin-top: 0;
+}
+#SettingsPage #SettingsContainer .nav-center ul.nav li.active a {
+  border-top: solid 5px #34495e;
+  border-radius: 4px 4px 0 0;
+  padding: 8px 25px;
+  margin-top: 0;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane {
+  margin: 15px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane #WorkgroupSettings,
+#SettingsPage #SettingsContainer .tab-content .tab-pane #SkillSettings {
+  border: solid 1px #333;
+  border-radius: 4px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane #WorkgroupSettings .collapse-arrow,
+#SettingsPage #SettingsContainer .tab-content .tab-pane #SkillSettings .collapse-arrow {
+  position: absolute;
+  right: 25px;
+  top: 7px;
+  font-size: 50px;
+  cursor: pointer;
+  color: #95a5a6;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .assignable-wrapper {
+  position: relative;
+  /*padding: 10px;
+                    border: solid 1px #333;
+                    border-radius: 4px;*/
+  margin: 5px auto;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .assignable-wrapper h2 i {
+  float: right;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .assignable-wrapper .settings-tab {
+  margin-top: 0 !important;
+  display: block;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab {
+  margin-top: 50px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroups-wrapper h2,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skills-wrapper h2 {
+  max-width: 355px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper {
+  background: white;
+  border: solid 1px #333;
+  padding: 5px;
+  margin-bottom: 3px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper span,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper span,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper span {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  max-width: 85%;
+  display: inline-block;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i {
+  float: right;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i.fa-times-circle,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i.fa-times-circle,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i.fa-times-circle {
+  color: #e74c3c;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i.fa-plus-square,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i.fa-plus-square,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i.fa-plus-square {
+  color: #2ecc71;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i.fa-pencil-square-o,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i.fa-pencil-square-o,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i.fa-pencil-square-o {
+  color: #3498db;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i.fa-trash,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i.fa-trash,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i.fa-trash,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper i .fa-calendar,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper i .fa-calendar,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper i .fa-calendar {
+  color: #ecf0f1;
+  float: none;
+  margin: 0 1px;
+}
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-workgroup-wrapper .schedule-info,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-skill-wrapper .schedule-info,
+#SettingsPage #SettingsContainer .tab-content .tab-pane .settings-tab .settings-schedule-wrapper .schedule-info {
+  background-color: #f29389;
+  height: 30px;
+  padding: 4px 10px;
+  float: right;
+  top: 0;
+  margin: -5px 10px 0 0;
+}
+#SettingsPage #SettingsContainer #GeneralSettings label,
+#SettingsPage #SettingsContainer #GeneralSettings .form-control,
+#SettingsPage #SettingsContainer #GeneralSettings .btn {
+  margin-bottom: 10px;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #LogoWrapper {
+  margin-bottom: 10px;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #LogoWrapper .no-logo {
+  color: #333;
+  width: 60%;
+  padding: 15px;
+  border: solid 3px #333;
+  text-align: center;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #LogoWrapper img {
+  max-width: 50%;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #GeneralLogos {
+  border: solid 3px #333;
+  border-radius: 4px;
+  width: 100%;
+  height: 275px;
+  margin-bottom: 10px;
+  overflow: auto;
+  padding: 0 10px;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #GeneralLogos img {
+  max-width: 48%;
+  max-height: 50px;
+  margin: 10px auto;
+  padding: 5px;
+  border: solid 3px #fff;
+  cursor: pointer;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #GeneralLogos img.selected {
+  border: solid 5px #3498db;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #CustomSystemMessages {
+  border-radius: 4px;
+  padding: 15px;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #CustomSystemMessages .custom-message-wrapper {
+  background-color: white;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+}
+#SettingsPage #SettingsContainer #GeneralSettings #CustomSystemMessages .custom-message-wrapper div textarea {
+  resize: none;
+  height: 75px;
+  min-height: 75px;
+  max-height: 75px;
+  width: 100%;
+  max-width: 100%;
+}
+#SettingsPage #SettingsContainer #TemplateSettings .row,
+#SettingsPage #SettingsContainer #WidgetSettings .row {
+  margin-bottom: 10px;
+}
+#SettingsPage #SettingsContainer #TemplateSettings h2,
+#SettingsPage #SettingsContainer #WidgetSettings h2 {
+  margin: 0;
+}
+#SettingsPage #SettingsContainer #TemplateSettings .template-wrapper,
+#SettingsPage #SettingsContainer #WidgetSettings .template-wrapper,
+#SettingsPage #SettingsContainer #TemplateSettings .widget-wrapper,
+#SettingsPage #SettingsContainer #WidgetSettings .widget-wrapper,
+#SettingsPage #SettingsContainer #TemplateSettings .form-wrapper,
+#SettingsPage #SettingsContainer #WidgetSettings .form-wrapper {
+  background: white;
+  border: solid 1px #333;
+  padding: 5px;
+  margin-bottom: 3px;
+}
+#SettingsPage #SettingsContainer #TemplateSettings .template-wrapper span,
+#SettingsPage #SettingsContainer #WidgetSettings .template-wrapper span,
+#SettingsPage #SettingsContainer #TemplateSettings .widget-wrapper span,
+#SettingsPage #SettingsContainer #WidgetSettings .widget-wrapper span,
+#SettingsPage #SettingsContainer #TemplateSettings .form-wrapper span,
+#SettingsPage #SettingsContainer #WidgetSettings .form-wrapper span {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  max-width: 80%;
+  display: inline-block;
+}
+#SettingsPage #SettingsContainer #TemplateSettings .template-wrapper i,
+#SettingsPage #SettingsContainer #WidgetSettings .template-wrapper i,
+#SettingsPage #SettingsContainer #TemplateSettings .widget-wrapper i,
+#SettingsPage #SettingsContainer #WidgetSettings .widget-wrapper i,
+#SettingsPage #SettingsContainer #TemplateSettings .form-wrapper i,
+#SettingsPage #SettingsContainer #WidgetSettings .form-wrapper i {
+  float: right;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsPage #SettingsContainer #TemplateSettings #LaunchIcons,
+#SettingsPage #SettingsContainer #WidgetSettings #LaunchIcons {
+  border: solid 3px #333;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+#SettingsPage #SettingsContainer #TemplateSettings #LaunchIcons img,
+#SettingsPage #SettingsContainer #WidgetSettings #LaunchIcons img {
+  max-height: 50px;
+}
+#MainModal .modal-dialog {
+  width: 80% !important;
+}
+#MainModal #ModalBody {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#MainModal #ModalBody #CreateChatProfile {
+  padding: 15px;
+}
+#MainModal #ModalBody #CreateChatProfile .row {
+  margin-bottom: 10px;
+}
+#MainModal #ModalBody #CreateChatProfile h3 {
+  margin: 10px 15px;
+}
+#MainModal #ModalBody #CreateChatProfile #LogoSelectBox {
+  border: solid 3px #333;
+  border-radius: 5px;
+  width: 100%;
+  height: 200px;
+  padding: 5px;
+  margin-bottom: 10px;
+  overflow: auto;
+}
+#MainModal #ModalBody #CreateChatProfile #LogoSelectBox img {
+  max-width: 48%;
+  max-height: 50px;
+  margin: 10px auto;
+  padding: 5px;
+  border: solid 3px #fff;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#MainModal #ModalBody #CreateChatProfile #LogoSelectBox img.selected {
+  border: solid 2px #3498db;
+}
+#MainModal #ModalBody #CreateChatProfile #ClearLogoSelection {
+  cursor: pointer;
+  font-size: 18px;
+}
+#MainModal #ModalBody #CreateChatProfile #Schedules {
+  height: 150px;
+}
+#MainModal #ModalBody #CreateChatProfile select,
+#MainModal #ModalBody #CreateChatProfile select[multiple] {
+  max-width: 100%;
+  width: 100%;
+}
+#MainModal #ModalBody #GeneratedProfileCode {
+  padding: 15px;
+}
+#MainModal #ModalBody #GeneratedProfileCode textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  resize: none;
+  height: 210px;
+}
+#SettingsModal .modal-dialog {
+  width: 80% !important;
+}
+#SettingsModal #SettingsModalBody {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#SettingsModal #SettingsModalBody .form-control {
+  max-width: 100%;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate {
+  padding: 15px;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate .row {
+  margin-bottom: 10px;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate h3 {
+  margin: 10px 15px;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #SendIconSelectLabel {
+  /*display: none;*/
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #SendIconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #CloseIconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #DisconnectIconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #PrintIconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #EmailIconSelectBox {
+  /*display: none;*/
+  background-color: #f9f2ee;
+  border: solid 3px #333;
+  border-radius: 5px;
+  width: 100%;
+  height: 130px;
+  margin: 0;
+  padding: 5px;
+  overflow: auto;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #SendIconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #CloseIconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #DisconnectIconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #PrintIconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #EmailIconSelectBox img {
+  max-width: 48%;
+  max-height: 50px;
+  margin: 5px auto;
+  padding: 2px;
+  border: solid 3px #fff;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #SendIconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #CloseIconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #DisconnectIconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #PrintIconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatTemplate #EmailIconSelectBox img.selected {
+  border: solid 2px #3498db;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #LogoSelectBox {
+  background-color: #f9f2ee;
+  border: solid 3px #333;
+  border-radius: 5px;
+  width: 100%;
+  height: 200px;
+  padding: 5px;
+  margin-bottom: 10px;
+  overflow: auto;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #LogoSelectBox img {
+  max-width: 48%;
+  max-height: 50px;
+  margin: 10px auto;
+  padding: 5px;
+  border: solid 3px #fff;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #LogoSelectBox img.selected {
+  border: solid 2px #3498db;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate #ClearLogoSelection {
+  cursor: pointer;
+  font-size: 18px;
+}
+#SettingsModal #SettingsModalBody #CreateChatTemplate .iframe-wrapper {
+  margin: 10px 15px;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget {
+  padding: 15px;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget .row {
+  margin-bottom: 10px;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget h3 {
+  margin: 10px 15px;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget #IconSelectLabel {
+  /*display: none;*/
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget #IconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatWidget #UnavailableIconSelectBox,
+#SettingsModal #SettingsModalBody #CreateChatWidget #ResumeIconSelectBox {
+  /*display: none;*/
+  border: solid 3px #333;
+  border-radius: 5px;
+  width: 100%;
+  height: 130px;
+  margin: 0;
+  padding: 5px;
+  overflow: auto;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget #IconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatWidget #UnavailableIconSelectBox img,
+#SettingsModal #SettingsModalBody #CreateChatWidget #ResumeIconSelectBox img {
+  max-width: 48%;
+  max-height: 50px;
+  margin: 5px auto;
+  padding: 2px;
+  border: solid 3px #fff;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget #IconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatWidget #UnavailableIconSelectBox img.selected,
+#SettingsModal #SettingsModalBody #CreateChatWidget #ResumeIconSelectBox img.selected {
+  border: solid 2px #3498db;
+}
+#SettingsModal #SettingsModalBody #CreateChatWidget #ClearIconSelection,
+#SettingsModal #SettingsModalBody #CreateChatWidget #ClearUnavailableIconSelection,
+#SettingsModal #SettingsModalBody #CreateChatWidget #ClearResumeIconSelection {
+  cursor: pointer;
+  font-size: 18px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #CreateFormField {
+  border: solid 1px #333;
+  margin: 0 0 15px 0;
+  border-radius: 4px;
+  padding: 15px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm .refresh-form-fields {
+  cursor: pointer;
+  color: #3498db;
+  font-size: 22px;
+  margin-left: 10px;
+  float: left;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionsWrapper {
+  border: solid 1px #333333;
+  padding: 15px;
+  border-radius: 4px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionsWrapper #AddSelectOption {
+  margin-top: 10px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #CloseSelectOptions {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  cursor: pointer;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor {
+  display: none;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail {
+  padding: 5px;
+  border-top: solid 1px #333;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail .option-text {
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail .option-value {
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail .remove-select-option {
+  float: right;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail .set-default-select-option {
+  float: right;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields #SelectOptionEditor .select-option-detail .default-option {
+  float: right;
+  font-size: 8px;
+  font-weight: 500;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .existing-form-field {
+  margin: 5px 0;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .existing-form-field label {
+  width: 100%;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .existing-form-field .required-field::after {
+  content: "*";
+  color: red;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper {
+  clear: both;
+  float: none;
+  background: #fff;
+  border: solid 1px #333;
+  padding: 5px;
+  margin-bottom: 6px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper .delete-form-field {
+  float: right;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper .raise-form-field {
+  float: right;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper .edit-select-options {
+  float: right;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper .edit-form-field {
+  float: right;
+  color: #3498db;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0 1px 0 2px;
+}
+#SettingsModal #SettingsModalBody #CreateFormForm #ExistingFormFields .form-field-wrapper .form-field-details {
+  display: none;
+}
+#UsersPage #UsersHeader {
+  background-color: #bdc3c7;
+  height: 150px;
+}
+#UsersPage #UsersHeader h2 {
+  font-size: 50px;
+  line-height: 150px;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+#UsersPage #CreateNewUserBtn {
+  padding: 5px 0;
+  width: 100%;
+  font-size: 25px;
+  background-color: #2ecc71;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+#UsersPage #UsersContainer {
+  margin-top: 15px;
+}
+#UsersPage #UsersContainer #WcbUsers {
+  width: 70%;
+  float: left;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper {
+  position: relative;
+  float: left;
+  margin: 0 1% 5px 1%;
+  width: 23%;
+  background-color: #95a5a6;
+  padding: 15px;
+  color: #fff;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .drag-arrows {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 22px;
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-header {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin: 25px 0 15px 0;
+  max-width: 100%;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-image {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 50%;
+  border: solid 5px #ecf0f1;
+  margin: 0 auto;
+  overflow: hidden;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-info {
+  text-align: center;
+  margin-top: 5px;
+  max-width: 100%;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-edit-btn {
+  display: inline-block;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-edit-btn .fa-stack {
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-edit-btn .fa-stack .fa-circle {
+  color: #3498db;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-pwd-btn {
+  display: inline-block;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-pwd-btn .fa-stack {
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-pwd-btn .fa-stack .fa-circle {
+  color: #f1c40f;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-delete-btn {
+  display: inline-block;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-delete-btn .fa-stack {
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-delete-btn .fa-stack .fa-circle {
+  color: #e74c3c;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-active-checkbox {
+  position: absolute;
+  top: 26%;
+  right: 0;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-active-checkbox input[type=checkbox] {
+  display: none;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-active-checkbox input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f096";
+  letter-spacing: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbUsers .user-wrapper .user-active-checkbox input[type=checkbox]:checked + label:before {
+  content: "\f046";
+  letter-spacing: 7px;
+  cursor: pointer;
+}
+#UsersPage #UsersContainer #WcbRoles {
+  width: 28%;
+  float: left;
+  margin: 0 1%;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper {
+  padding: 15px;
+  margin-bottom: 15px;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#DashboardAdminRole {
+  background-color: #3498db;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#SettingsAdminRole {
+  background-color: #1abc9c;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#UserAdminRole {
+  background-color: #f1c40f;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#AlertAdminRole {
+  background-color: #e74c3c;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#ProfileAdminRole {
+  background-color: #2ecc71;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper#SupervisorRole {
+  background-color: #f39c12;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper .role-header {
+  color: #fff;
+  font-weight: 600;
+  font-size: 22px;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper .role-users-list {
+  background-color: #fff;
+  padding: 15px 5px;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper .role-users-list .role-user {
+  border: solid 1px #333;
+  border-radius: 20px;
+  padding: 2px 2px 2px 12px;
+  font-size: 14px;
+  line-height: 22px;
+  vertical-align: middle;
+  margin-bottom: 2px;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper .role-users-list .role-user .role-user-name {
+  max-width: 100%;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#UsersPage #UsersContainer #WcbRoles .role-wrapper .role-users-list .role-user .btn {
+  border-radius: 50%;
+  padding: 2px 6px 1px 6px;
+  font-size: 12px;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper {
+  position: relative;
+  margin: 0;
+  width: 25%;
+  background-color: #95a5a6;
+  padding: 15px;
+  color: #fff;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .drag-arrows {
+  display: none;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-header {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 0 15%;
+  max-width: 85%;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-image {
+  height: 100%;
+  margin: 0;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-image img {
+  height: 85%;
+  border-radius: 50%;
+  border: solid 1px #ecf0f1;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-info {
+  display: none;
+}
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-edit-btn,
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-pwd-btn,
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-delete-btn,
+#UsersPage #UsersContainer .ui-draggable-dragging.user-wrapper .user-active-checkbox {
+  display: none;
+}
+#UserModalBody .control-label {
+  margin: 12px 0 0 0;
+  text-align: right;
+}
+#UserModalBody .form-control {
+  width: 100%;
+  margin: 5px 0;
+}
+#UserModalBody .btn {
+  margin: 10px 0;
+}
+#EditPage #EditHeader {
+  background-color: #bdc3c7;
+  height: 150px;
+  margin-bottom: 15px;
+}
+#EditPage #EditHeader h2 {
+  font-size: 50px;
+  line-height: 150px;
+  text-align: center;
+  color: #fff;
+  margin: 0;
+}
+#EditUser #DisplayImage {
+  max-width: 200px;
+  margin: 0 auto;
+}
+#EditUser #DisplayImage .img-wrapper {
+  max-width: 200px;
+  max-height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: solid 5px #95a5a6;
+}
+#EditUser #DisplayImage .btn {
+  margin: 15px 0;
+  width: 100%;
+}
+#EditUser #EditUserForm {
+  margin: 0 auto;
+  width: 90%;
+}
+#EditUser #EditUserForm .form-control {
+  max-width: 100%;
+}
+.validation-summary-errors {
+  color: red;
+}
+.validation-summary-errors ol,
+.validation-summary-errors ul {
+  list-style: none;
+}
+#VisitorMessages,
+#WebChatsWrapper {
+  margin-top: 100px;
+}
+#VisitorMessages .supervisor-list .vm-wrapper,
+#WebChatsWrapper .supervisor-list .vm-wrapper,
+#VisitorMessages .supervisor-list .chat-wrapper,
+#WebChatsWrapper .supervisor-list .chat-wrapper {
+  padding: 5px 0;
+  margin-bottom: 5px;
+  border: solid 1px #f39c12;
+  background-color: white;
+}
+#VisitorMessages .supervisor-list .vm-wrapper .btn,
+#WebChatsWrapper .supervisor-list .vm-wrapper .btn,
+#VisitorMessages .supervisor-list .chat-wrapper .btn,
+#WebChatsWrapper .supervisor-list .chat-wrapper .btn {
+  float: right;
+  margin-right: 10px;
+  padding: 8px 12px;
+}
+#VisitorMessages .supervisor-list .vm-wrapper .resend-msg-btn i,
+#WebChatsWrapper .supervisor-list .vm-wrapper .resend-msg-btn i,
+#VisitorMessages .supervisor-list .chat-wrapper .resend-msg-btn i,
+#WebChatsWrapper .supervisor-list .chat-wrapper .resend-msg-btn i {
+  color: #3498db;
+}
+#VisitorMessages .supervisor-list .vm-wrapper .delete-msg-btn i,
+#WebChatsWrapper .supervisor-list .vm-wrapper .delete-msg-btn i,
+#VisitorMessages .supervisor-list .chat-wrapper .delete-msg-btn i,
+#WebChatsWrapper .supervisor-list .chat-wrapper .delete-msg-btn i {
+  color: #e74c3c;
+}
+/*# sourceMappingURL=Site.css.map */

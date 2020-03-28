@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{45AAACD7-6E2C-4337-A0EE-52C30D01FDA2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebChatBuilderModels</RootNamespace>
+    <AssemblyName>WebChatBuilderModels</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1-beta3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CreateOrMigrateDatabaseInitializer.cs" />
+    <Compile Include="Helper\CustomEFInterceptor.cs" />
+    <Compile Include="Migrations\201512190949189_InitialCreate.cs" />
+    <Compile Include="Migrations\201512190949189_InitialCreate.Designer.cs">
+      <DependentUpon>201512190949189_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270304334_CleanMigration.cs" />
+    <Compile Include="Migrations\201601270304334_CleanMigration.Designer.cs">
+      <DependentUpon>201601270304334_CleanMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601270305449_AddedCustomMessages.cs" />
+    <Compile Include="Migrations\201601270305449_AddedCustomMessages.Designer.cs">
+      <DependentUpon>201601270305449_AddedCustomMessages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601310629480_AddedIsSecondaryStyleToWidget.cs" />
+    <Compile Include="Migrations\201601310629480_AddedIsSecondaryStyleToWidget.Designer.cs">
+      <DependentUpon>201601310629480_AddedIsSecondaryStyleToWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601311921342_AddedHideHeaderAndHideSendButtonToTemplate.cs" />
+    <Compile Include="Migrations\201601311921342_AddedHideHeaderAndHideSendButtonToTemplate.Designer.cs">
+      <DependentUpon>201601311921342_AddedHideHeaderAndHideSendButtonToTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605190102377_AddedIsRequiredToFormField.cs" />
+    <Compile Include="Migrations\201605190102377_AddedIsRequiredToFormField.Designer.cs">
+      <DependentUpon>201605190102377_AddedIsRequiredToFormField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605302135547_MajorWcbUpdates.cs" />
+    <Compile Include="Migrations\201605302135547_MajorWcbUpdates.Designer.cs">
+      <DependentUpon>201605302135547_MajorWcbUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606200331139_UpdatedWidgetsAndTemplates.cs" />
+    <Compile Include="Migrations\201606200331139_UpdatedWidgetsAndTemplates.Designer.cs">
+      <DependentUpon>201606200331139_UpdatedWidgetsAndTemplates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607240633126_UpdatedFormFieldAndVisitorMessage.cs" />
+    <Compile Include="Migrations\201607240633126_UpdatedFormFieldAndVisitorMessage.Designer.cs">
+      <DependentUpon>201607240633126_UpdatedFormFieldAndVisitorMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201608110301008_AddedMaxLengthToFormField.cs" />
+    <Compile Include="Migrations\201608110301008_AddedMaxLengthToFormField.Designer.cs">
+      <DependentUpon>201608110301008_AddedMaxLengthToFormField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609160512211_AddedShowTooltipOnMobileAndRemovedProfileFromCustomMessage.cs" />
+    <Compile Include="Migrations\201609160512211_AddedShowTooltipOnMobileAndRemovedProfileFromCustomMessage.Designer.cs">
+      <DependentUpon>201609160512211_AddedShowTooltipOnMobileAndRemovedProfileFromCustomMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610091525500_UpdatedTemplateModel.cs" />
+    <Compile Include="Migrations\201610091525500_UpdatedTemplateModel.Designer.cs">
+      <DependentUpon>201610091525500_UpdatedTemplateModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610162232266_AddedAllowAttachmentsToProfile.cs" />
+    <Compile Include="Migrations\201610162232266_AddedAllowAttachmentsToProfile.Designer.cs">
+      <DependentUpon>201610162232266_AddedAllowAttachmentsToProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201611051943216_AddedProfileToChat.cs" />
+    <Compile Include="Migrations\201611051943216_AddedProfileToChat.Designer.cs">
+      <DependentUpon>201611051943216_AddedProfileToChat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612032323401_AddedWorkgroupUtilization.cs" />
+    <Compile Include="Migrations\201612032323401_AddedWorkgroupUtilization.Designer.cs">
+      <DependentUpon>201612032323401_AddedWorkgroupUtilization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201612042227448_AddedCustomInfoAndAttributesToVisitorMessage.cs" />
+    <Compile Include="Migrations\201612042227448_AddedCustomInfoAndAttributesToVisitorMessage.Designer.cs">
+      <DependentUpon>201612042227448_AddedCustomInfoAndAttributesToVisitorMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705300210474_AddedFormOptions.cs" />
+    <Compile Include="Migrations\201705300210474_AddedFormOptions.Designer.cs">
+      <DependentUpon>201705300210474_AddedFormOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708122230127_Added IsDeleted to User.cs" />
+    <Compile Include="Migrations\201708122230127_Added IsDeleted to User.Designer.cs">
+      <DependentUpon>201708122230127_Added IsDeleted to User.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Agent.cs" />
+    <Compile Include="Models\Chat.cs" />
+    <Compile Include="Models\CustomMessage.cs" />
+    <Compile Include="Models\Form.cs" />
+    <Compile Include="Models\FormField.cs" />
+    <Compile Include="Models\FormOption.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Language.cs" />
+    <Compile Include="Models\MediaType.cs" />
+    <Compile Include="Models\Profile.cs" />
+    <Compile Include="Models\Schedule.cs" />
+    <Compile Include="Models\ScheduleRecurrence.cs" />
+    <Compile Include="Models\Setting.cs" />
+    <Compile Include="Models\Utilization.cs" />
+    <Compile Include="Models\VisitorMessage.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="Models\Skill.cs" />
+    <Compile Include="Models\Template.cs" />
+    <Compile Include="Models\UserData.cs" />
+    <Compile Include="Models\Widget.cs" />
+    <Compile Include="Models\Workgroup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryInitializer.cs" />
+    <Compile Include="Shared\SyncKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201512190949189_InitialCreate.resx">
+      <DependentUpon>201512190949189_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270304334_CleanMigration.resx">
+      <DependentUpon>201601270304334_CleanMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601270305449_AddedCustomMessages.resx">
+      <DependentUpon>201601270305449_AddedCustomMessages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601310629480_AddedIsSecondaryStyleToWidget.resx">
+      <DependentUpon>201601310629480_AddedIsSecondaryStyleToWidget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601311921342_AddedHideHeaderAndHideSendButtonToTemplate.resx">
+      <DependentUpon>201601311921342_AddedHideHeaderAndHideSendButtonToTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605190102377_AddedIsRequiredToFormField.resx">
+      <DependentUpon>201605190102377_AddedIsRequiredToFormField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605302135547_MajorWcbUpdates.resx">
+      <DependentUpon>201605302135547_MajorWcbUpdates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606200331139_UpdatedWidgetsAndTemplates.resx">
+      <DependentUpon>201606200331139_UpdatedWidgetsAndTemplates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607240633126_UpdatedFormFieldAndVisitorMessage.resx">
+      <DependentUpon>201607240633126_UpdatedFormFieldAndVisitorMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608110301008_AddedMaxLengthToFormField.resx">
+      <DependentUpon>201608110301008_AddedMaxLengthToFormField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609160512211_AddedShowTooltipOnMobileAndRemovedProfileFromCustomMessage.resx">
+      <DependentUpon>201609160512211_AddedShowTooltipOnMobileAndRemovedProfileFromCustomMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610091525500_UpdatedTemplateModel.resx">
+      <DependentUpon>201610091525500_UpdatedTemplateModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610162232266_AddedAllowAttachmentsToProfile.resx">
+      <DependentUpon>201610162232266_AddedAllowAttachmentsToProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611051943216_AddedProfileToChat.resx">
+      <DependentUpon>201611051943216_AddedProfileToChat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612032323401_AddedWorkgroupUtilization.resx">
+      <DependentUpon>201612032323401_AddedWorkgroupUtilization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612042227448_AddedCustomInfoAndAttributesToVisitorMessage.resx">
+      <DependentUpon>201612042227448_AddedCustomInfoAndAttributesToVisitorMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705300210474_AddedFormOptions.resx">
+      <DependentUpon>201705300210474_AddedFormOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708122230127_Added IsDeleted to User.resx">
+      <DependentUpon>201708122230127_Added IsDeleted to User.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

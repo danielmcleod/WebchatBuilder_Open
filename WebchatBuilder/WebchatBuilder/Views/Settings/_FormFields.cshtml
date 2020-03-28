@@ -1,0 +1,72 @@
+﻿@using WebChatBuilderModels.Models
+@model ICollection<WebChatBuilderModels.Models.FormField>
+<div class="col-xs-6">
+    @foreach (var field in Model)
+    {
+        var required = field.IsRequired ? "*" : "";
+        <div class="form-field-wrapper">
+            <span class="form-field-name">@field.Name @required</span>
+            <i class="fa fa-pencil-square edit-form-field" data-id="@field.FormFieldId" title="Edit Form Field"></i>
+            @if (field != Model.First())
+            {
+                <i class="fa fa-arrow-circle-up raise-form-field" data-id="@field.FormFieldId" title="Move Form Field Up"></i>
+            }
+            @if (field.FieldType == FieldType.Select || field.FieldType == FieldType.Profiles)
+            {
+                <i class="fa fa-bars edit-select-options" data-id="@field.FormFieldId" title="View and Edit Select Options"></i>
+            }
+            <i class="fa fa-times-circle delete-form-field" data-id="@field.FormFieldId" title="Delete Form Field"></i>
+            <div class="form-field-details" data-id="@field.FormFieldId">
+
+            </div>
+        </div>
+    }
+    @if (Model.Any(f => f.IsRequired))
+    {
+        <div>* indicates a required field</div>
+    }
+</div>
+@if (Model.Any(i => i.FieldType == FieldType.Select || i.FieldType == FieldType.Profiles))
+{
+    <div class="col-xs-6" id="SelectOptionEditor"></div>
+}
+<div class="col-xs-6" id="FormPreview">
+    <span>(Preview may differ from actual rendering in widget)</span>
+    @foreach (var field in Model)
+    {
+        var placeholder = !String.IsNullOrEmpty(field.PlaceHolder) ? field.PlaceHolder : "";
+        var classes = !String.IsNullOrEmpty(field.CustomClasses) ? field.CustomClasses : "";
+        var maxLength = field.MaxLength > 0 ? "maxlength=\"" + field.MaxLength + "\"" : "";
+        if (field.IsRequired)
+        {
+            classes += "required-field";
+        }
+        <div class="existing-form-field">
+            @if (!String.IsNullOrEmpty(field.Label))
+            {
+                <label>@field.Label</label>
+            }
+            @if ((field.FieldType == FieldType.Select || field.FieldType == FieldType.Profiles) && field.SelectOptions.Any())
+            {
+                <select class="@classes">
+                @foreach (var option in field.SelectOptions)
+                {
+                    var selected = option.IsDefault ? "selected" : "";
+                    <option @selected value="@option.Value">@option.Text</option>
+                }
+                </select>
+            }
+            else if (field.FieldType == FieldType.TextArea)
+            {
+                <textarea placeholder="@placeholder" class="@classes" @maxLength></textarea>
+            }
+            else
+            {
+                var type = field.FieldType == FieldType.Text ? "type=text" : field.FieldType == FieldType.Email ? "type=email" : "type=password";
+                <input @type placeholder="@placeholder" class="@classes" @maxLength />
+            }
+        </div>
+    }
+    <button id="PreviewBtn">Example</button>
+</div>
+

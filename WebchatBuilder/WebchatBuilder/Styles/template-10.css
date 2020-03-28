@@ -1,0 +1,79 @@
+body {
+  background-color: #333;
+}
+
+#wcb-chat-container #wcb-chat-header {
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-system-message {
+  background-color: #a7a7a7;
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-icon .chat-msg-initial-wrapper {
+  background-color: #808080;
+  /*border: solid 3px #333;*/
+  border-radius: 50%;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-icon .chat-msg-initial-wrapper .chat-msg-initials {
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text {
+  border: solid 1px #22a7f0;
+  background-color: #fff;
+  color: #22a7f0;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text a,
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text a:hover,
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text a:visited,
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text a:focus {
+  color: #22a7f0;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text .chat-msg-arrow {
+  border-left-color: #22a7f0;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-received .chat-msg-text .chat-msg-pointer {
+  border-left-color: #22a7f0;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-icon .chat-msg-initial-wrapper {
+  background-color: #808080;
+  /*border: solid 3px #333;*/
+  border-radius: 50%;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-icon .chat-msg-initial-wrapper .chat-msg-initials {
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-icon img {
+  border-radius: 50%;
+  /*border: solid 3px #333;*/
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text {
+  border: solid 1px #22f04c;
+  background-color: #22a7f0;
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text a,
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text a:hover,
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text a:visited,
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text a:focus {
+  color: #fff;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text .chat-msg-arrow {
+  border-right-color: #22f04c;
+}
+
+#wcb-chat-container #wcb-chat-body .chat-sent .chat-msg-text .chat-msg-pointer {
+  border-right-color: #22f04c;
+}

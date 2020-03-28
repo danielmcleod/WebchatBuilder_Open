@@ -1,0 +1,142 @@
+﻿@using Microsoft.AspNet.Identity
+@model ICollection<WebChatBuilderModels.Models.ApplicationUser>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="UsersPage">
+    <div id="UsersHeader">
+        <h2>Users</h2>
+    </div>
+    <div id="CreateNewUserBtn" data-type="add" data-toggle="modal" data-target="#UserModal" data-modal-title="Create User" title="Create a New User" class="wcb-tooltip">Create New User</div>
+    <div id="UsersContainer">
+        <div id="WcbUsers">
+            @foreach (var user in Model)
+            {
+                var imgPath = String.IsNullOrEmpty(user.DisplayImage) ? "/Content/Images/WcbUser.png" : user.DisplayImage;
+                <div class="user-wrapper" data-id="@user.Id">
+                    <i class="fa fa-arrows-alt drag-arrows"></i>
+                    <div class="user-header">@user.DisplayName</div>
+                    <div class="user-image">
+                        <img src="@imgPath" />
+                    </div>
+                    <div class="user-info">@user.Title</div>
+                    <div class="user-edit-btn wcb-tooltip" data-id="@user.Id" data-type="edit" data-toggle="modal" data-target="#UserModal" data-modal-title="Edit User" title="Edit User Info">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </div>
+                    @if (user.UserName != "WcbAdmin")
+                    {
+                        <div class="user-pwd-btn wcb-tooltip" data-id="@user.Id" data-type="pwd" data-toggle="modal" data-target="#UserModal" data-modal-title="Change Password" title="Change User Password">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-unlock-alt fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </div>
+                        if (user.UserName != User.Identity.GetUserName())
+                        {
+                            <div class="user-delete-btn wcb-tooltip" data-id="@user.Id" title="Delete User">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-trash fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </div>
+                            var isChecked = "";
+                            var boolChecked = user.IsActive ? "true" : "false";
+                            if (user.IsActive)
+                            {
+                                isChecked = "checked";
+                            }
+                            <div class="user-active-checkbox">
+                                <input data-id="@user.Id" class="user-active-toggle" id="IsUserActive-@user.UserName" name="IsUserActive-@user.UserName" type="checkbox" @isChecked>
+                                <label for="IsUserActive-@user.UserName" title="Toggle User Active" class="wcb-tooltip"></label>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+        <div id="WcbRoles">
+            <div class="role-wrapper" id="DashboardAdminRole">
+                <div class="role-header">Dashboard Admins</div>
+                <div class="role-users-list" data-id="DashboardAdmin">
+                    No Users in Role
+                </div>
+            </div>
+            <div class="role-wrapper" id="SettingsAdminRole">
+                <div class="role-header">Settings Admins</div>
+                <div class="role-users-list" data-id="SettingsAdmin">
+                    No Users in Role
+                </div>
+            </div>
+            <div class="role-wrapper" id="UserAdminRole">
+                <div class="role-header">User Admins</div>
+                <div class="role-users-list" data-id="UserAdmin">
+                    No Users in Role
+                </div>
+            </div>
+            <div class="role-wrapper" id="AlertAdminRole">
+                <div class="role-header">Alert Admins</div>
+                <div class="role-users-list" data-id="AlertAdmin">
+                    No Users in Role
+                </div>
+            </div>
+            <div class="role-wrapper" id="ProfileAdminRole">
+                <div class="role-header">Profile Admins</div>
+                <div class="role-users-list" data-id="ProfileAdmin">
+                    No Users in Role
+                </div>
+            </div>
+            <div class="role-wrapper" id="SupervisorRole">
+                <div class="role-header">Supervisors</div>
+                <div class="role-users-list" data-id="Supervisor">
+                    No Users in Role
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="UserTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="UserModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="UserModalBody">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-corner"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Templates*@
+
+<script id="assigned-role-template" type="text/x-handlebars-template">
+    {{#users}}
+    <div class="role-user" data-id="{{UserId}}">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="role-user-name">{{DisplayName}}</div>
+            </div>
+            <div class="col-xs-4">
+                <div class="btn btn-danger pull-right role-user-remove" data-user="{{UserId}}" data-role="{{RoleId}}" title="Remove user from role."><i class="fa fa-times"></i></div>
+            </div>
+        </div>
+    </div>
+    {{/users}}
+</script>
+
+@section scripts {
+    <script src="/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/handlebars.js"></script>
+    @Scripts.Render("~/bundles/users")
+}

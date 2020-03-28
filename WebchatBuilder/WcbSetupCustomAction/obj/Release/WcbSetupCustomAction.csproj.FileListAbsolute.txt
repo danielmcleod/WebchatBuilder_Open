@@ -1,0 +1,9 @@
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\WcbSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\WcbSetupCustomAction.pdb
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\Microsoft.Deployment.WindowsInstaller.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\WixSharp.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\Microsoft.Deployment.WindowsInstaller.xml
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\bin\Release\WixSharp.xml
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\obj\Release\WcbSetupCustomAction.csprojResolveAssemblyReference.cache
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\obj\Release\WcbSetupCustomAction.dll
+C:\qsect\Qsect Webchat Builder\WebchatBuilder\WcbSetupCustomAction\obj\Release\WcbSetupCustomAction.pdb
